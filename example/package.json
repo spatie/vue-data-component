@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "dev": "nuxt"
+    },
+    "dependencies": {
+        "nuxt": "^1.4.0",
+        "vue": "^2.5.16"
+    }
+}

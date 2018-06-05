@@ -1,0 +1,44 @@
+{
+  "name": "vue-data-component",
+  "version": "1.0.0-alpha.1",
+  "description": "A straightforward Vue component to filter, sort and paginate data",
+  "main": "dist/index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "dev": "babel src --watch --out-dir dist",
+    "build": "babel src --out-dir dist",
+    "prepublish": "npm run build",
+    "lint": "eslint src --fix",
+    "format": "prettier --write 'src/**/*.js' 'tests/**/*.js' 'example/pages/**/*.vue'",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spatie/vue-data-component.git"
+  },
+  "keywords": [
+    "spatie"
+  ],
+  "author": "Sebastian De Deyne",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spatie/vue-data-component/issues"
+  },
+  "homepage": "https://github.com/spatie/vue-data-component",
+  "peerDependencies": {
+    "vue": "^2.5.0"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.16",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.0",
+    "eslint-config-prettier": "^2.9.0",
+    "jest": "^23.1.0",
+    "prettier": "^1.13.0",
+    "vue": "^2.5.0",
+    "vue-template-compiler": "^2.5.16"
+  }
+}
