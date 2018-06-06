@@ -73,3 +73,13 @@ export function keyBy(collection, key) {
 export function flow(fns) {
     return subject => fns.reduce((subject, fn) => fn(subject), subject);
 }
+
+export function omit(object, properties) {
+    return Object.keys(object).reduce((newObject, key) => {
+        if (!properties.includes(key)) {
+            newObject[key] = object[key];
+        }
+
+        return newObject;
+    }, {});
+}

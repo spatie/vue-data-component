@@ -1,27 +1,25 @@
 <template>
-    <DataComponent
+    <ControlledDataComponent
         :items="items"
-        :sort-by="sortBy"
-        :filter="{ instrument: null }"
         :filter-function="filterFunction"
-        @update-sort-by="updateSortBy"
+        v-model="dataComponentState"
     >
-        <template slot-scope="{ state, items }">
+        <template slot-scope="{ items }">
             <div>
                 <label>
-                    <input type="radio" :value="null" v-model="state.filter.instrument">
+                    <input type="radio" :value="null" v-model="dataComponentState.filter.instrument">
                     All
                 </label>
                 <label>
-                    <input type="radio" value="Bass" v-model="state.filter.instrument">
+                    <input type="radio" value="Bass" v-model="dataComponentState.filter.instrument">
                     Bass
                 </label>
                 <label>
-                    <input type="radio" value="Drums" v-model="state.filter.instrument">
+                    <input type="radio" value="Drums" v-model="dataComponentState.filter.instrument">
                     Drums
                 </label>
                 <label>
-                    <input type="radio" value="Guitar" v-model="state.filter.instrument">
+                    <input type="radio" value="Guitar" v-model="dataComponentState.filter.instrument">
                     Guitar
                 </label>
                 <table>
@@ -47,24 +45,28 @@
                         </tr>
                     </tbody>
                 </table>
-                <button @click="sortBy = 'firstName'">Sort by name</button>
-                <button @click="sortBy = 'instrument'">Sort by instrument</button>
+                <button @click="dataComponentState.sortBy = 'firstName'">Sort by name</button>
+                <button @click="dataComponentState.sortBy = 'instrument'">Sort by instrument</button>
             </div>
         </template>
-    </DataComponent>
+    </ControlledDataComponent>
 </template>
 
 <script>
-import { DataComponent, DataSortToggle } from '../../src';
+import { ControlledDataComponent, DataSortToggle } from '../../src';
 
 export default {
     components: {
-        DataComponent,
+        ControlledDataComponent,
         DataSortToggle,
     },
 
     data: () => ({
-        sortBy: null,
+        dataComponentState: {
+            filter: { instrument: null },
+            sortBy: null,
+            sortOrder: 'asc',
+        },
 
         columns: {
             firstName: 'First name',

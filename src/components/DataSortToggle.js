@@ -1,4 +1,4 @@
-import { stateProvider } from './DataComponent';
+import { dataComponentProvider } from './ControlledDataComponent';
 
 export default {
     props: {
@@ -6,36 +6,55 @@ export default {
         tag: { default: 'button' },
     },
 
+    data: () => ({
+        sortBy: null,
+        sortOrder: null,
+    }),
+
     inject: {
-        state: stateProvider,
+        dataComponent: dataComponentProvider,
+    },
+
+    created() {
+        const initialState = this.dataComponent.getState();
+
+        this.sortBy = initialState.sortBy;
+        this.sortBy = initialState.sortOrder;
+
+        this.dataComponent.onStateChange(state => {
+            this.sortBy = state.sortBy;
+            this.sortOrder = state.sortOrder;
+        });
     },
 
     computed: {
         isActive() {
-            return this.state.sortBy === this.for;
+            return this.sortBy === this.for;
         },
 
         isAscending() {
-            return this.isActive && this.state.sortOrder === 'asc';
+            return this.isActive && this.sortOrder === 'asc';
         },
 
         isDescending() {
-            return this.isActive && this.state.sortOrder === 'desc';
+            return this.isActive && this.sortOrder === 'desc';
         },
     },
 
     methods: {
         toggleSort() {
             if (this.isActive) {
-                this.state.sortOrder = this.state.sortOrder === 'asc'
-                    ? 'desc'
-                    : 'asc';
+                this.dataComponent.setState({
+                    sortOrder: this.isAscending ? 'desc' : 'asc',
+                });
 
                 return;
             }
 
-            this.state.sortBy = this.for;
-            this.state.sortOrder = 'asc';
+            this.dataComponent.setState({
+                sortBy: this.for,
+                sortOrder: 'asc',
+            });
         },
     },
 
