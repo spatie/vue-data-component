@@ -24,22 +24,19 @@ export default {
     }),
 
     render(createElement) {
-        return createElement(
-            ControlledDataComponent,
-            {
-                props: {
-                    ...omit(this.$props, ['filter', 'sortBy', 'sortOrder']),
-                    state: this.state,
+        return createElement(ControlledDataComponent, {
+            props: {
+                ...omit(this.$props, ['filter', 'sortBy', 'sortOrder']),
+                state: this.state,
+            },
+            on: {
+                update: state => {
+                    this.state = state;
                 },
-                on: {
-                    update: state => {
-                        this.state = state;
-                    },
-                },
-                scopedSlots: {
-                    default: props => this.$scopedSlots.default({ ...props, state: this.state }),
-                },
-            }
-        );
+            },
+            scopedSlots: {
+                default: props => this.$scopedSlots.default({ ...props, state: this.state }),
+            },
+        });
     },
-}
+};

@@ -1,7 +1,5 @@
 import { defaultSortFunction, defaultFilterFunction, debounce, flow } from '../util';
 
-export const dataComponentProvider = Symbol();
-
 export default {
     name: 'ControlledDataComponent',
 
@@ -12,7 +10,11 @@ export default {
         state: {
             required: true,
             validator: state => {
-                if (!['filter', 'sortBy', 'sortOrder'].every(property => state.hasOwnProperty(property))) {
+                if (
+                    !['filter', 'sortBy', 'sortOrder'].every(property =>
+                        state.hasOwnProperty(property)
+                    )
+                ) {
                     return false;
                 }
 
@@ -33,12 +35,12 @@ export default {
 
     provide() {
         return {
-            [dataComponentProvider]: {
+            dataComponent: {
                 setState: this.setState,
                 getState: () => this.state,
-                onStateChange: (callback) => this.$on('update', callback),
+                onStateChange: callback => this.$on('update', callback),
             },
-        }
+        };
     },
 
     data() {
@@ -50,9 +52,10 @@ export default {
     },
 
     created() {
-        const getVisibleItems = typeof this.items === 'function'
-            ? this.getVisibleItemsFromDataSource
-            : this.getVisibleItemsFromLocalData;
+        const getVisibleItems =
+            typeof this.items === 'function'
+                ? this.getVisibleItemsFromDataSource
+                : this.getVisibleItemsFromLocalData;
 
         getVisibleItems();
 
@@ -71,8 +74,12 @@ export default {
         getVisibleItemsFromLocalData() {
             const visibleItems = flow([
                 items => this.filterFunction(items, this.state.filter),
-                items => this.sortFunction(items, { sortBy: this.state.sortBy, sortOrder: this.state.sortOrder }),
-            ])([...this.items]);
+                items =>
+                    this.sortFunction(items, {
+                        sortBy: this.state.sortBy,
+                        sortOrder: this.state.sortOrder,
+                    }),
+            ])([].concat(this.items));
 
             this.visibleItems = visibleItems;
             this.visibleItemCount = visibleItems.length;
@@ -104,17 +111,21 @@ export default {
     },
 
     render(createElement) {
-        return createElement(this.tag, {}, this.$scopedSlots.default({
-            filter: this.state.filter,
-            setFilter: this.setFilter,
+        return createElement(
+            this.tag,
+            {},
+            this.$scopedSlots.default({
+                filter: this.state.filter,
+                setFilter: this.setFilter,
 
-            sortBy: this.state.sortBy,
-            sortOrder: this.state.sortOrder,
-            toggleSort: this.toggleSort,
+                sortBy: this.state.sortBy,
+                sortOrder: this.state.sortOrder,
+                toggleSort: this.toggleSort,
 
-            items: this.visibleItems,
-            visibleItemsCount: this.visibleItemsCount,
-            totalItemsCount: this.totalItemsCount,
-        }));
+                items: this.visibleItems,
+                visibleItemsCount: this.visibleItemsCount,
+                totalItemsCount: this.totalItemsCount,
+            })
+        );
     },
 };

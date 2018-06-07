@@ -1,5 +1,3 @@
-import { dataComponentProvider } from './ControlledDataComponent';
-
 export default {
     props: {
         for: { required: true },
@@ -11,9 +9,7 @@ export default {
         sortOrder: null,
     }),
 
-    inject: {
-        dataComponent: dataComponentProvider,
-    },
+    inject: ['dataComponent'],
 
     created() {
         const initialState = this.dataComponent.getState();
@@ -61,16 +57,20 @@ export default {
     render(h) {
         const contents = this.$scopedSlots.default
             ? this.$scopedSlots.default({
-                isActive: this.isActive,
-                isAscending: this.isAscending,
-                isDescending: this.isDescending,
-            })
+                  isActive: this.isActive,
+                  isAscending: this.isAscending,
+                  isDescending: this.isDescending,
+              })
             : this.$slots.default;
 
-        return h(this.tag, {
-            on: {
-                click: this.toggleSort,
+        return h(
+            this.tag,
+            {
+                on: {
+                    click: this.toggleSort,
+                },
             },
-        }, contents);
+            contents
+        );
     },
-}
+};

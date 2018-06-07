@@ -116,7 +116,7 @@ export default {
         filterFunction(members, filter) {
             return filter.instrument
                 ? members.filter(member => member.instrument === filter.instrument)
-                : members
+                : members;
         },
     },
 };
