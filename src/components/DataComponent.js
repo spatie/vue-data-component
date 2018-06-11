@@ -1,4 +1,4 @@
-import { omit } from '../util';
+import { deepClone, omit } from '../util';
 import ControlledDataComponent from './ControlledDataComponent';
 
 export default {
@@ -16,6 +16,7 @@ export default {
     },
 
     data: vm => ({
+        innerItems: deepClone(vm.items),
         state: {
             filter: vm.filter,
             sortBy: vm.sortBy,
@@ -33,9 +34,20 @@ export default {
                 update: state => {
                     this.state = state;
                 },
+                remove: item => {
+                    const index = this.innerItems.indexOf(item);
+
+                    if (index > -1) {
+                        this.innerItems.splice(index, 1);
+                    }
+                },
             },
             scopedSlots: {
-                default: props => this.$scopedSlots.default({ ...props, state: this.state }),
+                default: props => this.$scopedSlots.default({
+                    ...props,
+                    items: this.innerItems,
+                    state: this.state,
+                }),
             },
         });
     },

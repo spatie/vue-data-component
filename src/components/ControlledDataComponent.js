@@ -108,6 +108,10 @@ export default {
         setState(partialState) {
             this.$emit('update', { ...this.state, ...partialState });
         },
+
+        remove(item) {
+            this.$emit('remove', item);
+        },
     },
 
     render(createElement) {
@@ -125,6 +129,8 @@ export default {
                 items: this.visibleItems,
                 visibleItemsCount: this.visibleItemsCount,
                 totalItemsCount: this.totalItemsCount,
+
+                remove: this.remove,
             })
         );
     },

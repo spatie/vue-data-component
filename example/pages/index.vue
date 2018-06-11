@@ -4,7 +4,7 @@
         :filter="{ instrument: null }"
         :filter-function="filterFunction"
     >
-        <template slot-scope="{ state, items }">
+        <template slot-scope="{ state, items, remove }">
             <div>
                 <label>
                     <input type="radio" :value="null" v-model="state.filter.instrument">
@@ -34,6 +34,7 @@
                                     </template>
                                 </DataSortToggle>
                             </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +43,11 @@
                             <td>{{ item.lastName }}</td>
                             <td>{{ item.instrument }}</td>
                             <td>{{ item.songs }}</td>
+                            <td>
+                                <button @click="remove(item)">
+                                    🚮
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

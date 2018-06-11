@@ -15,6 +15,12 @@ export function debounce(func, wait, immediate) {
     };
 }
 
+export function deepClone(object) {
+    return object
+        ? JSON.parse(JSON.stringify(object))
+        : object;
+}
+
 export function defaultFilterFunction(items, filter) {
     if (!filter) {
         return items;
