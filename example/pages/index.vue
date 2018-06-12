@@ -1,12 +1,8 @@
 <template>
-    <DataComponent
-        :items="items"
-        :filter="{ instrument: null }"
-        :filter-function="filterFunction"
-    >
-        <template slot-scope="{ state, items, remove }">
+    <DataComponent :data="members">
+        <template slot-scope="{ state, data }">
             <div>
-                <label>
+                <!-- <label>
                     <input type="radio" :value="null" v-model="state.filter.instrument">
                     All
                 </label>
@@ -21,7 +17,8 @@
                 <label>
                     <input type="radio" value="Guitar" v-model="state.filter.instrument">
                     Guitar
-                </label>
+                </label> -->
+                <input type="text" v-model="state.filter">
                 <table>
                     <thead>
                         <tr>
@@ -34,20 +31,14 @@
                                     </template>
                                 </DataSortToggle>
                             </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in items" :key="item.firstName">
-                            <td>{{ item.firstName }}</td>
-                            <td>{{ item.lastName }}</td>
-                            <td>{{ item.instrument }}</td>
-                            <td>{{ item.songs }}</td>
-                            <td>
-                                <button @click="remove(item)">
-                                    🚮
-                                </button>
-                            </td>
+                        <tr v-for="member in data" :key="member.firstName">
+                            <td>{{ member.firstName }}</td>
+                            <td>{{ member.lastName }}</td>
+                            <td>{{ member.instrument }}</td>
+                            <td>{{ member.songs }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -73,7 +64,7 @@ export default {
             songs: 'Songs',
         },
 
-        items: [
+        members: [
             {
                 firstName: 'John',
                 lastName: 'Lennon',
@@ -106,10 +97,12 @@ export default {
     }),
 
     methods: {
-        filterFunction(members, filter) {
-            return filter.instrument
-                ? members.filter(member => member.instrument === filter.instrument)
-                : members;
+        getData({ filter }) {
+            const members = filter.instrument
+                ? this.members.filter(member => member.instrument === filter.instrument)
+                : this.members;
+
+            return { data: members };
         },
     },
 };
