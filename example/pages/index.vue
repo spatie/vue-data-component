@@ -1,5 +1,5 @@
 <template>
-    <DataComponent :data="members">
+    <DataComponent :data="getData" :initial-load-delay-ms="1000">
         <template slot-scope="{ state, data }">
             <div>
                 <!-- <label>
@@ -102,7 +102,9 @@ export default {
                 ? this.members.filter(member => member.instrument === filter.instrument)
                 : this.members;
 
-            return { data: members };
+            return new Promise(resolve => {
+                window.setTimeout(() => resolve({ data: members }), 2000);
+            });
         },
     },
 };

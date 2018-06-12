@@ -7,12 +7,14 @@ export default {
     props: {
         data: { required: true, type: [Array, Function] },
         debounceMs: { default: 0 },
+        initialLoadDelayMs: { default: 0 },
         initialState: { default: () => ({}), type: Object },
         tag: { default: 'div' },
     },
 
     data: vm => ({
         dataGetter: null,
+        loaded: false,
 
         visibleData: [],
         visibleDataCount: 0,
@@ -45,6 +47,18 @@ export default {
             : this.getVisibleData;
 
         this.$watch('state', getVisibleData, { deep: true, immediate: true });
+
+        if (!this.initialLoadDelayMs) {
+            this.loaded = true;
+        }
+    },
+
+    mounted() {
+        if (this.initialLoadDelayMs) {
+            window.setTimeout(() => {
+                this.loaded = true;
+            }, this.initialLoadDelayMs);
+        }
     },
 
     methods: {
@@ -55,11 +69,15 @@ export default {
                 this.visibleData = result.data;
                 this.visibleItemCount = result.data.length;
                 this.totalItemCount = result.data.length;
+
+                this.loaded = true;
             } else if (typeof result.then == 'function') {
                 result.then(response => {
                     this.visibleData = response.data;
                     this.visibleItemCount = response.data.length;
                     this.totalItemCount = response.data.length;
+
+                    this.loaded = true;
                 });
             } else {
                 throw new Error('Data function must return an object or a promise');
@@ -96,6 +114,10 @@ export default {
     },
 
     render(createElement) {
+        if (!this.loaded) {
+            return null;
+        }
+
         return createElement(
             this.tag,
             {},
