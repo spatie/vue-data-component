@@ -15,7 +15,7 @@ export default {
         const initialState = this.dataComponent.getState();
 
         this.sortBy = initialState.sortBy;
-        this.sortBy = initialState.sortOrder;
+        this.sortOrder = initialState.sortOrder;
 
         this.dataComponent.onStateChange(state => {
             this.sortBy = state.sortBy;
