@@ -1,5 +1,9 @@
 <template>
-    <DataComponent :data="getData" :initial-load-delay-ms="1000">
+    <DataComponent
+        :data="getData"
+        :initial-data="initialData"
+        :initial-load-delay-ms="1000"
+    >
         <template slot-scope="{ state, data }">
             <div>
                 <!-- <label>
@@ -95,6 +99,12 @@ export default {
             },
         ],
     }),
+
+    computed: {
+        initialData() {
+            return [this.members[0]];
+        },
+    },
 
     methods: {
         getData({ filter }) {

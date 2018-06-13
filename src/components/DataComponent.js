@@ -6,6 +6,7 @@ export default {
 
     props: {
         data: { required: true, type: [Array, Function] },
+        initialData: { type: Array },
         debounceMs: { default: 0 },
         initialLoadDelayMs: { default: 0 },
         initialState: { default: () => ({}), type: Object },
@@ -41,6 +42,14 @@ export default {
         this.dataGetter = typeof this.data === 'function'
             ? this.data
             : createItemGetterFromArray(this.data);
+
+        if (this.initialData) {
+            this.visibleData = this.initialData;
+            this.visibleItemCount = this.initialData.length;
+            this.totalItemCount = this.initialData.length;
+
+            this.loaded = true;
+        }
 
         const getVisibleData = this.debounceMs
             ? debounce(this.getVisibleData, this.debounceMs)
