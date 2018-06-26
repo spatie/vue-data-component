@@ -71,6 +71,10 @@ export default {
     },
 
     methods: {
+        forceUpdate() {
+            this.getVisibleData();
+        },
+
         getVisibleData() {
             const result = this.dataGetter(this.state);
 
