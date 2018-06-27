@@ -1,32 +1,27 @@
 export default {
     props: {
         for: { required: true },
+        value: { required: true },
         tag: { default: 'button' },
-    },
-
-    data: () => ({
-        sort: null,
-    }),
-
-    inject: ['dataComponent'],
-
-    created() {
-        this.dataComponent.$on('fetch', () => {
-            this.sort = this.dataComponent.state.sort;
-        }, { immediate: true });
     },
 
     computed: {
         isActive() {
-            return this.sort === this.for || this.sort === `-${this.for}`;
+            return this.value === this.for || this.value === `-${this.for}`;
         },
 
         isAscending() {
-            return this.isActive && this.sort.charAt(0) !== '-';
+            return this.isActive && this.value.charAt(0) !== '-';
         },
 
         isDescending() {
-            return this.isActive && this.sort.charAt(0) === '-';
+            return this.isActive && this.value.charAt(0) === '-';
+        },
+    },
+
+    methods: {
+        toggleSort() {
+            this.$emit('input', this.isAscending ? `-${this.for}` : this.for);
         },
     },
 
@@ -43,7 +38,7 @@ export default {
             this.tag,
             {
                 on: {
-                    click: () => this.dataComponent.toggleSort(this.for),
+                    click: this.toggleSort,
                 },
             },
             contents

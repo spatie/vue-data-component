@@ -3,38 +3,26 @@ import createPagesArray from '../helpers/createPagesArray';
 import createItemGetterFromArray from '../helpers/createItemGetterFromArray';
 
 export default {
-    name: 'DataComponent',
-
     props: {
+        sort: { default: null, type: String },
+        filter: { default: null },
+        page: { default: 1, type: Number },
+        perPage: { default: Infinity, type: Number },
         data: { required: true, type: [Array, Function] },
         initialData: { default: null },
         debounceMs: { default: 0 },
         initialLoadDelayMs: { default: 0 },
-        initialState: { default: () => ({}), type: Object },
         tag: { default: 'div' },
     },
 
-    data: vm => ({
+    data: () => ({
         dataGetter: null,
         loaded: false,
 
         visibleData: [],
         visibleCount: 0,
         totalCount: 0,
-
-        state: {
-            sort: vm.initialState.sort || '',
-            filter: vm.initialState.filter || '',
-            page: vm.initialState.page || 1,
-            perPage: vm.initialState.perPage || Infinity,
-        },
     }),
-
-    provide() {
-        return {
-            dataComponent: this,
-        };
-    },
 
     created() {
         this.dataGetter =
@@ -54,10 +42,6 @@ export default {
 
         this.$watch('state', getVisibleData, { deep: true, immediate: true });
 
-        ['filter', 'sort', 'perPage'].forEach(stateProp => {
-            this.$watch(`state.${stateProp}`, () => { this.state.page = 1; }, { deep: true });
-        });
-
         if (!this.initialLoadDelayMs) {
             this.loaded = true;
         }
@@ -71,14 +55,23 @@ export default {
         }
     },
 
+    computed: {
+        state() {
+            return {
+                sort: this.sort,
+                filter: this.filter,
+                page: this.page,
+                perPage: this.perPage,
+            };
+        },
+    },
+
     methods: {
         forceUpdate() {
             this.getVisibleData();
         },
 
         getVisibleData() {
-            this.$emit('fetch');
-
             const result = this.dataGetter(this.state);
 
             if (typeof result.then == 'function') {
@@ -101,16 +94,16 @@ export default {
         },
 
         toggleSort(field) {
-            const currentSortOrder = this.state.sort.charAt(0) === '-' ? 'desc' : 'asc';
-            const currentSortField = currentSortOrder === 'desc' ? this.state.sort.slice(1) : this.state.sort;
+            const currentSortOrder = this.sort.charAt(0) === '-' ? 'desc' : 'asc';
+            const currentSortField = currentSortOrder === 'desc' ? this.sort.slice(1) : this.sort;
 
             if (field === currentSortField && currentSortOrder === 'asc') {
-                this.state.sort = `-${currentSortField}`
+                this.$emit('update:sort', `-${currentSortField}`);
 
                 return;
             }
 
-            this.state.sort = field;
+            this.$emit('update:sort', field);
         },
     },
 
@@ -123,12 +116,11 @@ export default {
             this.tag,
             {},
             this.$scopedSlots.default({
-                state: this.state,
-                toggleSort: this.toggleSort,
-
                 data: this.visibleData,
                 visibleCount: this.visibleCount,
                 totalCount: this.totalCount,
+
+                toggleSort: this.toggleSort,
 
                 pages: createPagesArray({
                     page: this.state.page,

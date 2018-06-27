@@ -8,7 +8,7 @@
 export default {
     head: {
         link: [
-            { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css' },
+            // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css' },
         ],
         bodyAttrs: {
             class: 'bg-black text-grey',

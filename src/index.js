@@ -1,6 +1,6 @@
 import DataComponent from './components/DataComponent';
-import DataSortToggle from './components/DataSortToggle';
+import SortToggle from './components/SortToggle';
 
-export { DataComponent, DataSortToggle };
+export { SortToggle };
 
 export default DataComponent;

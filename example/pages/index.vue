@@ -1,38 +1,24 @@
 <template>
     <DataComponent
+        :filter="filter"
+        :sort="sort"
         :data="members"
         :initial-load-delay-ms="1000"
     >
-        <template slot-scope="{ state, data }">
+        <template slot-scope="{ data }">
             <div>
-                <!-- <label>
-                    <input type="radio" :value="null" v-model="state.filter.instrument">
-                    All
-                </label>
-                <label>
-                    <input type="radio" value="Bass" v-model="state.filter.instrument">
-                    Bass
-                </label>
-                <label>
-                    <input type="radio" value="Drums" v-model="state.filter.instrument">
-                    Drums
-                </label>
-                <label>
-                    <input type="radio" value="Guitar" v-model="state.filter.instrument">
-                    Guitar
-                </label> -->
-                <input type="text" v-model="state.filter">
+                <input type="text" v-model="filter">
                 <table>
                     <thead>
                         <tr>
                             <th v-for="(label, property) in columns" :key="property">
-                                <DataSortToggle :for="property">
+                                <SortToggle :for="property" v-model="sort">
                                     <template slot-scope="{ isAscending, isDescending }">
                                         {{ label }}
                                         <span v-if="isAscending">⬆️</span>
                                         <span v-if="isDescending">⬇️️</span>
                                     </template>
-                                </DataSortToggle>
+                                </SortToggle>
                             </th>
                         </tr>
                     </thead>
@@ -51,15 +37,18 @@
 </template>
 
 <script>
-import { DataComponent, DataSortToggle } from '../../src';
+import DataComponent, { SortToggle } from '../../src';
 
 export default {
     components: {
         DataComponent,
-        DataSortToggle,
+        SortToggle,
     },
 
     data: () => ({
+        filter: '',
+        sort: 'firstName',
+
         columns: {
             firstName: 'First name',
             lastName: 'Last name',
@@ -98,15 +87,5 @@ export default {
             },
         ],
     }),
-
-    methods: {
-        getData({ filter }) {
-            const members = filter.instrument
-                ? this.members.filter(member => member.instrument === filter.instrument)
-                : this.members;
-
-            return { data: members };
-        },
-    },
 };
 </script>
