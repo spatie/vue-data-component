@@ -7,7 +7,7 @@ export default {
 
     props: {
         data: { required: true, type: [Array, Function] },
-        initialData: { type: Array },
+        initialData: { default: null },
         debounceMs: { default: 0 },
         initialLoadDelayMs: { default: 0 },
         initialState: { default: () => ({}), type: Object },
