@@ -1,13 +1,14 @@
 import { flow } from './util';
 
 export default function createItemGetterFromArray(array) {
-    return (state) => {
+    return state => {
         return {
-            data: [].concat(array)
+            data: []
+                .concat(array)
                 .filter(createFilterFunction(state))
                 .sort(createSortFunction(state)),
-        }
-    }
+        };
+    };
 }
 
 // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript/4760279#4760279
@@ -24,8 +25,10 @@ function createFilterFunction({ filter }) {
     const normalizedFilter = filter.toLowerCase().replace(/[^A-Za-z0-9]*/g, '');
 
     return flow([
-        row => Object.values(row)
-            .filter(value => typeof value === 'string' || typeof value === 'number'),
+        row =>
+            Object.values(row).filter(
+                value => typeof value === 'string' || typeof value === 'number'
+            ),
         values =>
             values
                 .join('')

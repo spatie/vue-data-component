@@ -39,9 +39,8 @@ export default {
     },
 
     created() {
-        this.dataGetter = typeof this.data === 'function'
-            ? this.data
-            : createItemGetterFromArray(this.data);
+        this.dataGetter =
+            typeof this.data === 'function' ? this.data : createItemGetterFromArray(this.data);
 
         if (this.initialData) {
             this.visibleData = this.initialData;

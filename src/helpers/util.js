@@ -16,5 +16,5 @@ export function debounce(func, wait, immediate) {
 }
 
 export function flow(fns) {
-    return (subject) => fns.reduce((subject, fn) => fn(subject), subject);
+    return subject => fns.reduce((subject, fn) => fn(subject), subject);
 }
