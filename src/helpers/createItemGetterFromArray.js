@@ -12,7 +12,10 @@ export default function createItemGetterFromArray(array) {
 }
 
 // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript/4760279#4760279
-function createSortFunction({ sortBy, sortOrder }) {
+function createSortFunction({ sort }) {
+    const sortOrder = sort.charAt(0) === '-' ? 'desc' : 'asc';
+    const sortBy = sortOrder === 'desc' ? sort.slice(1) : sort;
+
     return (a, b) => {
         const sortOrderIndex = sortOrder === 'desc' ? -1 : 1;
         const result = a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;

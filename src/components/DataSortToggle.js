@@ -5,35 +5,28 @@ export default {
     },
 
     data: () => ({
-        sortBy: null,
-        sortOrder: null,
+        sort: null,
     }),
 
     inject: ['dataComponent'],
 
     created() {
-        const initialState = this.dataComponent.state;
-
-        this.sortBy = initialState.sortBy;
-        this.sortOrder = initialState.sortOrder;
-
         this.dataComponent.$on('fetch', () => {
-            this.sortBy = this.dataComponent.state.sortBy;
-            this.sortOrder = this.dataComponent.state.sortOrder;
-        });
+            this.sort = this.dataComponent.state.sort;
+        }, { immediate: true });
     },
 
     computed: {
         isActive() {
-            return this.sortBy === this.for;
+            return this.sort === this.for || this.sort === `-${this.for}`;
         },
 
         isAscending() {
-            return this.isActive && this.sortOrder === 'asc';
+            return this.isActive && this.sort.charAt(0) !== '-';
         },
 
         isDescending() {
-            return this.isActive && this.sortOrder === 'desc';
+            return this.isActive && this.sort.charAt(0) === '-';
         },
     },
 

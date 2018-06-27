@@ -23,9 +23,8 @@ export default {
         totalCount: 0,
 
         state: {
+            sort: vm.initialState.sort || '',
             filter: vm.initialState.filter || '',
-            sortBy: vm.initialState.sortBy || '',
-            sortOrder: vm.initialState.sortOrder || 'asc',
             page: vm.initialState.page || 1,
             perPage: vm.initialState.perPage || Infinity,
         },
@@ -55,7 +54,7 @@ export default {
 
         this.$watch('state', getVisibleData, { deep: true, immediate: true });
 
-        ['filter', 'sortBy', 'sortOrder', 'perPage'].forEach(stateProp => {
+        ['filter', 'sort', 'perPage'].forEach(stateProp => {
             this.$watch(`state.${stateProp}`, () => { this.state.page = 1; }, { deep: true });
         });
 
@@ -101,15 +100,17 @@ export default {
             }
         },
 
-        toggleSort(sortBy) {
-            if (this.state.sortBy === sortBy) {
-                this.state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+        toggleSort(field) {
+            const currentSortOrder = this.state.sort.charAt(0) === '-' ? 'desc' : 'asc';
+            const currentSortField = currentSortOrder === 'desc' ? this.state.sort.slice(1) : this.state.sort;
+
+            if (field === currentSortField && currentSortOrder === 'asc') {
+                this.state.sort = `-${currentSortField}`
 
                 return;
             }
 
-            this.state.sortBy = sortBy;
-            this.state.sortOrder = 'asc';
+            this.state.sort = field;
         },
     },
 

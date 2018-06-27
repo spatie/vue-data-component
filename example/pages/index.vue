@@ -1,7 +1,6 @@
 <template>
     <DataComponent
         :data="members"
-        :initial-data="initialData"
         :initial-load-delay-ms="1000"
     >
         <template slot-scope="{ state, data }">
@@ -99,12 +98,6 @@ export default {
             },
         ],
     }),
-
-    computed: {
-        initialData() {
-            return [this.members[0]];
-        },
-    },
 
     methods: {
         getData({ filter }) {
