@@ -42,9 +42,9 @@ export default {
             typeof this.data === 'function' ? this.data : createItemGetterFromArray(this.data);
 
         if (this.initialData) {
-            this.visibleData = this.initialData;
-            this.visibleCount = this.initialData.length;
-            this.totalCount = this.initialData.length;
+            this.visibleData = this.initialData.data;
+            this.visibleCount = this.initialData.data.length;
+            this.totalCount = this.initialData.totalCount || this.initialData.data.length;
 
             this.loaded = true;
         }
