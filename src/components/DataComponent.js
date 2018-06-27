@@ -59,6 +59,10 @@ export default {
 
         this.$watch('state', getVisibleData, { deep: true, immediate: true });
 
+        ['filter', 'sortBy', 'sortOrder', 'perPage'].forEach(stateProp => {
+            this.$watch(`state.${stateProp}`, () => { this.state.page = 1; }, { deep: true });
+        });
+
         if (!this.initialLoadDelayMs) {
             this.loaded = true;
         }
