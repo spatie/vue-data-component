@@ -1,4 +1,5 @@
 import { debounce } from '../helpers/util';
+import createPagesArray from '../helpers/createPagesArray';
 import createItemGetterFromArray from '../helpers/createItemGetterFromArray';
 
 export default {
@@ -18,13 +19,15 @@ export default {
         loaded: false,
 
         visibleData: [],
-        visibleDataCount: 0,
-        totalDataCount: 0,
+        visibleCount: 0,
+        totalCount: 0,
 
         state: {
             filter: vm.initialState.filter || '',
-            sortBy: vm.initialState.sortBy || null,
+            sortBy: vm.initialState.sortBy || '',
             sortOrder: vm.initialState.sortOrder || 'asc',
+            page: vm.initialState.page || 1,
+            perPage: vm.initialState.perPage || Infinity,
         },
     }),
 
@@ -44,8 +47,8 @@ export default {
 
         if (this.initialData) {
             this.visibleData = this.initialData;
-            this.visibleItemCount = this.initialData.length;
-            this.totalItemCount = this.initialData.length;
+            this.visibleCount = this.initialData.length;
+            this.totalCount = this.initialData.length;
 
             this.loaded = true;
         }
@@ -77,20 +80,20 @@ export default {
         getVisibleData() {
             const result = this.dataGetter(this.state);
 
-            if (result.hasOwnProperty('data')) {
-                this.visibleData = result.data;
-                this.visibleItemCount = result.data.length;
-                this.totalItemCount = result.data.length;
-
-                this.loaded = true;
-            } else if (typeof result.then == 'function') {
+            if (typeof result.then == 'function') {
                 result.then(response => {
                     this.visibleData = response.data;
-                    this.visibleItemCount = response.data.length;
-                    this.totalItemCount = response.data.length;
+                    this.visibleCount = response.data.length;
+                    this.totalCount = response.totalCount || response.data.length;
 
                     this.loaded = true;
                 });
+            } else if (result.hasOwnProperty('data')) {
+                this.visibleData = result.data;
+                this.visibleCount = result.data.length;
+                this.totalCount = result.data.length;
+
+                this.loaded = true;
             } else {
                 throw new Error('Data function must return an object or a promise');
             }
@@ -139,8 +142,14 @@ export default {
                 toggleSort: this.toggleSort,
 
                 data: this.visibleData,
-                visibleDataCount: this.visibleDataCount,
-                totalDataCount: this.totalDataCount,
+                visibleCount: this.visibleCount,
+                totalCount: this.totalCount,
+
+                pages: createPagesArray({
+                    page: this.state.page,
+                    perPage: this.state.perPage,
+                    totalCount: this.totalCount,
+                }),
             })
         );
     },

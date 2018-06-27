@@ -18,3 +18,7 @@ export function debounce(func, wait, immediate) {
 export function flow(fns) {
     return subject => fns.reduce((subject, fn) => fn(subject), subject);
 }
+
+export function range(length) {
+    return Array.from({ length }).map((v, k) => k + 1);
+}
