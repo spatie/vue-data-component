@@ -12,14 +12,14 @@ export default {
     inject: ['dataComponent'],
 
     created() {
-        const initialState = this.dataComponent.getState();
+        const initialState = this.dataComponent.state;
 
         this.sortBy = initialState.sortBy;
         this.sortOrder = initialState.sortOrder;
 
-        this.dataComponent.onStateChange(state => {
-            this.sortBy = state.sortBy;
-            this.sortOrder = state.sortOrder;
+        this.dataComponent.$on('fetch', () => {
+            this.sortBy = this.dataComponent.state.sortBy;
+            this.sortOrder = this.dataComponent.state.sortOrder;
         });
     },
 
@@ -37,23 +37,6 @@ export default {
         },
     },
 
-    methods: {
-        toggleSort() {
-            if (this.isActive) {
-                this.dataComponent.setState({
-                    sortOrder: this.isAscending ? 'desc' : 'asc',
-                });
-
-                return;
-            }
-
-            this.dataComponent.setState({
-                sortBy: this.for,
-                sortOrder: 'asc',
-            });
-        },
-    },
-
     render(h) {
         const contents = this.$scopedSlots.default
             ? this.$scopedSlots.default({
@@ -67,7 +50,7 @@ export default {
             this.tag,
             {
                 on: {
-                    click: this.toggleSort,
+                    click: () => this.dataComponent.toggleSort(this.for),
                 },
             },
             contents

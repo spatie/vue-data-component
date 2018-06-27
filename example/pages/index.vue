@@ -1,6 +1,6 @@
 <template>
     <DataComponent
-        :data="getData"
+        :data="members"
         :initial-data="initialData"
         :initial-load-delay-ms="1000"
     >
@@ -112,9 +112,7 @@ export default {
                 ? this.members.filter(member => member.instrument === filter.instrument)
                 : this.members;
 
-            return new Promise(resolve => {
-                window.setTimeout(() => resolve({ data: members }), 2000);
-            });
+            return { data: members };
         },
     },
 };

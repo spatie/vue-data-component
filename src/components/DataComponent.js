@@ -33,11 +33,7 @@ export default {
 
     provide() {
         return {
-            dataComponent: {
-                setState: this.setState,
-                getState: () => this.state,
-                onStateChange: callback => this.$on('statechange', callback),
-            },
+            dataComponent: this,
         };
     },
 
@@ -82,6 +78,8 @@ export default {
         },
 
         getVisibleData() {
+            this.$emit('fetch');
+
             const result = this.dataGetter(this.state);
 
             if (typeof result.then == 'function') {
@@ -105,30 +103,13 @@ export default {
 
         toggleSort(sortBy) {
             if (this.state.sortBy === sortBy) {
-                this.setState({
-                    sortOrder: this.state.sortOrder === 'asc' ? 'desc' : 'asc',
-                });
+                this.state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
 
                 return;
             }
 
-            this.setState({
-                sortBy,
-                sortOrder: 'asc',
-            });
-        },
-
-        setFilter(filter) {
-            this.setState({ filter });
-        },
-
-        setState(partialState) {
-            this.state = {
-                ...this.state,
-                ...partialState,
-            };
-
-            this.$emit('statechange', this.state);
+            this.state.sortBy = sortBy;
+            this.state.sortOrder = 'asc';
         },
     },
 
@@ -142,7 +123,6 @@ export default {
             {},
             this.$scopedSlots.default({
                 state: this.state,
-                setFilter: this.setFilter,
                 toggleSort: this.toggleSort,
 
                 data: this.visibleData,
