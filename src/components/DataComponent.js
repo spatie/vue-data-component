@@ -61,8 +61,9 @@ export default {
             if (activeRequestCount === 0 && this.slowRequestTimeout) {
                 window.clearTimeout(this.slowRequestTimeout);
 
-                this.$emit('slowrequestend');
                 this.isSlowRequest = false;
+
+                this.$emit('slowrequestend');
             }
 
             if (activeRequestCount === 1) {
@@ -99,17 +100,20 @@ export default {
             if (typeof result.then == 'function') {
                 this.activeRequestCount++;
 
-                result.then(response => {
-                    this.visibleData = response.data;
-                    this.visibleCount = response.data.length;
-                    this.totalCount = response.totalCount || response.data.length;
+                result.then(
+                    response => {
+                        this.visibleData = response.data;
+                        this.visibleCount = response.data.length;
+                        this.totalCount = response.totalCount || response.data.length;
 
-                    this.loaded = true;
+                        this.loaded = true;
 
-                    this.activeRequestCount--;
-                }, () => {
-                    this.activeRequestCount--;
-                });
+                        this.activeRequestCount--;
+                    },
+                    () => {
+                        this.activeRequestCount--;
+                    }
+                );
             } else if (result.hasOwnProperty('data')) {
                 this.visibleData = result.data;
                 this.visibleCount = result.data.length;
