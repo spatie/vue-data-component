@@ -43,7 +43,7 @@ export default {
             ? debounce(this.getVisibleData, this.debounceMs)
             : this.getVisibleData;
 
-        this.$watch('state', getVisibleData, { deep: true, immediate: true });
+        this.$watch('state', getVisibleData, { deep: true, immediate: !this.initialData });
 
         if (!this.initialLoadDelayMs) {
             this.loaded = true;
