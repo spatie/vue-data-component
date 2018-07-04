@@ -12,12 +12,15 @@ export default {
         initialData: { default: null },
         debounceMs: { default: 0 },
         initialLoadDelayMs: { default: 0 },
+        slowRequestThresholdMs: { default: 400 },
         tag: { default: 'div' },
     },
 
     data: () => ({
         dataGetter: null,
         loaded: false,
+        activeRequestCount: 0,
+        isSlowRequest: false,
 
         visibleData: [],
         visibleCount: 0,
@@ -53,6 +56,25 @@ export default {
                 this.loaded = true;
             }, this.initialLoadDelayMs);
         }
+
+        this.$watch('activeRequestCount', activeRequestCount => {
+            if (activeRequestCount === 0 && this.slowRequestTimeout) {
+                window.clearTimeout(this.slowRequestTimeout);
+
+                this.$emit('slowrequestend');
+                this.isSlowRequest = false;
+            }
+
+            if (activeRequestCount === 1) {
+                this.slowRequestTimeout = window.setTimeout(() => {
+                    if (!this.isSlowRequest) {
+                        this.isSlowRequest = true;
+
+                        this.$emit('slowrequeststart');
+                    }
+                }, this.slowRequestThresholdMs);
+            }
+        });
     },
 
     computed: {
@@ -75,12 +97,18 @@ export default {
             const result = this.dataGetter(this.state);
 
             if (typeof result.then == 'function') {
+                this.activeRequestCount++;
+
                 result.then(response => {
                     this.visibleData = response.data;
                     this.visibleCount = response.data.length;
                     this.totalCount = response.totalCount || response.data.length;
 
                     this.loaded = true;
+
+                    this.activeRequestCount--;
+                }, () => {
+                    this.activeRequestCount--;
                 });
             } else if (result.hasOwnProperty('data')) {
                 this.visibleData = result.data;
@@ -91,6 +119,18 @@ export default {
             } else {
                 throw new Error('Data function must return an object or a promise');
             }
+        },
+
+        startSlowRequestTimeout() {
+            if (!window) {
+                return;
+            }
+
+            this.stopSlowRequestTimeout();
+
+            this.slowRequestTimeout = window.setTimeout(() => {
+                this.isSlowRequest = true;
+            }, this.slowRequestThresholdMs);
         },
 
         toggleSort(field) {
@@ -119,9 +159,8 @@ export default {
                 data: this.visibleData,
                 visibleCount: this.visibleCount,
                 totalCount: this.totalCount,
-
+                isSlowRequest: this.isSlowRequest,
                 toggleSort: this.toggleSort,
-
                 pages: createPagesArray({
                     page: this.state.page,
                     perPage: this.state.perPage,

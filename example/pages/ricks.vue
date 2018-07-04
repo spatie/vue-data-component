@@ -3,18 +3,16 @@
         :data="getRicks"
         :debounce-ms="200"
         :initial-load-delay-ms="1000"
-        :initial-state="{
-            filter: {
-                status: null,
-            },
-            perPage: 20,
-        }"
+        :filter="filter"
+        :page="page"
+        :per-page="20"
     >
-        <template slot-scope="{ state, data, visibleCount, totalCount, pages }">
+        <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
             <div>
-                <label><input type="radio" name="status" :value="null" v-model="state.filter.status"> All</label>
-                <label><input type="radio" name="status" value="Alive" v-model="state.filter.status"> Alive</label>
-                <label><input type="radio" name="status" value="Dead" v-model="state.filter.status"> Dead</label>
+                <label><input type="radio" name="status" :value="null" v-model="filter.status"> All</label>
+                <label><input type="radio" name="status" value="Alive" v-model="filter.status"> Alive</label>
+                <label><input type="radio" name="status" value="Dead" v-model="filter.status"> Dead</label>
+                <strong v-if="isSlowRequest">SLOW</strong>
 
                 <p><em>Displaying {{ visibleCount }} of {{ totalCount }} Ricks</em></p>
 
@@ -41,7 +39,7 @@
                         v-for="page in pages"
                         :key="page.number"
                         :style="{ textDecoration: page.isActive ? 'underline' : null }"
-                        @click="state.page = page.number"
+                        @click="page = page.number"
                     >
                         {{ page.number }}
                     </li>
@@ -59,6 +57,11 @@ export default {
     components: {
         DataComponent,
     },
+
+    data: () => ({
+        filter: { status: null },
+        page: 1,
+    }),
 
     methods: {
         getRicks({ filter, page }) {
