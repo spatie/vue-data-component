@@ -26,7 +26,10 @@
                 </p>
             </div>
 
-            <div class="flex flex-wrap justify-between transition" :class="isSlowRequest ? 'opacity-50' : null">
+            <div
+                class="flex flex-wrap justify-between transition"
+                :class="isSlowRequest ? 'opacity-50' : null"
+            >
                 <article
                     v-for="rick in data"
                     :key="rick.id"
@@ -65,7 +68,6 @@
 <script>
 import axios from 'axios';
 import DataComponent from '../../src';
-import animatedScrollTo from 'animated-scroll-to';
 
 export default {
     title: 'Ajax card layout',
@@ -79,7 +81,7 @@ export default {
         filter: { status: 'all' },
 
         statusses: {
-            'all': 'All',
+            all: 'All',
             Alive: 'Alive',
             Dead: 'Dead',
             unknown: 'Unknown',
