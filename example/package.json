@@ -3,6 +3,7 @@
         "dev": "nuxt"
     },
     "dependencies": {
+        "animated-scroll-to": "^1.2.2",
         "axios": "^0.18.0",
         "nuxt": "^1.4.0",
         "vue": "^2.5.16"
