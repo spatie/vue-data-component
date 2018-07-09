@@ -10,7 +10,7 @@
     "dev": "rollup -c -w",
     "prepublish": "npm run build",
     "lint": "eslint src --fix",
-    "format": "prettier --write 'src/**/*.js' 'tests/**/*.js' 'example/pages/**/*.vue'",
+    "format": "prettier --write 'src/**/*.{js,vue}' 'tests/**/*.{js,vue}' 'example/**/*.{js,vue}'",
     "test": "jest",
     "size": "size-limit"
   },

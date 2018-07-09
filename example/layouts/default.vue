@@ -8,12 +8,12 @@
                 Examples
             </h2>
             <ul>
-                <li><nuxt-link to="/ajax-cards">Ajax cards layout</nuxt-link></li>
-                <li><nuxt-link to="/ajax-table">Ajax table layout</nuxt-link></li>
+                <li><nuxt-link to="/ajax-card-layout">Ajax card layout</nuxt-link></li>
+                <li><nuxt-link to="/ajax-card-layout-prerendered">Ajax card layout (prerendered)</nuxt-link></li>
             </ul>
         </nav>
         <div class="bg-white p-8 pt-16 flex-1">
-            <h1 class="text-3xl font-bold mb-16 text-center">
+            <h1 class="text-3xl font-bold mb-8 text-black text-center">
                 {{ title }}
             </h1>
             <nuxt/>
@@ -23,14 +23,6 @@
 
 <script>
 export default {
-    head: {
-        link: [
-            // { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Crimson+Text:400,400i,700,700i' },
-            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Neuton:400,400i,700' },
-            { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css' },
-        ],
-    },
-
     computed: {
         title() {
             return this.$route.matched[0]
@@ -38,53 +30,63 @@ export default {
                 : '';
         },
     },
-}
+};
 </script>
 
 <style global>
-    * {
-        position: relative;
-        box-sizing: inherit;
-        margin: 0;
-        padding: 0;
-        color: inherit;
-        font: inherit;
-    }
+* {
+    position: relative;
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+}
 
-    *:after,
-    *:before {
-        box-sizing: inherit;
-    }
+*:after,
+*:before {
+    box-sizing: inherit;
+}
 
-    html {
-        box-sizing: border-box;
-    }
+*:focus {
+    outline: none !important;
+    background: #fff9c2;
+}
 
-    body {
-        background-color: #f5f5f5;
-        font-family: 'Neuton';
-    }
+html {
+    box-sizing: border-box;
+}
 
-    h1 {
-        font-size: inherit; /* Reset normalize 2em */
-    }
+body {
+    background-color: #f5f5f5;
+    font-family: 'Amiri';
+    line-height: 1.5;
+    color: #3d4852;
+}
 
-    a {
-        text-decoration: none;
-    }
+h1 {
+    font-size: inherit; /* Reset normalize 2em */
+}
 
-    ol,
-    ul {
-        list-style: none;
-    }
+a {
+    text-decoration: none;
+}
 
-    img,
-    svg {
-        vertical-align: middle;
-    }
+ol,
+ul {
+    list-style: none;
+}
 
-    .transition {
-        transition: all 0.2s ease-in-out;
-    }
+img,
+svg {
+    vertical-align: middle;
+}
+
+.fit-cover {
+    object-fit: cover;
+}
+
+.transition {
+    transition: all 0.2s ease-in-out;
+}
 </style>
-
