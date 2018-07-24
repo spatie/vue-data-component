@@ -1,11 +1,12 @@
 <template>
     <DataComponent
+        :fetcher="fetcher"
         :filter="filter"
         :sort="sort"
-        :data="members"
         :initial-load-delay-ms="1000"
+        data-key="members"
     >
-        <template slot-scope="{ data }">
+        <template slot-scope="{ members }">
             <div>
                 <input type="text" v-model="filter">
                 <table>
@@ -23,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="member in data" :key="member.firstName">
+                        <tr v-for="member in members" :key="member.firstName">
                             <td>{{ member.firstName }}</td>
                             <td>{{ member.lastName }}</td>
                             <td>{{ member.instrument }}</td>
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import DataComponent, { SortToggle } from '../../src';
+import DataComponent, { SortToggle, createFetcher, filterable, sortable } from '../../src';
 
 export default {
     components: {
@@ -87,5 +88,14 @@ export default {
             },
         ],
     }),
+
+    computed: {
+        fetcher() {
+            return createFetcher(this.members, [
+                filterable(['firstName', 'lastName', 'instrument']),
+                sortable(['firstName', 'lastName', 'instrument', 'birthday', 'songs']),
+            ]);
+        },
+    },
 };
 </script>

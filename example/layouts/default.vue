@@ -1,15 +1,31 @@
 <template>
-    <div class="max-w-xl mx-auto py-4 flex min-h-screen">
-        <nav class="w-1/5 pt-8 text-xl">
+    <div class="max-w-2xl mx-auto py-4 flex min-h-screen">
+        <nav class="w-1/5 pt-8 pr-4 font-sans text-sm">
+            <h2 class="text-grey-dark font-bold mb-4">
+                Vue Data Component
+            </h2>
             <ul class="mb-8">
-                <li><nuxt-link to="/">Home</nuxt-link></li>
+                <li><nuxt-link to="#">Introduction</nuxt-link></li>
+                <li><nuxt-link to="#">Postcardware</nuxt-link></li>
+                <li><nuxt-link to="#">Requirements</nuxt-link></li>
+                <li><nuxt-link to="#">High level overview</nuxt-link></li>
+                <li><nuxt-link to="#">Installation and setup</nuxt-link></li>
+                <li><nuxt-link to="#">About Spatie</nuxt-link></li>
             </ul>
-            <h2 class="mb-1 text-grey-dark">
+            <h2 class="text-grey-dark">
+                Manipulating data
+            </h2>
+            <ul class="mb-8">
+                <li><nuxt-link to="#">Filter</nuxt-link></li>
+                <li><nuxt-link to="#">Sort</nuxt-link></li>
+                <li><nuxt-link to="#">Pagination</nuxt-link></li>
+            </ul>
+            <h2 class="text-grey-dark">
                 Examples
             </h2>
             <ul>
                 <li><nuxt-link to="/ajax-card-layout">Ajax card layout</nuxt-link></li>
-                <li><nuxt-link to="/ajax-card-layout-prerendered">Ajax card layout (prerendered)</nuxt-link></li>
+                <li><nuxt-link to="/prerendered-card-layout">Prerendered card layout</nuxt-link></li>
             </ul>
         </nav>
         <div class="bg-white p-8 pt-16 flex-1">
@@ -18,6 +34,7 @@
             </h1>
             <nuxt/>
         </div>
+        <div class="w-1/5"></div>
     </div>
 </template>
 

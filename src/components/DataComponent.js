@@ -1,6 +1,5 @@
 import { debounce } from '../helpers/util';
 import createPagesArray from '../helpers/createPagesArray';
-import createItemGetterFromArray from '../helpers/createItemGetterFromArray';
 
 export default {
     props: {
@@ -8,16 +7,16 @@ export default {
         filter: { default: null },
         page: { default: 1, type: Number },
         perPage: { default: Infinity, type: Number },
-        data: { required: true, type: [Array, Function] },
+        fetcher: { required: true, type: Function },
         initialData: { default: null },
         debounceMs: { default: 0 },
         initialLoadDelayMs: { default: 0 },
         slowRequestThresholdMs: { default: 400 },
+        dataKey: { default: 'data' },
         tag: { default: 'div' },
     },
 
     data: () => ({
-        dataGetter: null,
         loaded: false,
         activeRequestCount: 0,
         isSlowRequest: false,
@@ -28,9 +27,6 @@ export default {
     }),
 
     created() {
-        this.dataGetter =
-            typeof this.data === 'function' ? this.data : createItemGetterFromArray(this.data);
-
         if (this.initialData) {
             this.visibleData = this.initialData.data;
             this.visibleCount = this.initialData.data.length;
@@ -95,7 +91,7 @@ export default {
         },
 
         getVisibleData() {
-            const result = this.dataGetter(this.state);
+            const result = this.fetcher(this.state);
 
             if (typeof result.then == 'function') {
                 this.activeRequestCount++;
@@ -121,7 +117,7 @@ export default {
 
                 this.loaded = true;
             } else {
-                throw new Error('Data function must return an object or a promise');
+                throw new Error('Fetcher must return an object with at least `data` key or a promise');
             }
         },
 
@@ -160,7 +156,7 @@ export default {
             this.tag,
             {},
             this.$scopedSlots.default({
-                data: this.visibleData,
+                [this.dataKey]: this.visibleData,
                 visibleCount: this.visibleCount,
                 totalCount: this.totalCount,
                 isSlowRequest: this.isSlowRequest,

@@ -77,7 +77,7 @@ import axios from 'axios';
 import ricksFirstPage from '../data/ricks-first-page';
 
 export default {
-    title: 'Ajax card layout (prerendered)',
+    title: 'Prerendered card layout',
 
     data: () => ({
         page: 1,
