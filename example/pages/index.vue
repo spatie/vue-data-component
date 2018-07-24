@@ -92,8 +92,8 @@ export default {
     computed: {
         fetcher() {
             return createFetcher(this.members, [
-                filterable(['firstName', 'lastName', 'instrument']),
-                sortable(['firstName', 'lastName', 'instrument', 'birthday', 'songs']),
+                filterBy(['firstName', 'lastName', 'instrument']),
+                sortBy(['firstName', 'lastName', 'instrument', 'birthday', 'songs']),
             ]);
         },
     },

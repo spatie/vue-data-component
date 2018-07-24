@@ -9,7 +9,7 @@ export function createFetcher(data, decorators = []) {
     };
 }
 
-export function sortable(fields) {
+export function sortBy(fields) {
     return (data, { sort }) => {
         const sortOrder = sort.charAt(0) === '-' ? 'desc' : 'asc';
         const sortBy = sortOrder === 'desc' ? sort.slice(1) : sort;
@@ -30,7 +30,7 @@ export function sortable(fields) {
     }
 }
 
-export function filterable(fields) {
+export function filterBy(fields) {
     return (data, { filter }) => {
         const normalizedFilter = `${filter}`.toLowerCase().replace(/[^A-Za-z0-9]*/g, '');
 
