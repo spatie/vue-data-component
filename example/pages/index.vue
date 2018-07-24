@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import DataComponent, { SortToggle, createFetcher, filterable, sortable } from '../../src';
+import DataComponent, { SortToggle, createFetcher, filterBy, sortBy } from '../../src';
 
 export default {
     components: {

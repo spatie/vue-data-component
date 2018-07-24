@@ -1,18 +1,51 @@
 export function createFetcher(data, decorators = []) {
     return state => {
+        const totalCount = data.length;
+
         const visibleData = decorators.reduce(
             (data, decorator) => decorator(data, state),
             [].concat(data)
         );
 
-        return { data: visibleData };
+        return {
+            totalCount,
+            data: visibleData,
+        };
     };
+}
+
+export function filterBy(fields) {
+    return (data, { filter }) => {
+        if (!filter) {
+            return data;
+        }
+
+        const normalizedFilter = `${filter}`.toLowerCase().replace(/[^A-Za-z0-9]*/g, '');
+
+        if (!normalizedFilter) {
+            return data;
+        }
+
+        return data.filter(row => {
+            return Object.keys(row)
+                .filter(field => fields.indexOf(field) !== -1)
+                .map(field => row[field])
+                .join('')
+                .toLowerCase()
+                .replace(/[^A-Za-z0-9]*/g, '')
+                .indexOf(normalizedFilter) !== -1;
+        });
+    }
 }
 
 export function sortBy(fields) {
     return (data, { sort }) => {
-        const sortOrder = `${sort}`.charAt(0) === '-' ? 'desc' : 'asc';
-        const sortBy = sortOrder === 'desc' ? sort.slice(1) : `${sort}`;
+        if (!sort) {
+            return data;
+        }
+
+        const sortOrder = sort.charAt(0) === '-' ? 'desc' : 'asc';
+        const sortBy = sortOrder === 'desc' ? sort.slice(1) : sort;
 
         if (fields.indexOf(sortBy) === -1) {
             return data;
@@ -27,25 +60,5 @@ export function sortBy(fields) {
         };
 
         return data.sort(compareFunction);
-    }
-}
-
-export function filterBy(fields) {
-    return (data, { filter }) => {
-        const normalizedFilter = `${filter}`.toLowerCase().replace(/[^A-Za-z0-9]*/g, '');
-
-        if (! normalizedFilter) {
-            return data;
-        }
-
-        return data.filter(row => {
-            return Object.keys(row)
-                .filter(field => fields.indexOf(field) !== -1)
-                .map(field => row[field])
-                .join('')
-                .toLowerCase()
-                .replace(/[^A-Za-z0-9]*/g, '')
-                .indexOf(normalizedFilter) !== -1;
-        });
     }
 }
