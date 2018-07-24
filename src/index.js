@@ -3,6 +3,6 @@ import SortToggle from './components/SortToggle';
 
 export { SortToggle };
 
-export { createFetcher, filterBy, sortBy } from './helpers/fetchers';
+export { createFetcher } from './helpers/createFetcher';
 
 export default DataComponent;

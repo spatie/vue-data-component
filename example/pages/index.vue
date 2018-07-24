@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import DataComponent, { SortToggle, createFetcher, filterBy, sortBy } from '../../src';
+import DataComponent, { SortToggle, createFetcher } from '../../src';
 
 export default {
     components: {
@@ -91,10 +91,9 @@ export default {
 
     computed: {
         fetcher() {
-            return createFetcher(this.members, [
-                filterBy(['firstName', 'lastName', 'instrument']),
-                sortBy(['firstName', 'lastName', 'instrument', 'birthday', 'songs']),
-            ]);
+            return createFetcher(this.members, {
+                filterBy: ['firstName', 'lastName', 'instrument'],
+            });
         },
     },
 };
