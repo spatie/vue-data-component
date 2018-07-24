@@ -11,8 +11,8 @@ export function createFetcher(data, decorators = []) {
 
 export function sortBy(fields) {
     return (data, { sort }) => {
-        const sortOrder = sort.charAt(0) === '-' ? 'desc' : 'asc';
-        const sortBy = sortOrder === 'desc' ? sort.slice(1) : sort;
+        const sortOrder = `${sort}`.charAt(0) === '-' ? 'desc' : 'asc';
+        const sortBy = sortOrder === 'desc' ? sort.slice(1) : `${sort}`;
 
         if (fields.indexOf(sortBy) === -1) {
             return data;
