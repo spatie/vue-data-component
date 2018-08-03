@@ -2,6 +2,8 @@ import { debounce } from '../helpers/util';
 import createPagesArray from '../helpers/createPagesArray';
 
 export default {
+    name: 'DataComponent',
+
     props: {
         sort: { default: null, type: String },
         filter: { default: null },
@@ -87,11 +89,11 @@ export default {
 
     methods: {
         forceUpdate() {
-            this.getVisibleData();
+            this.getVisibleData({ forceUpdate: true });
         },
 
-        getVisibleData() {
-            const result = this.fetcher(this.state);
+        getVisibleData({ forceUpdate = false } = {}) {
+            const result = this.fetcher({ ...this.state, forceUpdate });
 
             if (typeof result.then == 'function') {
                 this.activeRequestCount++;

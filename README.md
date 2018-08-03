@@ -11,6 +11,13 @@
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
+## Installation
+
+### Polyfills
+
+- `Promise`
+- `Array.from`
+
 ## Testing
 
 ```bash
