@@ -1,6 +1,8 @@
 import { dataComponent } from './DataComponent';
 
 export default {
+    name: 'DataSortToggle',
+
     props: {
         for: { required: true },
         tag: { default: 'button' },

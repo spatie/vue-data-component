@@ -15,13 +15,13 @@
                         <thead>
                             <tr>
                                 <th v-for="(label, property) in columns" :key="property">
-                                    <sort-toggle :for="property">
+                                    <data-sort-toggle :for="property">
                                         <template slot-scope="{ sortedByAscending, sortedByDescending }">
                                             {{ label }}
                                             <span v-if="sortedByAscending">⬆️</span>
                                             <span v-if="sortedByDescending">⬇️️</span>
                                         </template>
-                                    </sort-toggle>
+                                    </data-sort-toggle>
                                 </th>
                             </tr>
                         </thead>
@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import DataComponent, { SortToggle, withQuery, createFetcher } from '../../src';
+import DataComponent, { DataSortToggle, withQuery, createFetcher } from '../../src';
 
 export default {
     components: {
         DataComponent,
-        SortToggle,
+        DataSortToggle,
     },
 
     data() {

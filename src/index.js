@@ -1,7 +1,7 @@
 import DataComponent from './components/DataComponent';
-import SortToggle from './components/SortToggle';
+import DataSortToggle from './components/DataSortToggle';
 
-export { SortToggle };
+export { DataSortToggle };
 
 export { withQuery } from './helpers/queryString';
 export { createFetcher } from './helpers/createFetcher';
