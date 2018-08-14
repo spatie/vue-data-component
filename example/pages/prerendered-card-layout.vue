@@ -5,7 +5,7 @@
             <p>Since the component already knows which data to display in the first render, there's no flash when the page loads.</p>
         </Intro>
         <DataComponent
-            :data="getRicks"
+            :fetcher="getRicks"
             :initial-data="initialData"
             :filter="filter"
             :page="page"

@@ -1,5 +1,6 @@
 import { debounce } from '../helpers/util';
 import createPagesArray from '../helpers/createPagesArray';
+import { toQuery } from '../helpers/queryString';
 
 export const dataComponent = Symbol();
 
@@ -12,12 +13,14 @@ export default {
         filter: { default: null },
         page: { default: 1, type: Number },
         perPage: { default: Infinity, type: Number },
-        initialData: { default: null },
-        debounceMs: { default: 0 },
-        initialLoadDelayMs: { default: 0 },
-        slowRequestThresholdMs: { default: 400 },
-        dataKey: { default: 'data' },
-        tag: { default: 'div' },
+        initialData: { default: null, type: Object },
+        debounceMs: { default: 0, type: Number },
+        initialLoadDelayMs: { default: 0, type: Number },
+        slowRequestThresholdMs: { default: 400, type: Number },
+        dataKey: { default: 'data', type: String },
+        tag: { default: 'div', type: String },
+        queryString: { default: false, type: Boolean },
+        queryStringDefaults: { default: () => {}, type: Object },
     },
 
     data: () => ({
@@ -33,11 +36,8 @@ export default {
     provide() {
         return {
             [dataComponent]: {
-                setSort: this.setSort,
+                setState: this.setState,
                 toggleSort: this.toggleSort,
-                setFilter: this.setFilter,
-                setPage: this.setPage,
-                setPerPage: this.setPerPage,
             },
         }
     },
@@ -53,9 +53,9 @@ export default {
             ? debounce(this.getVisibleData, this.debounceMs)
             : this.getVisibleData;
 
-        this.$watch('state', getVisibleData, {
+        this.stateWatcher = this.$watch('state', getVisibleData, {
             deep: true,
-            immediate: !this.initialData,
+            immediate: !this.loaded,
         });
 
         if (!this.initialLoadDelayMs) {
@@ -70,8 +70,6 @@ export default {
             }, this.initialLoadDelayMs);
         }
 
-        // Since `handleActiveRequestCountChange` uses the browser's `timeout` API, we can't start the watcher in
-        // the `created` hook for SSR.
         this.$watch('activeRequestCount', this.handleActiveRequestCountChange);
     },
 
@@ -88,7 +86,14 @@ export default {
 
     methods: {
         getVisibleData({ forceUpdate = false } = {}) {
-            const result = this.fetcher({ ...this.state, forceUpdate });
+            if (this.queryString && this.loaded) {
+                window.history.replaceState(null, null, toQuery(this.state, this.queryStringDefaults));
+            }
+
+            const result = this.fetcher({
+                ...this.state,
+                forceUpdate,
+            });
 
             if (typeof result.then == 'function') {
                 this.activeRequestCount++;
@@ -144,33 +149,29 @@ export default {
             }
         },
 
-        toggleSort(field) {
-            const currentSortOrder = this.sort.charAt(0) === '-' ? 'desc' : 'asc';
-            const currentSortField = currentSortOrder === 'desc' ? this.sort.slice(1) : this.sort;
+        setState(state) {
+            for (const key in state) {
+                this.$emit(`update:${key}`, state[key]);
+            }
+        },
 
-            if (field === currentSortField && currentSortOrder === 'asc') {
-                this.setSort(`-${currentSortField}`);
+        toggleSort(field) {
+            if (!this.sort) {
+                this.setState({ sort: field });
 
                 return;
             }
 
-            this.setSort(field);
-        },
+            const currentSortOrder = this.sort.charAt(0) === '-' ? 'desc' : 'asc';
+            const currentSortField = currentSortOrder === 'desc' ? this.sort.slice(1) : this.sort;
 
-        setSort(sort) {
-            this.$emit('update:sort', sort);
-        },
+            if (field === currentSortField && currentSortOrder === 'asc') {
+                this.setState({ sort: `-${currentSortField}` });
 
-        setFilter(filter) {
-            this.$emit('update:filter', filter);
-        },
+                return;
+            }
 
-        setPage(page) {
-            this.$emit('update:page', page);
-        },
-
-        setPerPage(perPage) {
-            this.$emit('update:perPage', perPage);
+            this.setState({ sort: field });
         },
 
         forceUpdate() {
@@ -192,6 +193,7 @@ export default {
                 totalCount: this.totalCount,
                 isSlowRequest: this.isSlowRequest,
                 toggleSort: this.toggleSort,
+                setState: this.setState,
                 pages: createPagesArray({
                     page: this.state.page,
                     perPage: this.state.perPage,

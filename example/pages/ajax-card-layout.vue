@@ -5,7 +5,7 @@
             The free public API is a perfect case for a paginated, filterable, ajax-driven data component.</p>
         </Intro>
         <DataComponent
-            :data="getRicks"
+            :fetcher="getRicks"
             :initial-load-delay-ms="1000"
             :filter="filter"
             :page="page"

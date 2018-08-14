@@ -5,7 +5,7 @@
                 Vue Data Component
             </h2>
             <ul class="mb-8">
-                <li><nuxt-link to="#">Introduction</nuxt-link></li>
+                <li><nuxt-link to="/">Introduction</nuxt-link></li>
                 <li><nuxt-link to="#">Postcardware</nuxt-link></li>
                 <li><nuxt-link to="#">Requirements</nuxt-link></li>
                 <li><nuxt-link to="#">High level overview</nuxt-link></li>

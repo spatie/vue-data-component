@@ -1,44 +1,47 @@
 <template>
-    <DataComponent
-        :fetcher="fetcher"
-        :filter="filter"
-        :sort.sync="sort"
-        :initial-load-delay-ms="1000"
-        data-key="members"
-    >
-        <template slot-scope="{ members }">
-            <div>
-                <input type="text" v-model="filter">
-                <table>
-                    <thead>
-                        <tr>
-                            <th v-for="(label, property) in columns" :key="property">
-                                <SortToggle :for="property">
-                                    <template slot-scope="{ sortedByAscending, sortedByDescending }">
-                                        {{ label }}
-                                        <span v-if="sortedByAscending">⬆️</span>
-                                        <span v-if="sortedByDescending">⬇️️</span>
-                                    </template>
-                                </SortToggle>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="member in members" :key="member.firstName">
-                            <td>{{ member.firstName }}</td>
-                            <td>{{ member.lastName }}</td>
-                            <td>{{ member.instrument }}</td>
-                            <td>{{ member.songs }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </template>
-    </DataComponent>
+    <no-ssr>
+        <data-component
+            :fetcher="fetcher"
+            :filter.sync="state.filter"
+            :sort.sync="state.sort"
+            :initial-load-delay-ms="1000"
+            :query-string="true"
+            data-key="members"
+        >
+            <template slot-scope="{ members }">
+                <div>
+                    <input type="text" v-model="state.filter">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th v-for="(label, property) in columns" :key="property">
+                                    <sort-toggle :for="property">
+                                        <template slot-scope="{ sortedByAscending, sortedByDescending }">
+                                            {{ label }}
+                                            <span v-if="sortedByAscending">⬆️</span>
+                                            <span v-if="sortedByDescending">⬇️️</span>
+                                        </template>
+                                    </sort-toggle>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="member in members" :key="member.firstName">
+                                <td>{{ member.firstName }}</td>
+                                <td>{{ member.lastName }}</td>
+                                <td>{{ member.instrument }}</td>
+                                <td>{{ member.songs }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </data-component>
+    </no-ssr>
 </template>
 
 <script>
-import DataComponent, { SortToggle, createFetcher } from '../../src';
+import DataComponent, { SortToggle, withQuery, createFetcher } from '../../src';
 
 export default {
     components: {
@@ -46,48 +49,52 @@ export default {
         SortToggle,
     },
 
-    data: () => ({
-        filter: '',
-        sort: 'firstName',
+    data() {
+        return {
+            state: withQuery({
+                filter: '',
+                sort: 'firstName',
+            }),
 
-        columns: {
-            firstName: 'First name',
-            lastName: 'Last name',
-            instrument: 'Instrument',
-            songs: 'Songs',
-        },
+            columns: {
+                firstName: 'First name',
+                lastName: 'Last name',
+                instrument: 'Instrument',
+                songs: 'Songs',
+            },
 
-        members: [
-            {
-                firstName: 'John',
-                lastName: 'Lennon',
-                instrument: 'Guitar',
-                birthday: '04/10/1940',
-                songs: 72,
-            },
-            {
-                firstName: 'Paul',
-                lastName: 'McCartney',
-                instrument: 'Bass',
-                birthday: '18/06/1942',
-                songs: 70,
-            },
-            {
-                firstName: 'George',
-                lastName: 'Harrison',
-                instrument: 'Guitar',
-                birthday: '25/02/1943',
-                songs: 22,
-            },
-            {
-                firstName: 'Ringo',
-                lastName: 'Starr',
-                instrument: 'Drums',
-                birthday: '07/07/1940',
-                songs: 2,
-            },
-        ],
-    }),
+            members: [
+                {
+                    firstName: 'John',
+                    lastName: 'Lennon',
+                    instrument: 'Guitar',
+                    birthday: '04/10/1940',
+                    songs: 72,
+                },
+                {
+                    firstName: 'Paul',
+                    lastName: 'McCartney',
+                    instrument: 'Bass',
+                    birthday: '18/06/1942',
+                    songs: 70,
+                },
+                {
+                    firstName: 'George',
+                    lastName: 'Harrison',
+                    instrument: 'Guitar',
+                    birthday: '25/02/1943',
+                    songs: 22,
+                },
+                {
+                    firstName: 'Ringo',
+                    lastName: 'Starr',
+                    instrument: 'Drums',
+                    birthday: '07/07/1940',
+                    songs: 2,
+                },
+            ],
+        }
+    },
 
     computed: {
         fetcher() {
