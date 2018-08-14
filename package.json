@@ -52,5 +52,8 @@
       "limit": "2 KB",
       "path": "dist/vue-data-component.min.js"
     }
-  ]
+  ],
+  "dependencies": {
+    "query-string": "^6.1.0"
+  }
 }

@@ -2,7 +2,7 @@
     <DataComponent
         :fetcher="fetcher"
         :filter="filter"
-        :sort="sort"
+        :sort.sync="sort"
         :initial-load-delay-ms="1000"
         data-key="members"
     >
@@ -13,11 +13,11 @@
                     <thead>
                         <tr>
                             <th v-for="(label, property) in columns" :key="property">
-                                <SortToggle :for="property" v-model="sort">
-                                    <template slot-scope="{ isAscending, isDescending }">
+                                <SortToggle :for="property">
+                                    <template slot-scope="{ sortedByAscending, sortedByDescending }">
                                         {{ label }}
-                                        <span v-if="isAscending">⬆️</span>
-                                        <span v-if="isDescending">⬇️️</span>
+                                        <span v-if="sortedByAscending">⬆️</span>
+                                        <span v-if="sortedByDescending">⬇️️</span>
                                     </template>
                                 </SortToggle>
                             </th>

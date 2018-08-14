@@ -1,15 +1,17 @@
 import { debounce } from '../helpers/util';
 import createPagesArray from '../helpers/createPagesArray';
 
+export const dataComponent = Symbol();
+
 export default {
     name: 'DataComponent',
 
     props: {
+        fetcher: { required: true, type: Function },
         sort: { default: null, type: String },
         filter: { default: null },
         page: { default: 1, type: Number },
         perPage: { default: Infinity, type: Number },
-        fetcher: { required: true, type: Function },
         initialData: { default: null },
         debounceMs: { default: 0 },
         initialLoadDelayMs: { default: 0 },
@@ -28,11 +30,21 @@ export default {
         totalCount: 0,
     }),
 
+    provide() {
+        return {
+            [dataComponent]: {
+                setSort: this.setSort,
+                toggleSort: this.toggleSort,
+                setFilter: this.setFilter,
+                setPage: this.setPage,
+                setPerPage: this.setPerPage,
+            },
+        }
+    },
+
     created() {
         if (this.initialData) {
-            this.visibleData = this.initialData.data;
-            this.visibleCount = this.initialData.data.length;
-            this.totalCount = this.initialData.totalCount || this.initialData.data.length;
+            this.hydrateWithInitialData();
 
             this.loaded = true;
         }
@@ -41,7 +53,10 @@ export default {
             ? debounce(this.getVisibleData, this.debounceMs)
             : this.getVisibleData;
 
-        this.$watch('state', getVisibleData, { deep: true, immediate: !this.initialData });
+        this.$watch('state', getVisibleData, {
+            deep: true,
+            immediate: !this.initialData,
+        });
 
         if (!this.initialLoadDelayMs) {
             this.loaded = true;
@@ -49,31 +64,15 @@ export default {
     },
 
     mounted() {
-        if (this.initialLoadDelayMs) {
+        if (!this.loaded) {
             window.setTimeout(() => {
                 this.loaded = true;
             }, this.initialLoadDelayMs);
         }
 
-        this.$watch('activeRequestCount', activeRequestCount => {
-            if (activeRequestCount === 0 && this.slowRequestTimeout) {
-                window.clearTimeout(this.slowRequestTimeout);
-
-                this.isSlowRequest = false;
-
-                this.$emit('slowrequestend');
-            }
-
-            if (activeRequestCount === 1) {
-                this.slowRequestTimeout = window.setTimeout(() => {
-                    if (!this.isSlowRequest) {
-                        this.isSlowRequest = true;
-
-                        this.$emit('slowrequeststart');
-                    }
-                }, this.slowRequestThresholdMs);
-            }
-        });
+        // Since `handleActiveRequestCountChange` uses the browser's `timeout` API, we can't start the watcher in
+        // the `created` hook for SSR.
+        this.$watch('activeRequestCount', this.handleActiveRequestCountChange);
     },
 
     computed: {
@@ -88,10 +87,6 @@ export default {
     },
 
     methods: {
-        forceUpdate() {
-            this.getVisibleData({ forceUpdate: true });
-        },
-
         getVisibleData({ forceUpdate = false } = {}) {
             const result = this.fetcher({ ...this.state, forceUpdate });
 
@@ -119,20 +114,34 @@ export default {
 
                 this.loaded = true;
             } else {
-                throw new Error('Fetcher must return an object with at least `data` key or a promise');
+                throw new Error('Fetcher must return a promise or an object with a `data` key');
             }
         },
 
-        startSlowRequestTimeout() {
-            if (!window) {
-                return;
+        hydrateWithInitialData() {
+            this.visibleData = this.initialData.data;
+            this.visibleCount = this.initialData.data.length;
+            this.totalCount = this.initialData.totalCount || this.initialData.data.length;
+        },
+
+        handleActiveRequestCountChange(activeRequestCount) {
+            if (activeRequestCount === 0 && this.slowRequestTimeout) {
+                window.clearTimeout(this.slowRequestTimeout);
+
+                this.isSlowRequest = false;
+
+                this.$emit('slowrequestend');
             }
 
-            this.stopSlowRequestTimeout();
+            if (activeRequestCount === 1) {
+                this.slowRequestTimeout = window.setTimeout(() => {
+                    if (!this.isSlowRequest) {
+                        this.isSlowRequest = true;
 
-            this.slowRequestTimeout = window.setTimeout(() => {
-                this.isSlowRequest = true;
-            }, this.slowRequestThresholdMs);
+                        this.$emit('slowrequeststart');
+                    }
+                }, this.slowRequestThresholdMs);
+            }
         },
 
         toggleSort(field) {
@@ -140,12 +149,32 @@ export default {
             const currentSortField = currentSortOrder === 'desc' ? this.sort.slice(1) : this.sort;
 
             if (field === currentSortField && currentSortOrder === 'asc') {
-                this.$emit('update:sort', `-${currentSortField}`);
+                this.setSort(`-${currentSortField}`);
 
                 return;
             }
 
-            this.$emit('update:sort', field);
+            this.setSort(field);
+        },
+
+        setSort(sort) {
+            this.$emit('update:sort', sort);
+        },
+
+        setFilter(filter) {
+            this.$emit('update:filter', filter);
+        },
+
+        setPage(page) {
+            this.$emit('update:page', page);
+        },
+
+        setPerPage(perPage) {
+            this.$emit('update:perPage', perPage);
+        },
+
+        forceUpdate() {
+            this.getVisibleData({ forceUpdate: true });
         },
     },
 
