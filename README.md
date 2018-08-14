@@ -43,11 +43,8 @@ If you discover any security related issues, please contact freek@spatie.be inst
 
 ## Credits
 
-- [Freek Van der Herten](https://github.com/freekmurze)
 - [Sebastian De Deyne](https://github.com/sebdedeyne)
 - [All Contributors](../../contributors)
-
-The Pagination component was inspired by [this lesson on Laracasts.com](https://laracasts.com/series/lets-build-a-forum-with-laravel/episodes/16).
 
 ## Support us
 
