@@ -1,5 +1,6 @@
 # A straightforward Vue component to filter, sort and paginate data.
 
+![Less than 4kb](https://img.shields.io/badge/size-%3C4kb-brightgreen.svg?style=flat-square)
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-data-component.svg?style=flat-square)](https://npmjs.com/package/vue-data-component)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/spatie/vue-data-component/master.svg?style=flat-square)](https://travis-ci.org/spatie/vue-data-component)
