@@ -13,8 +13,8 @@
         }]
     ],
     "plugins": [
-        "babel-plugin-transform-object-rest-spread",
-        "babel-plugin-external-helpers"
+        "babel-plugin-transform-class-properties",
+        "babel-plugin-transform-object-rest-spread"
     ],
     "env": {
         "test": {

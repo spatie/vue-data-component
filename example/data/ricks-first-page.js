@@ -6,7 +6,10 @@ export default [
         species: 'Human',
         type: '',
         gender: 'Male',
-        origin: { name: 'Earth (C-137)', url: 'https://rickandmortyapi.com/api/location/1' },
+        origin: {
+            name: 'Earth (C-137)',
+            url: 'https://rickandmortyapi.com/api/location/1',
+        },
         location: {
             name: 'Earth (Replacement Dimension)',
             url: 'https://rickandmortyapi.com/api/location/20',
@@ -56,7 +59,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/8.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/8',
@@ -70,7 +76,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/15.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/10'],
         url: 'https://rickandmortyapi.com/api/character/15',
@@ -98,7 +107,10 @@ export default [
         type: 'Fish-Person',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/22.jpeg',
         episode: [
             'https://rickandmortyapi.com/api/episode/10',
@@ -116,7 +128,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/48.jpeg',
         episode: [
             'https://rickandmortyapi.com/api/episode/22',
@@ -133,7 +148,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/56.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/56',
@@ -147,7 +165,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/69.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/22'],
         url: 'https://rickandmortyapi.com/api/character/69',
@@ -160,8 +181,14 @@ export default [
         species: 'Human',
         type: '',
         gender: 'Male',
-        origin: { name: 'Earth (K-83)', url: 'https://rickandmortyapi.com/api/location/26' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        origin: {
+            name: 'Earth (K-83)',
+            url: 'https://rickandmortyapi.com/api/location/26',
+        },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/72.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/72',
@@ -175,7 +202,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/74.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/74',
@@ -189,7 +219,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/78.jpeg',
         episode: [
             'https://rickandmortyapi.com/api/episode/10',
@@ -205,8 +238,14 @@ export default [
         species: 'Cronenberg',
         type: '',
         gender: 'Male',
-        origin: { name: 'Cronenberg Earth', url: 'https://rickandmortyapi.com/api/location/12' },
-        location: { name: 'Earth (C-137)', url: 'https://rickandmortyapi.com/api/location/1' },
+        origin: {
+            name: 'Cronenberg Earth',
+            url: 'https://rickandmortyapi.com/api/location/12',
+        },
+        location: {
+            name: 'Earth (C-137)',
+            url: 'https://rickandmortyapi.com/api/location/1',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/82.jpeg',
         episode: [
             'https://rickandmortyapi.com/api/episode/6',
@@ -223,7 +262,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/86.jpeg',
         episode: [
             'https://rickandmortyapi.com/api/episode/10',
@@ -240,7 +282,10 @@ export default [
         species: 'Human',
         type: '',
         gender: 'Male',
-        origin: { name: 'Earth (J19ζ7)', url: 'https://rickandmortyapi.com/api/location/31' },
+        origin: {
+            name: 'Earth (J19ζ7)',
+            url: 'https://rickandmortyapi.com/api/location/31',
+        },
         location: {
             name: 'Earth (Replacement Dimension)',
             url: 'https://rickandmortyapi.com/api/location/20',
@@ -261,7 +306,10 @@ export default [
         type: 'Robot',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/119.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/10'],
         url: 'https://rickandmortyapi.com/api/character/119',
@@ -275,7 +323,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/135.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/135',
@@ -289,7 +340,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/164.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/10'],
         url: 'https://rickandmortyapi.com/api/character/164',
@@ -303,7 +357,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/165.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/165',
@@ -317,7 +374,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/187.jpeg',
         episode: ['https://rickandmortyapi.com/api/episode/28'],
         url: 'https://rickandmortyapi.com/api/character/187',
@@ -331,7 +391,10 @@ export default [
         type: '',
         gender: 'Male',
         origin: { name: 'unknown', url: '' },
-        location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+        location: {
+            name: 'Citadel of Ricks',
+            url: 'https://rickandmortyapi.com/api/location/3',
+        },
         image: 'https://rickandmortyapi.com/api/character/avatar/215.jpeg',
         episode: [
             'https://rickandmortyapi.com/api/episode/10',

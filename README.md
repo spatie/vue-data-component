@@ -14,6 +14,10 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Installation
 
+### Optional dependencies
+
+- `query-string`
+
 ### Polyfills
 
 - `Promise`

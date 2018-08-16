@@ -36,12 +36,14 @@
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.16",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.6",
     "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.0",
     "eslint-config-prettier": "^2.9.0",
-    "jest": "^23.1.0",
+    "jest": "^23.5.0",
     "prettier": "^1.13.0",
     "query-string": "^6.1.0",
     "rollup": "^0.60.1",
@@ -50,6 +52,9 @@
     "size-limit": "^0.18.2",
     "vue": "^2.5.0",
     "vue-template-compiler": "^2.5.16"
+  },
+  "jest": {
+    "testPathIgnorePatterns": ["/fixtures/"]
   },
   "size-limit": [
     {

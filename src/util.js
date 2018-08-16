@@ -22,3 +22,11 @@ export function flow(fns) {
 export function range(length) {
     return Array.from({ length }).map((v, k) => k + 1);
 }
+
+export function arrayWrap(array) {
+    return Array.isArray(array) ? array : [array];
+}
+
+export function passThrough(value) {
+    return value;
+}

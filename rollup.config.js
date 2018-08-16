@@ -7,7 +7,10 @@ export default [
 		input: 'src/index.js',
 		external: ['vue', 'query-string'],
         plugins: [
-            babel({ exclude: 'node_modules/**' }),
+            babel({
+                exclude: 'node_modules/**',
+                plugins: ['external-helpers']
+            }),
         ],
         output: [
             {
@@ -29,7 +32,10 @@ export default [
 		input: 'src/index.js',
 		external: ['vue', 'query-string'],
         plugins: [
-            babel({ exclude: 'node_modules/**' }),
+            babel({
+                exclude: 'node_modules/**',
+                plugins: ['external-helpers']
+            }),
             uglify(),
         ],
         output: [

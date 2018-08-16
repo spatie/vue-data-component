@@ -93,7 +93,7 @@ export default {
                     songs: 2,
                 },
             ],
-        }
+        };
     },
 
     computed: {

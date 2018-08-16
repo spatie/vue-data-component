@@ -1,4 +1,4 @@
-import { debounce } from '../helpers/util';
+import { debounce } from '../util';
 import createPagesArray from '../helpers/createPagesArray';
 import { toQuery } from '../helpers/queryString';
 
@@ -39,7 +39,7 @@ export default {
                 setState: this.setState,
                 toggleSort: this.toggleSort,
             },
-        }
+        };
     },
 
     created() {
@@ -87,7 +87,11 @@ export default {
     methods: {
         getVisibleData({ forceUpdate = false } = {}) {
             if (this.queryString && this.loaded) {
-                window.history.replaceState(null, null, toQuery(this.state, this.queryStringDefaults));
+                window.history.replaceState(
+                    null,
+                    null,
+                    toQuery(this.state, this.queryStringDefaults)
+                );
             }
 
             const result = this.fetcher({

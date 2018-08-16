@@ -6,7 +6,7 @@ export function createFetcher(data, options = {}) {
 
         if (options.filterBy && state.filter) {
             if (typeof state.filter !== 'string' && typeof state.filter !== 'number') {
-                throw new Error("Only strings and numbers are supported with `filterBy`")
+                throw new Error('Only strings and numbers are supported with `filterBy`');
             }
 
             visibleData = filterData(visibleData, options.filterBy, state.filter);
@@ -31,13 +31,15 @@ function filterData(data, fields, filter) {
     }
 
     return data.filter(row => {
-        return Object.keys(row)
-            .filter(field => fields.indexOf(field) !== -1)
-            .map(field => row[field])
-            .join('')
-            .toLowerCase()
-            .replace(/[^A-Za-z0-9]*/g, '')
-            .indexOf(normalizedFilter) !== -1;
+        return (
+            Object.keys(row)
+                .filter(field => fields.indexOf(field) !== -1)
+                .map(field => row[field])
+                .join('')
+                .toLowerCase()
+                .replace(/[^A-Za-z0-9]*/g, '')
+                .indexOf(normalizedFilter) !== -1
+        );
     });
 }
 
