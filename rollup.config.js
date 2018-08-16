@@ -5,7 +5,7 @@ import { uglify } from 'rollup-plugin-uglify';
 export default [
 	{
 		input: 'src/index.js',
-		external: ['vue', 'query-string'],
+        external: ['vue', 'query-string'],
         plugins: [
             babel({
                 exclude: 'node_modules/**',
@@ -24,13 +24,19 @@ export default [
             },
             {
                 file: pkg.browser,
-                format: 'umd', name: 'DataComponent', exports: 'named',
+                format: 'umd',
+                name: 'DataComponent',
+                exports: 'named',
+                globals: {
+                    'vue': 'vue',
+                    'query-string': 'queryString'
+                },
             },
         ],
 	},
 	{
 		input: 'src/index.js',
-		external: ['vue', 'query-string'],
+        external: ['vue', 'query-string'],
         plugins: [
             babel({
                 exclude: 'node_modules/**',
@@ -44,6 +50,10 @@ export default [
                 format: 'umd',
                 name: 'DataComponent',
                 exports: 'named',
+                globals: {
+                    'vue': 'vue',
+                    'query-string': 'queryString'
+                },
             },
         ],
 	},
