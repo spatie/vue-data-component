@@ -10,3 +10,4 @@ export { Source };
 
 export { default as sort } from './filters/sort';
 export { default as search } from './filters/search';
+export { default as paginate } from './filters/paginate';

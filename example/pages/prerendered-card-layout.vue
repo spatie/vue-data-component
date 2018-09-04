@@ -5,11 +5,9 @@
             <p>Since the component already knows which data to display in the first render, there's no flash when the page loads.</p>
         </intro>
         <data-component
-            :resource="getRicks"
+            :source="getRicks"
+            :query="query"
             :initial-data="initialData"
-            :filter="filter"
-            :page="page"
-            :per-page="20"
         >
             <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
                 <div class="flex justify-between mb-12 py-4 border-t border-b border-grey">
@@ -22,7 +20,7 @@
                             v-for="(status, value) in statusses"
                             :key="value"
                             class="uppercase tracking-wide ml-4"
-                            :class="filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
+                            :class="query.filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
                             @click="filterStatus(value)"
                         >
                             {{ status }}
@@ -57,13 +55,13 @@
                 </div>
 
                 <ul class="mt-4 flex justify-center">
-                    <li v-for="p in pages" :key="p.number">
+                    <li v-for="page in pages" :key="page.number">
                         <button
                             class="mx-4"
-                            :class="p.isActive ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="page = p.number"
+                            :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
+                            @click="query.page = page.number"
                         >
-                            {{ p.number }}
+                            {{ page.number }}
                         </button>
                     </li>
                 </ul>
@@ -80,10 +78,12 @@ export default {
     title: 'Prerendered card layout',
 
     data: () => ({
-        page: 1,
-
-        filter: {
-            status: 'all',
+        query: {
+            page: 1,
+            perPage: 20,
+            filter: {
+                status: 'all',
+            },
         },
 
         statusses: {
@@ -129,12 +129,12 @@ export default {
         },
 
         filterStatus(status) {
-            if (this.filter.status === status) {
+            if (this.query.filter.status === status) {
                 return;
             }
 
-            this.page = 1;
-            this.filter.status = status;
+            this.query.page = 1;
+            this.query.filter.status = status;
         },
     },
 };

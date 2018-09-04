@@ -1,7 +1,7 @@
 <template>
     <no-ssr>
         <data-component
-            :resource="resource"
+            :source="source"
             :query.sync="query"
             :initial-load-delay-ms="1000"
             :query-string="true"
@@ -14,16 +14,39 @@
         >
             <template slot-scope="{ members }">
                 <input type="text" v-model="query.filter.search">
+
+                <data-filter-facet v-model="query.filter.instruments" :multiple="true">
+                    <ul slot-scope="{ toggle, active }">
+                        <li v-for="instrument in instruments" :key="instrument">
+                            <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
+                                {{ instrument }}
+                            </button>
+                        </li>
+                    </ul>
+                </data-filter-facet>
+
+                <data-filter-facet v-model="query.filter.moreThanTenSongs">
+                    <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
+                        More than 10 songs
+                    </button>
+                </data-filter-facet>
+
+                <data-filter-facet v-model="query.filter.lover" facet-value="Yoko">
+                    <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
+                        Yoko
+                    </button>
+                </data-filter-facet>
+
                 <table>
                     <thead>
                         <tr>
                             <th v-for="(label, property) in columns" :key="property">
-                                <data-sort-toggle :for="property">
-                                    <template slot-scope="{ toggle, sortedByAscending, sortedByDescending }">
+                                <data-sort-toggle :for="property" v-model="query.sort">
+                                    <button slot-scope="{ toggle, sortedAsc, sortedDesc }" @click.prevent="toggle">
                                         {{ label }}
-                                        <span v-if="sortedByAscending">⬆️</span>
-                                        <span v-if="sortedByDescending">⬇️️</span>
-                                    </template>
+                                        <span v-if="sortedAsc">⬆️</span>
+                                        <span v-if="sortedDesc">⬇️️</span>
+                                    </button>
                                 </data-sort-toggle>
                             </th>
                         </tr>
@@ -37,17 +60,19 @@
                         </tr>
                     </tbody>
                 </table>
+                <pre>{{ debug }}</pre>
             </template>
         </data-component>
     </no-ssr>
 </template>
 
 <script>
-import DataComponent, { DataSortToggle, createSource, fromQueryString } from '../../packages';
+import DataComponent, { DataFilterFacet, DataSortToggle, createSource, fromQueryString } from '../../packages';
 
 export default {
     components: {
         DataComponent,
+        DataFilterFacet,
         DataSortToggle,
     },
 
@@ -56,6 +81,9 @@ export default {
             query: fromQueryString({
                 filter: {
                     search: '',
+                    instruments: [],
+                    moreThanTenSongs: false,
+                    lover: null,
                 },
                 sort: 'firstName',
             }),
@@ -101,10 +129,20 @@ export default {
     },
 
     computed: {
-        resource() {
-            return createSource(this.members, {
-                filterBy: ['firstName', 'lastName', 'instrument'],
+        source() {
+            return createSource(this.members);
+        },
+
+        instruments() {
+            const instruments = this.members.map(member => member.instrument);
+
+            return instruments.filter((instrument, index) => {
+                return instruments.indexOf(instrument) === index;
             });
+        },
+
+        debug() {
+            return JSON.stringify(this.query, null, 4);
         },
     },
 };

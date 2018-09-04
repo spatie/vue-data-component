@@ -1,54 +1,52 @@
-import { dataComponent } from './DataComponent';
-
 export default {
     name: 'DataSortToggle',
 
     props: {
         for: { required: true },
-        tag: { default: 'button' },
-    },
-
-    inject: {
-        dataComponent,
+        value: { required: true },
     },
 
     computed: {
-        sortedBy() {
+        sorted() {
             return this.value === this.for || this.value === `-${this.for}`;
         },
 
-        sortedByAscending() {
-            return this.sortedBy && this.value.charAt(0) !== '-';
+        sortedAsc() {
+            return this.sorted && this.value.charAt(0) !== '-';
         },
 
-        sortedByDescending() {
-            return this.sortedBy && this.value.charAt(0) === '-';
+        sortedDesc() {
+            return this.sorted && this.value.charAt(0) === '-';
         },
     },
 
     methods: {
-        toggleSort() {
-            this.dataComponent.toggleSort(this.for);
+        toggle() {
+            if (!this.value) {
+                this.$emit('input', this.for);
+
+                return;
+            }
+
+            const currentSortOrder = this.value.charAt(0) === '-' ? 'desc' : 'asc';
+            const currentSortField = currentSortOrder === 'desc' ? this.value.slice(1) : this.value;
+
+            if (this.for === currentSortField && currentSortOrder === 'asc') {
+                this.$emit('input', `-${this.for}`);
+
+                return;
+            }
+
+            this.$emit('input', this.for);
         },
     },
 
     render(h) {
-        const contents = this.$scopedSlots.default
-            ? this.$scopedSlots.default({
-                  sortedBy: this.sortedBy,
-                  sortedByAscending: this.sortedByAscending,
-                  sortedByDescending: this.sortedByDescending,
-              })
-            : this.$slots.default;
-
-        return h(
-            this.tag,
-            {
-                on: {
-                    click: this.toggleSort,
-                },
-            },
-            contents
-        );
+        return this.$scopedSlots.default({
+            toggle: this.toggle,
+            sorted: this.sorted,
+            sortedAsc: this.sortedAsc,
+            sortedDesc: this.sortedDesc,
+        });
     },
 };
