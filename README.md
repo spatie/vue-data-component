@@ -8,6 +8,22 @@
 
 **Work in progress!**
 
+`vue-data-component` is a renderless component to build data-driven interfaces. Interfaces that contain filterable, sortable, or paginated data. We wanted to build something that takes care of pesky little problems like loading indicators, debouncing, or mapping your interface's filters to an AJAX request.
+
+A brief overview of what `vue-data-component` has to offer:
+
+- Filter, sort, and paginate data via AJAX or from a local array
+- Sync the component state with the current URL's query string
+- Debounce AJAX requests
+- No unnecessary loading indicators, only if the request is taking too long
+- Pass initial data for the component's first render when fetching data asynchronously
+- Avoids layout jumps on first render when the data isn't loaded yet, inspired by React Suspense
+- Lightweight, the base package is less than 4KB small
+- Renderless: build your own interface, we don't make any assumptions
+- Additional helper components for sort toggling, pagination, and facet filters
+
+On their own, these features aren't super impressive, but together they enable you to build better interfaces in a uniform approach.
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
@@ -17,6 +33,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 ### Optional dependencies
 
 - `query-string`
+- `data-resource`
 
 ### Polyfills
 
