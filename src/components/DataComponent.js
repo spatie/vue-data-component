@@ -119,7 +119,7 @@ export default {
             } else if (result.hasOwnProperty('data')) {
                 this.visibleData = result.data;
                 this.visibleCount = result.data.length;
-                this.totalCount = result.data.length;
+                this.totalCount = result.totalCount || result.data.length;
 
                 this.loaded = true;
             } else {
