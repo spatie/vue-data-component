@@ -1,6 +1,6 @@
 import { debounce } from '../util';
 import createPagesArray from '../helpers/createPagesArray';
-import { toQuery } from '../helpers/queryString';
+import { sanitizeQueryString, toQuery } from '../helpers/queryString';
 
 export const dataComponent = Symbol();
 
@@ -20,7 +20,7 @@ export default {
         dataKey: { default: 'data', type: String },
         tag: { default: 'div', type: String },
         queryString: { default: false, type: Boolean },
-        queryStringDefaults: { default: () => {}, type: Object },
+        queryStringSanitizer: { default: sanitizeQueryString, type: Function },
     },
 
     data: () => ({
@@ -53,7 +53,7 @@ export default {
             ? debounce(this.getVisibleData, this.debounceMs)
             : this.getVisibleData;
 
-        this.stateWatcher = this.$watch('state', getVisibleData, {
+        this.$watch('state', getVisibleData, {
             deep: true,
             immediate: !this.loaded,
         });
@@ -87,11 +87,7 @@ export default {
     methods: {
         getVisibleData({ forceUpdate = false } = {}) {
             if (this.queryString && this.loaded) {
-                window.history.replaceState(
-                    null,
-                    null,
-                    toQuery(this.state, this.queryStringDefaults)
-                );
+                this.updateQueryString();
             }
 
             const result = this.resource({
@@ -176,6 +172,14 @@ export default {
             }
 
             this.setState({ sort: field });
+        },
+
+        updateQueryString() {
+            window.history.replaceState(
+                null,
+                null,
+                window.location.pathname + toQuery(this.queryStringSanitizer(this.state))
+            );
         },
 
         forceUpdate() {

@@ -30,3 +30,11 @@ export function arrayWrap(array) {
 export function passThrough(value) {
     return value;
 }
+
+export function cloneDeep(value) {
+    if (!value) {
+        return value;
+    }
+
+    return JSON.parse(JSON.stringify(value));
+}

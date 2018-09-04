@@ -2,14 +2,15 @@
     <no-ssr>
         <data-component
             :resource="resource"
-            :filter.sync="filter"
-            :sort.sync="sort"
+            :filter.sync="state.filter"
+            :sort.sync="state.sort"
             :initial-load-delay-ms="1000"
             :query-string="true"
+            :query-string-sanitizer="sanitizeQueryString"
             data-key="members"
         >
             <template slot-scope="{ members }">
-                <input type="text" v-model="filter.search">
+                <input type="text" v-model="state.filter.search">
                 <table>
                     <thead>
                         <tr>
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import DataComponent, { DataSortToggle, createSource } from '../../packages';
+import DataComponent, { DataSortToggle, createSource, withQuery, sanitizeQueryString } from '../../packages';
 
 export default {
     components: {
@@ -49,11 +50,13 @@ export default {
 
     data() {
         return {
-            filter: {
-                search: '',
-            },
+            state: withQuery({
+                filter: {
+                    search: '',
+                },
 
-            sort: 'firstName',
+                sort: 'firstName',
+            }),
 
             columns: {
                 firstName: 'First name',
@@ -100,6 +103,18 @@ export default {
             return createSource(this.members, {
                 filterBy: ['firstName', 'lastName', 'instrument'],
             });
+        },
+    },
+
+    methods: {
+        sanitizeQueryString(state) {
+            state = sanitizeQueryString(state);
+
+            if (state.sort === 'firstName') {
+                delete state.sort;
+            }
+
+            return state;
         },
     },
 };

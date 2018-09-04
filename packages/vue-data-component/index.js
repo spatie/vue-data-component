@@ -1,11 +1,5 @@
-import { withQuery } from './helpers/queryString';
 import DataComponent from './components/DataComponent';
-import DataSortToggle from './components/DataSortToggle';
-
-export {
-    withQuery,
-    DataComponent,
-    DataSortToggle,
-};
-
 export default DataComponent;
+
+export { sanitizeQueryString, withQuery } from './helpers/queryString';
+export { default as DataSortToggle } from './components/DataSortToggle';
