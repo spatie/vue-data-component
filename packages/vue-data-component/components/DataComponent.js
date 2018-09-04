@@ -1,6 +1,6 @@
 import { debounce } from '../util';
 import createPagesArray from '../helpers/createPagesArray';
-import { sanitizeQueryString, toQuery } from '../helpers/queryString';
+import { toQueryString } from '../helpers/queryString';
 
 export const dataComponent = Symbol();
 
@@ -9,10 +9,7 @@ export default {
 
     props: {
         resource: { required: true, type: Function },
-        sort: { default: null, type: String },
-        filter: { default: () => ({}) },
-        page: { default: 1, type: Number },
-        perPage: { default: null, type: Number },
+        query: { default: () => ({}) },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
@@ -20,7 +17,6 @@ export default {
         dataKey: { default: 'data', type: String },
         tag: { default: 'div', type: String },
         queryString: { default: false, type: Boolean },
-        queryStringSanitizer: { default: sanitizeQueryString, type: Function },
     },
 
     data: () => ({
@@ -36,7 +32,7 @@ export default {
     provide() {
         return {
             [dataComponent]: {
-                setState: this.setState,
+                updateQuery: this.updateQuery,
                 toggleSort: this.toggleSort,
             },
         };
@@ -53,7 +49,7 @@ export default {
             ? debounce(this.getVisibleData, this.debounceMs)
             : this.getVisibleData;
 
-        this.$watch('state', getVisibleData, {
+        this.$watch('query', getVisibleData, {
             deep: true,
             immediate: !this.loaded,
         });
@@ -73,17 +69,6 @@ export default {
         this.$watch('activeRequestCount', this.handleActiveRequestCountChange);
     },
 
-    computed: {
-        state() {
-            return {
-                sort: this.sort,
-                filter: this.filter,
-                page: this.page,
-                perPage: this.perPage,
-            };
-        },
-    },
-
     methods: {
         getVisibleData({ forceUpdate = false } = {}) {
             if (this.queryString && this.loaded) {
@@ -91,7 +76,7 @@ export default {
             }
 
             const result = this.resource({
-                ...this.state,
+                ...this.query,
                 forceUpdate,
             });
 
@@ -149,36 +134,35 @@ export default {
             }
         },
 
-        setState(state) {
-            for (const key in state) {
-                this.$emit(`update:${key}`, state[key]);
-            }
+        updateQuery(query) {
+            this.$emit('update:query', { ...this.query, ...query });
         },
 
         toggleSort(field) {
-            if (!this.sort) {
-                this.setState({ sort: field });
+            if (!this.query.sort) {
+                this.updateQuery({ sort: field });
 
                 return;
             }
 
-            const currentSortOrder = this.sort.charAt(0) === '-' ? 'desc' : 'asc';
-            const currentSortField = currentSortOrder === 'desc' ? this.sort.slice(1) : this.sort;
+            const currentSortOrder = this.query.sort.charAt(0) === '-' ? 'desc' : 'asc';
+            const currentSortField =
+                currentSortOrder === 'desc' ? this.query.sort.slice(1) : this.query.sort;
 
             if (field === currentSortField && currentSortOrder === 'asc') {
-                this.setState({ sort: `-${currentSortField}` });
+                this.updateQuery({ sort: `-${currentSortField}` });
 
                 return;
             }
 
-            this.setState({ sort: field });
+            this.updateQuery({ sort: field });
         },
 
         updateQueryString() {
             window.history.replaceState(
                 null,
                 null,
-                window.location.pathname + toQuery(this.queryStringSanitizer(this.state))
+                window.location.pathname + toQueryString(this.query)
             );
         },
 
@@ -201,10 +185,11 @@ export default {
                 totalCount: this.totalCount,
                 isSlowRequest: this.isSlowRequest,
                 toggleSort: this.toggleSort,
-                setState: this.setState,
+                updateQuery: this.updateQuery,
+                reset: this.reset,
                 pages: createPagesArray({
-                    page: this.state.page,
-                    perPage: this.state.perPage,
+                    page: this.query.page,
+                    perPage: this.query.perPage,
                     totalCount: this.totalCount,
                 }),
             })
