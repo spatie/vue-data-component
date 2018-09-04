@@ -1,11 +1,11 @@
 <template>
     <div>
-        <Intro>
+        <intro>
             <p>Similar to the previous ajax example, but with initial data passed to the data component.</p>
             <p>Since the component already knows which data to display in the first render, there's no flash when the page loads.</p>
-        </Intro>
-        <DataComponent
-            :fetcher="getRicks"
+        </intro>
+        <data-component
+            :resource="getRicks"
             :initial-data="initialData"
             :filter="filter"
             :page="page"
@@ -68,7 +68,7 @@
                     </li>
                 </ul>
             </template>
-        </DataComponent>
+        </data-component>
     </div>
 </template>
 
@@ -81,7 +81,10 @@ export default {
 
     data: () => ({
         page: 1,
-        filter: { status: 'all' },
+
+        filter: {
+            status: 'all',
+        },
 
         statusses: {
             all: 'All',

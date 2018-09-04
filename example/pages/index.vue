@@ -1,47 +1,45 @@
 <template>
     <no-ssr>
         <data-component
-            :fetcher="fetcher"
-            :filter.sync="state.filter"
-            :sort.sync="state.sort"
+            :resource="resource"
+            :filter.sync="filter"
+            :sort.sync="sort"
             :initial-load-delay-ms="1000"
             :query-string="true"
             data-key="members"
         >
             <template slot-scope="{ members }">
-                <div>
-                    <input type="text" v-model="state.filter">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th v-for="(label, property) in columns" :key="property">
-                                    <data-sort-toggle :for="property">
-                                        <template slot-scope="{ sortedByAscending, sortedByDescending }">
-                                            {{ label }}
-                                            <span v-if="sortedByAscending">⬆️</span>
-                                            <span v-if="sortedByDescending">⬇️️</span>
-                                        </template>
-                                    </data-sort-toggle>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="member in members" :key="member.firstName">
-                                <td>{{ member.firstName }}</td>
-                                <td>{{ member.lastName }}</td>
-                                <td>{{ member.instrument }}</td>
-                                <td>{{ member.songs }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <input type="text" v-model="filter.search">
+                <table>
+                    <thead>
+                        <tr>
+                            <th v-for="(label, property) in columns" :key="property">
+                                <data-sort-toggle :for="property">
+                                    <template slot-scope="{ toggle, sortedByAscending, sortedByDescending }">
+                                        {{ label }}
+                                        <span v-if="sortedByAscending">⬆️</span>
+                                        <span v-if="sortedByDescending">⬇️️</span>
+                                    </template>
+                                </data-sort-toggle>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="member in members" :key="member.firstName">
+                            <td>{{ member.firstName }}</td>
+                            <td>{{ member.lastName }}</td>
+                            <td>{{ member.instrument }}</td>
+                            <td>{{ member.songs }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </template>
         </data-component>
     </no-ssr>
 </template>
 
 <script>
-import DataComponent, { DataSortToggle, withQuery, createFetcher } from '../../src';
+import DataComponent, { DataSortToggle, createSource } from '../../packages';
 
 export default {
     components: {
@@ -51,10 +49,11 @@ export default {
 
     data() {
         return {
-            state: withQuery({
-                filter: '',
-                sort: 'firstName',
-            }),
+            filter: {
+                search: '',
+            },
+
+            sort: 'firstName',
 
             columns: {
                 firstName: 'First name',
@@ -97,8 +96,8 @@ export default {
     },
 
     computed: {
-        fetcher() {
-            return createFetcher(this.members, {
+        resource() {
+            return createSource(this.members, {
                 filterBy: ['firstName', 'lastName', 'instrument'],
             });
         },

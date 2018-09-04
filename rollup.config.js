@@ -3,13 +3,13 @@ import babel from 'rollup-plugin-babel';
 import { uglify } from 'rollup-plugin-uglify';
 
 export default [
-	{
-		input: 'src/index.js',
+    {
+        input: 'packages/index.js',
         external: ['vue', 'query-string'],
         plugins: [
             babel({
                 exclude: 'node_modules/**',
-                plugins: ['external-helpers']
+                plugins: ['external-helpers'],
             }),
         ],
         output: [
@@ -28,19 +28,19 @@ export default [
                 name: 'DataComponent',
                 exports: 'named',
                 globals: {
-                    'vue': 'vue',
-                    'query-string': 'queryString'
+                    vue: 'vue',
+                    'query-string': 'queryString',
                 },
             },
         ],
-	},
-	{
-		input: 'src/index.js',
+    },
+    {
+        input: 'packages/index.js',
         external: ['vue', 'query-string'],
         plugins: [
             babel({
                 exclude: 'node_modules/**',
-                plugins: ['external-helpers']
+                plugins: ['external-helpers'],
             }),
             uglify(),
         ],
@@ -51,10 +51,10 @@ export default [
                 name: 'DataComponent',
                 exports: 'named',
                 globals: {
-                    'vue': 'vue',
-                    'query-string': 'queryString'
+                    vue: 'vue',
+                    'query-string': 'queryString',
                 },
             },
         ],
-	},
+    },
 ];

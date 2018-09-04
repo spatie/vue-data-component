@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import DataComponent from '~/../src';
+import DataComponent from '~/../packages';
 import Intro from '~/components/Intro';
 
 Vue.component('Intro', Intro);

@@ -1,7 +1,7 @@
 import { range } from '../util';
 
 export default function createPagesArray({ page, perPage, totalCount }) {
-    const pageCount = perPage === Infinity ? 1 : Math.ceil(totalCount / perPage);
+    const pageCount = perPage ? Math.ceil(totalCount / perPage) : 1;
 
     return range(pageCount).map(number => ({
         number,

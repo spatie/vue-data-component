@@ -1,11 +1,11 @@
 <template>
     <div>
-        <Intro>
+        <intro>
             <p>Here we use the <a href="https://rickandmortyapi.com/" target="_blank">Rick and Morty API</a> to render a list of Ricks.
             The free public API is a perfect case for a paginated, filterable, ajax-driven data component.</p>
-        </Intro>
-        <DataComponent
-            :fetcher="getRicks"
+        </intro>
+        <data-component
+            :resource="getRicks"
             :initial-load-delay-ms="1000"
             :filter="filter"
             :page="page"
@@ -68,7 +68,7 @@
                     </li>
                 </ul>
             </template>
-        </DataComponent>
+        </data-component>
     </div>
 </template>
 
@@ -80,7 +80,10 @@ export default {
 
     data: () => ({
         page: 1,
-        filter: { status: 'all' },
+
+        filter: {
+            status: 'all',
+        },
 
         statusses: {
             all: 'All',

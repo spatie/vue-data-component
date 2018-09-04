@@ -6,7 +6,7 @@
   "main": "dist/vue-data-component.common.js",
   "module": "dist/vue-data-component.esm.js",
   "scripts": {
-    "build": "rollup -c && size-limit",
+    "build": "rollup -c",
     "dev": "rollup -c -w",
     "prepublish": "npm run build",
     "lint": "eslint src --fix",
@@ -53,7 +53,9 @@
     "vue-template-compiler": "^2.5.16"
   },
   "jest": {
-    "testPathIgnorePatterns": ["/fixtures/"]
+    "testPathIgnorePatterns": [
+      "/fixtures/"
+    ]
   },
   "size-limit": [
     {

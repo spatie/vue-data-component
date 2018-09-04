@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-2xl mx-auto py-4 flex min-h-screen">
+    <div class="max-w-2xl mx-auto p-4 flex min-h-screen">
         <nav class="w-1/5 pt-8 pr-4 font-sans text-sm">
             <h2 class="text-grey-dark font-bold mb-4">
                 Vue Data Component

@@ -8,11 +8,11 @@ export default {
     name: 'DataComponent',
 
     props: {
-        fetcher: { required: true, type: Function },
+        resource: { required: true, type: Function },
         sort: { default: null, type: String },
-        filter: { default: null },
+        filter: { default: () => ({}) },
         page: { default: 1, type: Number },
-        perPage: { default: Infinity, type: Number },
+        perPage: { default: null, type: Number },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
@@ -94,7 +94,7 @@ export default {
                 );
             }
 
-            const result = this.fetcher({
+            const result = this.resource({
                 ...this.state,
                 forceUpdate,
             });
