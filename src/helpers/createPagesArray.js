@@ -1,4 +1,4 @@
-import { range } from '../util';
+import { range } from './util';
 
 export default function createPagesArray({ page, perPage, totalCount }) {
     const pageCount = perPage ? Math.ceil(totalCount / perPage) : 1;

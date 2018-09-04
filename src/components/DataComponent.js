@@ -1,6 +1,6 @@
-import { debounce } from '../util';
+import { debounce } from '../helpers/util';
 import createPagesArray from '../helpers/createPagesArray';
-import { toQueryString } from '../helpers/queryString';
+import { toQueryString } from '../queryString/index';
 
 export default {
     name: 'DataComponent',

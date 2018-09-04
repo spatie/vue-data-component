@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import DataComponent, { DataFilterFacet, DataSortToggle, createSource, fromQueryString } from '../../packages';
+import DataComponent, { DataFilterFacet, DataSortToggle, createSource, fromQueryString } from '../../src';
 
 export default {
     components: {
