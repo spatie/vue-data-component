@@ -2,8 +2,8 @@
     <no-ssr>
         <data-component
             :source="source"
-            :query.sync="query"
-            :initial-load-delay-ms="1000"
+            :filter="query.filter"
+            :sort="query.sort"
             :query-string="true"
             :query-string-defaults="{
                 sort: 'firstName',

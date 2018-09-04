@@ -1,14 +1,14 @@
 <template>
-    <div v-show="loaded">
+    <div>
         <intro>
             <p>Here we use the <a href="https://rickandmortyapi.com/" target="_blank">Rick and Morty API</a> to render a list of Ricks.
             The free public API is a perfect case for a paginated, filterable, ajax-driven data component.</p>
         </intro>
         <data-component
             :source="getRicks"
-            :query="query"
-            :initial-load-delay-ms="500"
-            @load="loaded = true"
+            :filter="filter"
+            :page="page"
+            :per-page="perPage"
         >
             <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
                 <div class="flex justify-between mb-12 py-4 border-t border-b border-grey">
@@ -21,7 +21,7 @@
                             v-for="(status, value) in statusses"
                             :key="value"
                             class="uppercase tracking-wide ml-4"
-                            :class="query.filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
+                            :class="filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
                             @click="filterStatus(value)"
                         >
                             {{ status }}
@@ -60,7 +60,7 @@
                         <button
                             class="mx-4"
                             :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="query.page = page.number"
+                            @click="page = page.number"
                         >
                             {{ page.number }}
                         </button>
@@ -78,15 +78,11 @@ export default {
     title: 'Ajax card layout',
 
     data: () => ({
-        loaded: false,
-
-        query: {
-            page: 1,
-            perPage: 20,
-            filter: {
-                status: 'all',
-            },
+        filter: {
+            status: 'all',
         },
+        page: 1,
+        perPage: 20,
 
         statusses: {
             all: 'All',
@@ -125,12 +121,12 @@ export default {
         },
 
         filterStatus(status) {
-            if (this.query.filter.status === status) {
+            if (this.filter.status === status) {
                 return;
             }
 
-            this.query.page = 1;
-            this.query.filter.status = status;
+            this.page = 1;
+            this.filter.status = status;
         },
     },
 };

@@ -6,7 +6,9 @@
         </intro>
         <data-component
             :source="getRicks"
-            :query="query"
+            :filter="filter"
+            :page="page"
+            :per-page="perPage"
             :initial-data="initialData"
         >
             <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
@@ -20,7 +22,7 @@
                             v-for="(status, value) in statusses"
                             :key="value"
                             class="uppercase tracking-wide ml-4"
-                            :class="query.filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
+                            :class="filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
                             @click="filterStatus(value)"
                         >
                             {{ status }}
@@ -59,7 +61,7 @@
                         <button
                             class="mx-4"
                             :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="query.page = page.number"
+                            @click="page = page.number"
                         >
                             {{ page.number }}
                         </button>
@@ -78,13 +80,12 @@ export default {
     title: 'Prerendered card layout',
 
     data: () => ({
-        query: {
-            page: 1,
-            perPage: 20,
-            filter: {
-                status: 'all',
-            },
+        filter: {
+            status: 'all',
         },
+
+        page: 1,
+        perPage: 20,
 
         statusses: {
             all: 'All',
@@ -129,12 +130,12 @@ export default {
         },
 
         filterStatus(status) {
-            if (this.query.filter.status === status) {
+            if (this.filter.status === status) {
                 return;
             }
 
-            this.query.page = 1;
-            this.query.filter.status = status;
+            this.page = 1;
+            this.filter.status = status;
         },
     },
 };

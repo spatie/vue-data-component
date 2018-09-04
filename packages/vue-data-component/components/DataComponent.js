@@ -7,7 +7,10 @@ export default {
 
     props: {
         source: { required: true, type: Function },
-        query: { default: () => ({}) },
+        sort: { default: null, type: String },
+        filter: { default: () => ({}) },
+        page: { default: 1, type: Number },
+        perPage: { default: null, type: Number },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
@@ -56,6 +59,17 @@ export default {
         }
 
         this.$watch('activeRequestCount', this.handleActiveRequestCountChange);
+    },
+
+    computed: {
+        query() {
+            return {
+                sort: this.sort,
+                filter: this.filter,
+                page: this.page,
+                perPage: this.perPage,
+            };
+        },
     },
 
     methods: {
@@ -123,10 +137,6 @@ export default {
             }
         },
 
-        updateQuery(query) {
-            this.$emit('update:query', { ...this.query, ...query });
-        },
-
         updateQueryString() {
             window.history.replaceState(
                 null,
@@ -160,7 +170,6 @@ export default {
                 visibleCount: this.visibleCount,
                 totalCount: this.totalCount,
                 isSlowRequest: this.isSlowRequest,
-                updateQuery: this.updateQuery,
                 reset: this.reset,
                 pages: createPagesArray({
                     page: this.query.page,
