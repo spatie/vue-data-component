@@ -1,14 +1,15 @@
 <template>
     <div>
         <intro>
-            <p>Here we use the <a href="https://rickandmortyapi.com/" target="_blank">Rick and Morty API</a> to render a list of Ricks.
-            The free public API is a perfect case for a paginated, filterable, ajax-driven data component.</p>
+            <p>Similar to the previous ajax example, but with initial data passed to the data component.</p>
+            <p>Since the component already knows which data to display in the first render, there's no flash when the page loads.</p>
         </intro>
         <data-component
             :source="getRicks"
             :filter="filter"
             :page="page"
             :per-page="perPage"
+            :initial-data="initialData"
         >
             <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
                 <div class="flex justify-between mb-12 py-4 border-t border-b border-grey">
@@ -56,13 +57,13 @@
                 </div>
 
                 <ul class="mt-4 flex justify-center">
-                    <li v-for="page in pages" :key="page.number">
+                    <li v-for="p in pages" :key="p.number">
                         <button
                             class="mx-4"
-                            :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="page = page.number"
+                            :class="p.isActive ? 'border-b border-black' : 'text-grey-dark'"
+                            @click="page = p.number"
                         >
-                            {{ page.number }}
+                            {{ p.number }}
                         </button>
                     </li>
                 </ul>
@@ -73,14 +74,16 @@
 
 <script>
 import axios from 'axios';
+import ricksFirstPage from '../data/ricks-first-page';
 
 export default {
-    title: 'Ajax card layout',
+    title: 'Prerendered card layout',
 
     data: () => ({
         filter: {
             status: 'all',
         },
+
         page: 1,
         perPage: 20,
 
@@ -89,6 +92,12 @@ export default {
             Alive: 'Alive',
             Dead: 'Dead',
             unknown: 'Unknown',
+        },
+
+        initialData: {
+            page: 1,
+            totalCount: 73,
+            data: ricksFirstPage,
         },
     }),
 
