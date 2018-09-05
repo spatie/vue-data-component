@@ -1,5 +1,5 @@
 import { debounce } from '../helpers/util';
-import createPagesArray from '../helpers/createPagesArray';
+import createPaginator from '../helpers/createPaginator';
 import { toQueryString } from '../queryString/index';
 
 export default {
@@ -15,15 +15,14 @@ export default {
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
-        dataKey: { default: 'data', type: String },
-        tag: { default: 'div', type: String },
         queryString: { default: false, type: Boolean },
     },
 
     data: () => ({
         loaded: false,
+        initialLoadDelayMsFinished: false,
         activeRequestCount: 0,
-        isSlowRequest: false,
+        slowRequest: false,
 
         visibleData: [],
         visibleCount: 0,
@@ -54,7 +53,8 @@ export default {
     mounted() {
         if (!this.loaded) {
             window.setTimeout(() => {
-                this.loadIfNotLoaded();
+                console.log('yoyo');
+                this.initialLoadDelayMsFinished = true;
             }, this.initialLoadDelayMs);
         }
 
@@ -69,6 +69,14 @@ export default {
                 page: this.page,
                 perPage: this.perPage,
             };
+        },
+
+        paginator() {
+            return createPaginator({
+                page: this.query.page,
+                perPage: this.query.perPage,
+                totalCount: this.totalCount,
+            });
         },
     },
 
@@ -121,15 +129,15 @@ export default {
             if (activeRequestCount === 0 && this.slowRequestTimeout) {
                 window.clearTimeout(this.slowRequestTimeout);
 
-                this.isSlowRequest = false;
+                this.slowRequest = false;
 
                 this.$emit('slowrequestend');
             }
 
             if (activeRequestCount === 1) {
                 this.slowRequestTimeout = window.setTimeout(() => {
-                    if (!this.isSlowRequest) {
-                        this.isSlowRequest = true;
+                    if (!this.slowRequest) {
+                        this.slowRequest = true;
 
                         this.$emit('slowrequeststart');
                     }
@@ -148,7 +156,7 @@ export default {
         loadIfNotLoaded() {
             if (!this.loaded) {
                 this.loaded = true;
-                this.$emit('load');
+                this.initialLoadDelayMsFinished = true;
             }
         },
 
@@ -158,25 +166,17 @@ export default {
     },
 
     render(createElement) {
-        if (!this.loaded) {
-            return null;
-        }
-
-        return createElement(
-            this.tag,
-            {},
-            this.$scopedSlots.default({
-                [this.dataKey]: this.visibleData,
-                visibleCount: this.visibleCount,
-                totalCount: this.totalCount,
-                isSlowRequest: this.isSlowRequest,
-                reset: this.reset,
-                pages: createPagesArray({
-                    page: this.query.page,
-                    perPage: this.query.perPage,
-                    totalCount: this.totalCount,
-                }),
-            })
-        );
+        return this.$scopedSlots.default({
+            data: this.visibleData,
+            visibleCount: this.visibleCount,
+            totalCount: this.totalCount,
+            loaded: this.loaded,
+            loading: !this.loaded,
+            slowLoad: this.initialLoadDelayMsFinished && !this.loaded,
+            slowRequest: this.slowRequest,
+            reset: this.reset,
+            pages: this.paginator.length,
+            paginator: this.paginator,
+        });
     },
 };

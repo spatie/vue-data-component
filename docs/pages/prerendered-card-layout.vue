@@ -11,11 +11,11 @@
             :per-page="perPage"
             :initial-data="initialData"
         >
-            <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
+            <div slot-scope="{ data, visibleCount, totalCount, paginator, slowRequest }">
                 <div class="flex justify-between mb-12 py-4 border-t border-b border-grey">
                     <p class="text-grey-dark italic">
                         Displaying {{ visibleCount }} of {{ totalCount }} Ricks.
-                        <span v-if="isSlowRequest">Loading...</span>
+                        <span v-if="slowRequest">Loading...</span>
                     </p>
                     <p>
                         <button
@@ -32,7 +32,7 @@
 
                 <div
                     class="flex flex-wrap justify-between transition"
-                    :class="isSlowRequest ? 'opacity-50' : null"
+                    :class="slowRequest ? 'opacity-50' : null"
                 >
                     <article
                         v-for="rick in data"
@@ -57,7 +57,7 @@
                 </div>
 
                 <ul class="mt-4 flex justify-center">
-                    <li v-for="p in pages" :key="p.number">
+                    <li v-for="p in paginator" :key="p.number">
                         <button
                             class="mx-4"
                             :class="p.isActive ? 'border-b border-black' : 'text-grey-dark'"
@@ -67,7 +67,7 @@
                         </button>
                     </li>
                 </ul>
-            </template>
+            </div>
         </data-component>
     </div>
 </template>

@@ -9,14 +9,18 @@
             :filter="filter"
             :page="page"
             :per-page="perPage"
+            :initial-load-delay-ms="400"
         >
-            <template slot-scope="{ data, visibleCount, totalCount, pages, isSlowRequest }">
-                <div class="flex justify-between mb-12 py-4 border-t border-b border-grey">
-                    <p class="text-grey-dark italic">
+            <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, loaded, slowLoad, slowRequest }">
+                <div v-if="loaded || slowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
+                    <p v-if="loaded" class="text-grey-dark italic">
                         Displaying {{ visibleCount }} of {{ totalCount }} Ricks.
-                        <span v-if="isSlowRequest">Loading...</span>
+                        <span v-if="slowRequest">Loading...</span>
                     </p>
-                    <p>
+                    <p v-else class="text-grey-dark italic">
+                        Still loading...
+                    </p>
+                    <p v-if="loaded">
                         <button
                             v-for="(status, value) in statusses"
                             :key="value"
@@ -31,10 +35,10 @@
 
                 <div
                     class="flex flex-wrap justify-between transition"
-                    :class="isSlowRequest ? 'opacity-50' : null"
+                    :class="slowRequest ? 'opacity-50' : null"
                 >
                     <article
-                        v-for="rick in data"
+                        v-for="rick in ricks"
                         :key="rick.id"
                         class="w-32 flex flex-col items-center text-center mb-12 relative text-grey-darkest"
                     >
@@ -56,7 +60,7 @@
                 </div>
 
                 <ul class="mt-4 flex justify-center">
-                    <li v-for="p in pages" :key="p.number">
+                    <li v-for="p in paginator" :key="p.number">
                         <button
                             class="mx-4"
                             :class="p.isActive ? 'border-b border-black' : 'text-grey-dark'"
@@ -66,7 +70,7 @@
                         </button>
                     </li>
                 </ul>
-            </template>
+            </div>
         </data-component>
     </div>
 </template>

@@ -10,9 +10,8 @@
                 page: 1,
                 perPage: null,
             }"
-            data-key="members"
         >
-            <template slot-scope="{ members }">
+            <div slot-scope="{ data: members }">
                 <input type="text" v-model="query.filter.search">
 
                 <data-filter-facet v-model="query.filter.instruments" :multiple="true">
@@ -61,7 +60,7 @@
                     </tbody>
                 </table>
                 <pre>{{ debug }}</pre>
-            </template>
+            </div>
         </data-component>
     </no-ssr>
 </template>
