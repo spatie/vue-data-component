@@ -9,7 +9,7 @@ export default class Source {
         this.filters = options.filters || [search(), sort(), paginate()];
     }
 
-    query(query) {
+    query(query = {}) {
         const data = this.filters.reduce(
             (data, filter) => filter(data, query),
             [].concat(this.data)
