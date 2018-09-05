@@ -1,10 +1,9 @@
 import { range } from './util';
 
-export default function createPaginator({ page, perPage, totalCount }) {
-    const pageCount = perPage ? Math.ceil(totalCount / perPage) : 1;
+export default function createPaginator({ pageSize, pageNumber, totalCount }) {
+    const pageCount = pageSize ? Math.ceil(totalCount / pageSize) : 1;
 
-    return range(pageCount).map(number => ({
-        number,
-        isActive: number === page,
-    }));
+    return range(pageCount).map(number => {
+        return { number, active: number === pageNumber };
+    });
 }

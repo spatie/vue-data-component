@@ -1,15 +1,10 @@
 <template>
     <no-ssr>
         <data-component
-            :source="source"
-            :filter="query.filter"
-            :sort="query.sort"
+            :source="getMembers"
+            :query="query"
             :query-string="true"
-            :query-string-defaults="{
-                sort: 'firstName',
-                page: 1,
-                perPage: null,
-            }"
+            :query-string-defaults="queryStringDefaults"
         >
             <div slot-scope="{ data: members }">
                 <input type="text" v-model="query.filter.search">
@@ -87,6 +82,13 @@ export default {
                 sort: 'firstName',
             }),
 
+            queryStringDefaults: {
+                sort: 'firstName',
+                page: {
+                    number: 1,
+                },
+            },
+
             columns: {
                 firstName: 'First name',
                 lastName: 'Last name',
@@ -128,7 +130,7 @@ export default {
     },
 
     computed: {
-        source() {
+        getMembers() {
             return createSource(this.members);
         },
 

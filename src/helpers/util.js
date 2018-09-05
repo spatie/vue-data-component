@@ -15,26 +15,20 @@ export function debounce(func, wait, immediate) {
     };
 }
 
-export function flow(fns) {
-    return subject => fns.reduce((subject, fn) => fn(subject), subject);
-}
-
 export function range(length) {
     return Array.from({ length }).map((v, k) => k + 1);
 }
 
-export function arrayWrap(array) {
-    return Array.isArray(array) ? array : [array];
-}
-
-export function passThrough(value) {
-    return value;
-}
-
-export function cloneDeep(value) {
-    if (!value) {
-        return value;
+export function get(object, path) {
+    if (!path) {
+        return object;
     }
 
-    return JSON.parse(JSON.stringify(value));
+    if (object === null || typeof object !== 'object') {
+        return object;
+    }
+
+    const [pathHead, pathTail] = path.split(/\.(.+)/);
+
+    return get(object[pathHead], pathTail);
 }

@@ -58,7 +58,7 @@
                 <li><nuxt-link to="/prerendered-card-layout">Prerendered AJAX card layout</nuxt-link></li>
             </ul>
         </nav>
-        <div class="bg-white p-8 pt-16 flex-1">
+        <div class="w-4/5 bg-white p-8 pt-16 flex-1">
             <h1 class="text-3xl font-bold mb-8 text-black text-center">
                 {{ title }}
             </h1>

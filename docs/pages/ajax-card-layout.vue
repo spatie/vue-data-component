@@ -6,9 +6,7 @@
         </intro>
         <data-component
             :source="getRicks"
-            :filter="filter"
-            :page="page"
-            :per-page="perPage"
+            :query="query"
             :initial-load-delay-ms="400"
         >
             <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, loaded, slowLoad, slowRequest }">
@@ -22,10 +20,17 @@
                     </p>
                     <p v-if="loaded">
                         <button
+                            class="uppercase tracking-wide ml-4"
+                            :class="!query.status ? 'border-b border-black' : 'text-grey-dark'"
+                            @click="filterStatus(null)"
+                        >
+                            All
+                        </button>
+                        <button
                             v-for="(status, value) in statusses"
                             :key="value"
                             class="uppercase tracking-wide ml-4"
-                            :class="filter.status == value ? 'border-b border-black' : 'text-grey-dark'"
+                            :class="query.status == value ? 'border-b border-black' : 'text-grey-dark'"
                             @click="filterStatus(value)"
                         >
                             {{ status }}
@@ -60,13 +65,13 @@
                 </div>
 
                 <ul class="mt-4 flex justify-center">
-                    <li v-for="p in paginator" :key="p.number">
+                    <li v-for="page in paginator" :key="page.number">
                         <button
                             class="mx-4"
-                            :class="p.isActive ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="page = p.number"
+                            :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
+                            @click="query.page = page.number"
                         >
-                            {{ p.number }}
+                            {{ page.number }}
                         </button>
                     </li>
                 </ul>
@@ -82,14 +87,12 @@ export default {
     title: 'Ajax card layout',
 
     data: () => ({
-        filter: {
-            status: 'all',
+        query: {
+            status: null,
+            page: 1,
         },
-        page: 1,
-        perPage: 20,
 
         statusses: {
-            all: 'All',
             Alive: 'Alive',
             Dead: 'Dead',
             unknown: 'Unknown',
@@ -111,26 +114,24 @@ export default {
     },
 
     methods: {
-        getRicks({ filter, page }) {
-            const baseUrl = `https://rickandmortyapi.com/api/character?page=${page}&name=Rick`;
+        getRicks({ query }) {
+            const baseUrl = `https://rickandmortyapi.com/api/character?page=${query.page}&name=Rick`;
             const requestUrl =
-                filter.status !== 'all' ? `${baseUrl}&status=${filter.status}` : baseUrl;
+                query.status ? `${baseUrl}&status=${query.status}` : baseUrl;
 
-            return axios.get(requestUrl).then(response => {
-                return {
-                    data: response.data.results,
-                    totalCount: response.data.info.count,
-                };
-            });
+            return axios.get(requestUrl).then(response => ({
+                data: response.data.results,
+                totalCount: response.data.info.count,
+            }));
         },
 
         filterStatus(status) {
-            if (this.filter.status === status) {
+            if (this.query.status === status) {
                 return;
             }
 
-            this.page = 1;
-            this.filter.status = status;
+            this.query.page = 1;
+            this.query.status = status;
         },
     },
 };

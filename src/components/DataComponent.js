@@ -1,4 +1,4 @@
-import { debounce } from '../helpers/util';
+import { debounce, get } from '../helpers/util';
 import createPaginator from '../helpers/createPaginator';
 import { toQueryString } from '../queryString/index';
 
@@ -7,15 +7,14 @@ export default {
 
     props: {
         source: { required: true, type: Function },
-        sort: { default: null, type: String },
-        filter: { default: () => ({}) },
-        page: { default: 1, type: Number },
-        perPage: { default: null, type: Number },
+        query: { default: () => ({}), type: Object },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
         queryString: { default: false, type: Boolean },
+        pageNumberKey: { default: 'page.number' },
+        pageSizeKey: { default: 'page.size' },
     },
 
     data: () => ({
@@ -53,7 +52,6 @@ export default {
     mounted() {
         if (!this.loaded) {
             window.setTimeout(() => {
-                console.log('yoyo');
                 this.initialLoadDelayMsFinished = true;
             }, this.initialLoadDelayMs);
         }
@@ -62,20 +60,11 @@ export default {
     },
 
     computed: {
-        query() {
-            return {
-                sort: this.sort,
-                filter: this.filter,
-                page: this.page,
-                perPage: this.perPage,
-            };
-        },
-
         paginator() {
             return createPaginator({
-                page: this.query.page,
-                perPage: this.query.perPage,
-                totalCount: this.totalCount,
+                pageSize: get(this.query, this.pageSizeKey) || null,
+                pageNumber: get(this.query, this.pageNumberKey) || 1,
+                totalCount: this.totalCount || 0,
             });
         },
     },
@@ -86,10 +75,7 @@ export default {
                 this.updateQueryString();
             }
 
-            const result = this.source({
-                ...this.query,
-                forceUpdate,
-            });
+            const result = this.source({ query: this.query, forcedUpdate: forceUpdate });
 
             if (typeof result.then == 'function') {
                 this.activeRequestCount++;
