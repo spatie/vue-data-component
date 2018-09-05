@@ -12,7 +12,7 @@ export function fromQueryString(state, queryString = null) {
 export function toQueryString(query, defaults) {
     return pipe(
         query,
-        [toPairsRecursive, flattenPairs, fromPairs, stringify]
+        [toPairsRecursive, flattenPairs, fromPairs, query => stringify(query, { encode: false })]
     );
 }
 
@@ -27,11 +27,15 @@ function toPairsRecursive(object, prefix = '', level = 0) {
         }
 
         if (Array.isArray(value)) {
-            return [key, value.join(',')];
+            return [key, value.length ? value.join(',') : undefined];
         }
 
         if (isObject(value)) {
             return [key, toPairsRecursive(value, key, level + 1)];
+        }
+
+        if (value === null || value === '') {
+            return [key, undefined];
         }
 
         return [key, value];

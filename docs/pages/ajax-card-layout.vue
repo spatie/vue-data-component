@@ -7,6 +7,8 @@
         <data-component
             :source="getRicks"
             :query="query"
+            :page="query.page"
+            :page-size="20"
             :initial-load-delay-ms="400"
         >
             <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, loaded, slowLoad, slowRequest }">
@@ -68,7 +70,7 @@
                     <li v-for="page in paginator" :key="page.number">
                         <button
                             class="mx-4"
-                            :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
+                            :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
                             @click="query.page = page.number"
                         >
                             {{ page.number }}
@@ -114,12 +116,10 @@ export default {
     },
 
     methods: {
-        getRicks({ query }) {
-            const baseUrl = `https://rickandmortyapi.com/api/character?page=${query.page}&name=Rick`;
-            const requestUrl =
-                query.status ? `${baseUrl}&status=${query.status}` : baseUrl;
+        getRicks({ query, queryString }) {
+            const baseUrl = 'https://rickandmortyapi.com/api/character';
 
-            return axios.get(requestUrl).then(response => ({
+            return axios.get(`${baseUrl}?name=Rick&${queryString}`).then(response => ({
                 data: response.data.results,
                 totalCount: response.data.info.count,
             }));

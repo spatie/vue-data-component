@@ -8,13 +8,13 @@ export default {
     props: {
         source: { required: true, type: Function },
         query: { default: () => ({}), type: Object },
+        page: { default: null },
+        pageSize: { default: null },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
         queryString: { default: false, type: Boolean },
-        pageNumberKey: { default: 'page.number' },
-        pageSizeKey: { default: 'page.size' },
     },
 
     data: () => ({
@@ -44,6 +44,9 @@ export default {
             immediate: !this.loaded,
         });
 
+        this.$watch('page', getVisibleData);
+        this.$watch('pageSize', getVisibleData);
+
         if (!this.initialLoadDelayMs) {
             this.loadIfNotLoaded();
         }
@@ -62,8 +65,8 @@ export default {
     computed: {
         paginator() {
             return createPaginator({
-                pageSize: get(this.query, this.pageSizeKey) || null,
-                pageNumber: get(this.query, this.pageNumberKey) || 1,
+                page: this.page,
+                pageSize: this.pageSize,
                 totalCount: this.totalCount || 0,
             });
         },
@@ -75,7 +78,11 @@ export default {
                 this.updateQueryString();
             }
 
-            const result = this.source({ query: this.query, forcedUpdate: forceUpdate });
+            const result = this.source({
+                query: this.query,
+                queryString: toQueryString(this.query),
+                forcedUpdate: forceUpdate,
+            });
 
             if (typeof result.then == 'function') {
                 this.activeRequestCount++;
@@ -135,7 +142,7 @@ export default {
             window.history.replaceState(
                 null,
                 null,
-                window.location.pathname + toQueryString(this.query)
+                `${window.location.pathname}?${toQueryString(this.query)}`
             );
         },
 

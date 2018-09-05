@@ -12,10 +12,10 @@ it('adds nothing from an undefined value', () => {
     expect(queryString).toBe('');
 });
 
-it('adds an empty key from a null value', () => {
+it('adds nothing from a null value', () => {
     const queryString = toQueryString({ search: null });
 
-    expect(queryString).toBe('search');
+    expect(queryString).toBe('');
 });
 
 it('accepts a string value', () => {
@@ -42,10 +42,16 @@ it('sorts multiple values', () => {
     expect(queryString).toBe('page=5&search=Sebastian');
 });
 
+it('adds nothing key from an empty array', () => {
+    const queryString = toQueryString({ ids: [] });
+
+    expect(queryString).toBe('');
+});
+
 it('accepts an array value', () => {
     const queryString = toQueryString({ ids: [1, 2, 3] });
 
-    expect(queryString).toBe('ids=1%2C2%2C3');
+    expect(queryString).toBe('ids=1,2,3');
 });
 
 it('accepts an object value', () => {
@@ -56,7 +62,7 @@ it('accepts an object value', () => {
         },
     });
 
-    expect(queryString).toBe('filter%5Bcompany%5D=Spatie&filter%5Bname%5D=Sebastian');
+    expect(queryString).toBe('filter[company]=Spatie&filter[name]=Sebastian');
 });
 
 it('accepts a nested object value', () => {
@@ -69,9 +75,7 @@ it('accepts a nested object value', () => {
         },
     });
 
-    expect(queryString).toBe(
-        'filter%5Bsearch.author%5D=Sebastian&filter%5Bsearch.company%5D=Spatie'
-    );
+    expect(queryString).toBe('filter[search.author]=Sebastian&filter[search.company]=Spatie');
 });
 
 it('accepts a deeply nested object value', () => {
@@ -87,6 +91,6 @@ it('accepts a deeply nested object value', () => {
     });
 
     expect(queryString).toBe(
-        'filter%5Bsearch.deeper.author%5D=Sebastian&filter%5Bsearch.deeper.company%5D=Spatie'
+        'filter[search.deeper.author]=Sebastian&filter[search.deeper.company]=Spatie'
     );
 });
