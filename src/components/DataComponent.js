@@ -15,6 +15,7 @@ export default {
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
         queryString: { default: false, type: Boolean },
+        queryStringDefaults: { default: () => ({}), type: Object },
     },
 
     data: () => ({
@@ -143,10 +144,17 @@ export default {
         },
 
         updateQueryString() {
+            const queryString = toQueryString(
+                this.query,
+                this.queryStringDefaults
+            );
+
             window.history.replaceState(
                 null,
                 null,
-                `${window.location.pathname}?${toQueryString(this.query)}`
+                queryString
+                    ? `${window.location.pathname}?${queryString}`
+                    : window.location.pathname
             );
         },
 

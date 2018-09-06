@@ -41,7 +41,7 @@ export default {
             }
 
             if (!this.facetValue) {
-                this.$emit('input', !this.value);
+                this.$emit('input', this.value ? null : true);
 
                 return;
             }

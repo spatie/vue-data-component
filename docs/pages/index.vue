@@ -4,7 +4,7 @@
             :source="getMembers"
             :query="query"
             :query-string="true"
-            :query-string-defaults="queryStringDefaults"
+            :query-string-defaults="{ sort: 'firstName' }"
         >
             <div slot-scope="{ data: members }">
                 <input type="text" v-model="query.filter.search">
@@ -76,18 +76,11 @@ export default {
                 filter: {
                     search: '',
                     instruments: [],
-                    moreThanTenSongs: false,
+                    moreThanTenSongs: null,
                     lover: null,
                 },
                 sort: 'firstName',
             }),
-
-            queryStringDefaults: {
-                sort: 'firstName',
-                page: {
-                    number: 1,
-                },
-            },
 
             columns: {
                 firstName: 'First name',
