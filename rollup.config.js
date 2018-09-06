@@ -5,7 +5,7 @@ import { uglify } from 'rollup-plugin-uglify';
 export default [
     {
         input: 'src/index.js',
-        external: ['vue', 'query-string'],
+        external: ['vue', 'qs'],
         plugins: [
             babel({
                 exclude: 'node_modules/**',
@@ -36,7 +36,7 @@ export default [
     },
     {
         input: 'src/index.js',
-        external: ['vue', 'query-string'],
+        external: ['vue', 'qs'],
         plugins: [
             babel({
                 exclude: 'node_modules/**',
@@ -52,7 +52,7 @@ export default [
                 exports: 'named',
                 globals: {
                     vue: 'vue',
-                    'query-string': 'queryString',
+                    qs: 'queryString',
                 },
             },
         ],

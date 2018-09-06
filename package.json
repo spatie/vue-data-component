@@ -31,7 +31,7 @@
     "vue": "^2.5.0"
   },
   "optionalDependencies": {
-    "query-string": "^6.1.0"
+    "qs": "^6.5.2"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.16",
@@ -44,7 +44,7 @@
     "eslint-config-prettier": "^2.9.0",
     "jest": "^23.5.0",
     "prettier": "^1.13.0",
-    "query-string": "^6.1.0",
+    "qs": "^6.5.2",
     "rollup": "^0.60.1",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-uglify": "^4.0.0",

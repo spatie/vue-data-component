@@ -12,8 +12,44 @@ it('adds nothing from an undefined value', () => {
     expect(queryString).toBe('');
 });
 
+it('adds nothing from a nested undefined', () => {
+    const queryString = toQueryString({
+        filter: {
+            search: undefined,
+        },
+    });
+
+    expect(queryString).toBe('');
+});
+
 it('adds nothing from a null value', () => {
     const queryString = toQueryString({ search: null });
+
+    expect(queryString).toBe('');
+});
+
+it('adds nothing from a nested null value', () => {
+    const queryString = toQueryString({
+        filter: {
+            search: null,
+        },
+    });
+
+    expect(queryString).toBe('');
+});
+
+it('adds nothing from an empty string', () => {
+    const queryString = toQueryString({ search: '' });
+
+    expect(queryString).toBe('');
+});
+
+it('adds nothing from a nested empty string', () => {
+    const queryString = toQueryString({
+        filter: {
+            search: '',
+        },
+    });
 
     expect(queryString).toBe('');
 });
@@ -51,7 +87,23 @@ it('adds nothing key from an empty array', () => {
 it('accepts an array value', () => {
     const queryString = toQueryString({ ids: [1, 2, 3] });
 
-    expect(queryString).toBe('ids=1,2,3');
+    expect(queryString).toBe('ids[]=1&ids[]=2&ids[]=3');
+});
+
+it('sorts array values', () => {
+    const queryString = toQueryString({ ids: [2, 1, 3] });
+
+    expect(queryString).toBe('ids[]=1&ids[]=2&ids[]=3');
+});
+
+it('sorts nested array values', () => {
+    const queryString = toQueryString({
+        filter: {
+            ids: [2, 1, 3],
+        },
+    });
+
+    expect(queryString).toBe('ids[]=1&ids[]=2&ids[]=3');
 });
 
 it('accepts an object value', () => {
@@ -75,22 +127,29 @@ it('accepts a nested object value', () => {
         },
     });
 
-    expect(queryString).toBe('filter[search.author]=Sebastian&filter[search.company]=Spatie');
+    expect(queryString).toBe('filter[search][author]=Sebastian&filter[search][company]=Spatie');
 });
 
-it('accepts a deeply nested object value', () => {
+it('sorts nested object value keys', () => {
     const queryString = toQueryString({
         filter: {
             search: {
-                deeper: {
-                    author: 'Sebastian',
-                    company: 'Spatie',
-                },
+                company: 'Spatie',
+                author: 'Sebastian',
             },
         },
     });
 
-    expect(queryString).toBe(
-        'filter[search.deeper.author]=Sebastian&filter[search.deeper.company]=Spatie'
-    );
+    expect(queryString).toBe('filter[search][author]=Sebastian&filter[search][company]=Spatie');
+});
+
+it('accepts a value with dotted keys', () => {
+    const queryString = toQueryString({
+        filter: {
+            'search.author': 'Sebastian',
+            'search.company': 'Spatie',
+        },
+    });
+
+    expect(queryString).toBe('filter[search.author]=Sebastian&filter[search.company]=Spatie');
 });
