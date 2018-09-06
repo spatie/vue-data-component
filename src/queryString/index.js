@@ -1,5 +1,5 @@
-import { flatMap, fromPairs, isObject, mapValues, pipe, toPairs } from '../helpers/util';
-import { parse, stringify } from 'qs';
+import { isObject, mapValues, pipe } from '../helpers/util';
+import { parse as qsParse, stringify as qsStringify } from 'qs';
 
 const qsOptions = {
     arrayFormat: 'brackets',
@@ -8,14 +8,48 @@ const qsOptions = {
     sort: (a, b) => a.localeCompare(b),
 };
 
+const stringify = query => qsStringify(query, qsOptions);
+const parse = query => qsParse(query, qsOptions);
+
 export function fromQueryString(state, queryString = null) {
     if (queryString === null && typeof window !== 'undefined') {
         queryString = window.location.search;
     }
 
-    return { ...state, ...parse(queryString, qsOptions) };
+    return { ...state, ...parse(queryString) };
 }
 
 export function toQueryString(query, defaults) {
-    return stringify(query, qsOptions);
+    return pipe(
+        query,
+        [filterEmptyStrings, sortArrayValues, stringify]
+    );
+}
+
+function filterEmptyStrings(object) {
+    return mapValues(object, value => {
+        if (value === '') {
+            return undefined;
+        }
+
+        if (isObject(value)) {
+            return filterEmptyStrings(value);
+        }
+
+        return value;
+    });
+}
+
+function sortArrayValues(object) {
+    return mapValues(object, value => {
+        if (Array.isArray(value)) {
+            return value.sort();
+        }
+
+        if (isObject(value)) {
+            return sortArrayValues(value);
+        }
+
+        return value;
+    });
 }

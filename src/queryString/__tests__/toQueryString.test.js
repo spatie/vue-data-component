@@ -103,7 +103,7 @@ it('sorts nested array values', () => {
         },
     });
 
-    expect(queryString).toBe('ids[]=1&ids[]=2&ids[]=3');
+    expect(queryString).toBe('filter[ids][]=1&filter[ids][]=2&filter[ids][]=3');
 });
 
 it('accepts an object value', () => {
@@ -152,4 +152,26 @@ it('accepts a value with dotted keys', () => {
     });
 
     expect(queryString).toBe('filter[search.author]=Sebastian&filter[search.company]=Spatie');
+});
+
+it('ignores default values', () => {
+    const queryString = toQueryString(
+        {
+            filter: {
+                search: {
+                    company: 'Spatie',
+                    author: 'Sebastian',
+                },
+            },
+        },
+        {
+            filter: {
+                search: {
+                    company: 'Spatie',
+                },
+            },
+        }
+    );
+
+    expect(queryString).toBe('filter[search.author]=Sebastian');
 });
