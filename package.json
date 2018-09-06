@@ -47,6 +47,7 @@
     "qs": "^6.5.2",
     "rollup": "^0.60.1",
     "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^4.0.0",
     "size-limit": "^0.18.2",
     "vue": "^2.5.0",
@@ -59,7 +60,7 @@
   },
   "size-limit": [
     {
-      "limit": "4 KB",
+      "limit": "5 KB",
       "path": "dist/vue-data-component.min.js"
     }
   ]

@@ -162,6 +162,7 @@ it('ignores default values', () => {
                     company: 'Spatie',
                     author: 'Sebastian',
                 },
+                ids: [1, 3, 4],
             },
         },
         {
@@ -169,9 +170,12 @@ it('ignores default values', () => {
                 search: {
                     company: 'Spatie',
                 },
+                ids: [1, 2, 3],
             },
         }
     );
 
-    expect(queryString).toBe('filter[search.author]=Sebastian');
+    expect(queryString).toBe(
+        'filter[ids][]=1&filter[ids][]=3&filter[ids][]=4&filter[search][author]=Sebastian'
+    );
 });

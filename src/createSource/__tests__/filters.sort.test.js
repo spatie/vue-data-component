@@ -1,6 +1,6 @@
 import sort from '../filters/sort';
 import people from './helpers/people';
-import { createQuery } from './helpers/util';
+import { createQuery } from './util';
 
 it('does nothing when empty', () => {
     const results = sort()(people, createQuery());

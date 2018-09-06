@@ -27,7 +27,9 @@ export default {
                 const valueIndex = this.value.indexOf(value);
 
                 const newValue =
-                    valueIndex === -1 ? [...this.value, value] : this.value.filter(v => v != value);
+                    valueIndex === -1
+                        ? this.value.concat(value)
+                        : this.value.filter(v => v != value);
 
                 this.$emit('input', newValue);
 

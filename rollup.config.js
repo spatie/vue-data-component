@@ -1,12 +1,14 @@
 import pkg from './package.json';
 import babel from 'rollup-plugin-babel';
 import { uglify } from 'rollup-plugin-uglify';
+import resolve from 'rollup-plugin-node-resolve';
 
 export default [
     {
         input: 'src/index.js',
         external: ['vue', 'qs'],
         plugins: [
+            resolve(),
             babel({
                 exclude: 'node_modules/**',
                 plugins: ['external-helpers'],
@@ -38,6 +40,7 @@ export default [
         input: 'src/index.js',
         external: ['vue', 'qs'],
         plugins: [
+            resolve(),
             babel({
                 exclude: 'node_modules/**',
                 plugins: ['external-helpers'],

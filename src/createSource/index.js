@@ -1,7 +1,9 @@
-import Source from './Source';
-
 export default function createSource(data, options) {
-    const resource = new Source(data, options);
+    const filters = options.filters || [search(), sort(), paginate()];
 
-    return resource.query.bind(resource);
+    return function(query = {}) {
+        const data = filters.reduce((data, filter) => filter(data, query), [].concat(data));
+
+        return { data, totalCount: data.length };
+    };
 }

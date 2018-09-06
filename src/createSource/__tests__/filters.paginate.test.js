@@ -1,6 +1,6 @@
 import paginate from '../filters/paginate';
 import people from './helpers/people';
-import { createQuery } from './helpers/util';
+import { createQuery } from './util';
 
 it('does nothing when perPage is empty', () => {
     const results = paginate()(people, createQuery());

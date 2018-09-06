@@ -1,4 +1,4 @@
-import { isObject, mapValues, pipe } from '../helpers/util';
+import { diff, isObject, mapValues } from '../util';
 import { parse as qsParse, stringify as qsStringify } from 'qs';
 
 const qsOptions = {
@@ -19,11 +19,12 @@ export function fromQueryString(state, queryString = null) {
     return { ...state, ...parse(queryString) };
 }
 
-export function toQueryString(query, defaults) {
-    return pipe(
-        query,
-        [filterEmptyStrings, sortArrayValues, stringify]
-    );
+export function toQueryString(query, defaults = {}) {
+    return stringify(diff(sanitizeQuery(defaults), sanitizeQuery(query)));
+}
+
+function sanitizeQuery(query) {
+    return sortArrayValues(filterEmptyStrings(query));
 }
 
 function filterEmptyStrings(object) {
@@ -32,7 +33,7 @@ function filterEmptyStrings(object) {
             return undefined;
         }
 
-        if (isObject(value)) {
+        if (isObject(value) && !Array.isArray(value)) {
             return filterEmptyStrings(value);
         }
 
@@ -46,7 +47,7 @@ function sortArrayValues(object) {
             return value.sort();
         }
 
-        if (isObject(value)) {
+        if (isObject(value) && !Array.isArray(value)) {
             return sortArrayValues(value);
         }
 

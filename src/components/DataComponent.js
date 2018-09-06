@@ -1,6 +1,6 @@
-import { debounce, get } from '../helpers/util';
-import createPaginator from '../helpers/createPaginator';
-import { toQueryString } from '../queryString/index';
+import { debounce } from '../util';
+import { toQueryString } from '../queryString';
+import { createPaginator } from '../pagination';
 
 export default {
     name: 'DataComponent',
