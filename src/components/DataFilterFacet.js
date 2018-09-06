@@ -10,6 +10,10 @@ export default {
     computed: {
         active() {
             if (this.multiple) {
+                if (!Array.isArray(this.value)) {
+                    return () => false;
+                }
+
                 return value => this.value.indexOf(value) !== -1;
             }
 
@@ -42,7 +46,10 @@ export default {
                 return;
             }
 
-            this.$emit('input', this.value == this.facetValue ? null : this.facetValue);
+            this.$emit(
+                'input',
+                this.value == this.facetValue ? null : this.facetValue
+            );
         },
     },
 

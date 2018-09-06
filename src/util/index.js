@@ -15,6 +15,14 @@ export function debounce(func, wait, immediate) {
     };
 }
 
+export function deepClone(object) {
+    if (!object) {
+        return object;
+    }
+
+    return JSON.parse(JSON.stringify(object));
+}
+
 // Modified version of https://github.com/mattphillips/deep-object-diff
 export function diff(lhs, rhs) {
     if (lhs === rhs) {

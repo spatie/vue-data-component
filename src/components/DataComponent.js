@@ -91,7 +91,8 @@ export default {
                     response => {
                         this.visibleData = response.data;
                         this.visibleCount = response.data.length;
-                        this.totalCount = response.totalCount || response.data.length;
+                        this.totalCount =
+                            response.totalCount || response.data.length;
 
                         this.loadIfNotLoaded();
 
@@ -108,14 +109,17 @@ export default {
 
                 this.loadIfNotLoaded();
             } else {
-                throw new Error('Fetcher must return a promise or an object with a `data` key');
+                throw new Error(
+                    'Fetcher must return a promise or an object with a `data` key'
+                );
             }
         },
 
         hydrateWithInitialData() {
             this.visibleData = this.initialData.data;
             this.visibleCount = this.initialData.data.length;
-            this.totalCount = this.initialData.totalCount || this.initialData.data.length;
+            this.totalCount =
+                this.initialData.totalCount || this.initialData.data.length;
         },
 
         handleActiveRequestCountChange(activeRequestCount) {

@@ -1,4 +1,4 @@
-import { diff, isObject, mapValues } from '../util';
+import { deepClone, diff, isObject, mapValues } from '../util';
 import { parse as qsParse, stringify as qsStringify } from 'qs';
 
 const qsOptions = {
@@ -11,12 +11,13 @@ const qsOptions = {
 const stringify = query => qsStringify(query, qsOptions);
 const parse = query => qsParse(query, qsOptions);
 
-export function fromQueryString(state, queryString = null) {
-    if (queryString === null && typeof window !== 'undefined') {
-        queryString = window.location.search;
-    }
+export function fromQueryString(query, queryString = null) {
+    return query;
+    // if (queryString === null && typeof window !== 'undefined') {
+    //     queryString = window.location.search;
+    // }
 
-    return { ...state, ...parse(queryString) };
+    // return { ...state, ...parse(queryString) };
 }
 
 export function toQueryString(query, defaults = {}) {
@@ -24,7 +25,7 @@ export function toQueryString(query, defaults = {}) {
 }
 
 function sanitizeQuery(query) {
-    return sortArrayValues(filterEmptyStrings(query));
+    return sortArrayValues(filterEmptyStrings(deepClone(query)));
 }
 
 function filterEmptyStrings(object) {

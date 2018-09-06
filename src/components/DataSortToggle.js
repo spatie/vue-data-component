@@ -28,8 +28,10 @@ export default {
                 return;
             }
 
-            const currentSortOrder = this.value.charAt(0) === '-' ? 'desc' : 'asc';
-            const currentSortField = currentSortOrder === 'desc' ? this.value.slice(1) : this.value;
+            const currentSortOrder =
+                this.value.charAt(0) === '-' ? 'desc' : 'asc';
+            const currentSortField =
+                currentSortOrder === 'desc' ? this.value.slice(1) : this.value;
 
             if (this.for === currentSortField && currentSortOrder === 'asc') {
                 this.$emit('input', `-${this.for}`);
