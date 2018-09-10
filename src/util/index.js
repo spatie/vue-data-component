@@ -1,3 +1,11 @@
+export function cloneDeep(object) {
+    if (!object) {
+        return object;
+    }
+
+    return JSON.parse(JSON.stringify(object));
+}
+
 // https://davidwalsh.name/javascript-debounce-function
 export function debounce(func, wait, immediate) {
     var timeout;
@@ -13,14 +21,6 @@ export function debounce(func, wait, immediate) {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
     };
-}
-
-export function deepClone(object) {
-    if (!object) {
-        return object;
-    }
-
-    return JSON.parse(JSON.stringify(object));
 }
 
 // Modified version of https://github.com/mattphillips/deep-object-diff
@@ -74,6 +74,8 @@ export function mapValues(object, callback) {
         return newObject;
     }, {});
 }
+
+export { default as mergeDeep } from 'deepmerge';
 
 export function range(length) {
     return Array.from({ length }).map((v, k) => k + 1);

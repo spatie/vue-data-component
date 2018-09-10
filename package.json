@@ -63,5 +63,8 @@
       "limit": "5 KB",
       "path": "dist/vue-data-component.min.js"
     }
-  ]
+  ],
+  "dependencies": {
+    "deepmerge": "^2.1.1"
+  }
 }

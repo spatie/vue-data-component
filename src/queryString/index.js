@@ -1,5 +1,5 @@
-import { deepClone, diff, isObject, mapValues } from '../util';
 import { parse as qsParse, stringify as qsStringify } from 'qs';
+import { cloneDeep, diff, isObject, mapValues, mergeDeep } from '../util';
 
 const qsOptions = {
     arrayFormat: 'brackets',
@@ -11,13 +11,14 @@ const qsOptions = {
 const stringify = query => qsStringify(query, qsOptions);
 const parse = query => qsParse(query, qsOptions);
 
-export function fromQueryString(query, queryString = null) {
-    return query;
-    // if (queryString === null && typeof window !== 'undefined') {
-    //     queryString = window.location.search;
-    // }
+export function fromQueryString(defaultQuery, queryString = null) {
+    if (queryString === null && typeof window !== 'undefined') {
+        queryString = window.location.search;
+    }
 
-    // return { ...state, ...parse(queryString) };
+    const query = filterEmptyValues(parse(queryString));
+
+    return mergeDeep(cloneDeep(defaultQuery), query);
 }
 
 export function toQueryString(query, defaults = {}) {
@@ -25,21 +26,63 @@ export function toQueryString(query, defaults = {}) {
 }
 
 function sanitizeQuery(query) {
-    return sortArrayValues(filterEmptyStrings(deepClone(query)));
+    return sortArrayValues(filterEmptyValues(cloneDeep(query)));
 }
 
-function filterEmptyStrings(object) {
-    return mapValues(object, value => {
-        if (value === '') {
-            return undefined;
+function filterEmptyValues(object) {
+    return Object.keys(object).reduce((filteredObject, key) => {
+        if (isEmptyValue(object[key])) {
+            return filteredObject;
         }
 
-        if (isObject(value) && !Array.isArray(value)) {
-            return filterEmptyStrings(value);
+        if (Array.isArray(object[key])) {
+            const value = object[key].filter(isNotEmptyValue);
+
+            if (value.length === 0) {
+                return filteredObject;
+            }
+
+            filteredObject[key] = value;
+
+            return filteredObject;
         }
 
-        return value;
-    });
+        if (isObject(object[key])) {
+            const value = filterEmptyValues(object[key]);
+
+            if (Object.keys(value).length === 0) {
+                return filteredObject;
+            }
+
+            filteredObject[key] = value;
+
+            return filteredObject;
+        }
+
+        filteredObject[key] = object[key];
+
+        return filteredObject;
+    }, {});
+}
+
+function isEmptyValue(value) {
+    if (value === '') {
+        return true;
+    }
+
+    if (value === undefined) {
+        return true;
+    }
+
+    if (value === null) {
+        return true;
+    }
+
+    return false;
+}
+
+function isNotEmptyValue(value) {
+    return !isEmptyValue(value);
 }
 
 function sortArrayValues(object) {

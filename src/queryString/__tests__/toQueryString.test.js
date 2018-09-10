@@ -1,4 +1,4 @@
-import { toQueryString } from '../';
+import { toQueryString } from '..';
 
 it('creates an empty query string from an empty object', () => {
     const queryString = toQueryString({});
@@ -78,7 +78,7 @@ it('sorts multiple values', () => {
     expect(queryString).toBe('page=5&search=Sebastian');
 });
 
-it('adds nothing key from an empty array', () => {
+it('adds nothing from an empty array', () => {
     const queryString = toQueryString({ ids: [] });
 
     expect(queryString).toBe('');
