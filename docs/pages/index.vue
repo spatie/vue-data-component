@@ -1,63 +1,62 @@
 <template>
-    <no-ssr>
-        <data-component
-            :source="getMembers"
-            :query="query"
-            :query-string="true"
-            :query-string-defaults="{ sort: 'firstName' }"
-        >
-            <div slot-scope="{ data: members }">
-                <input type="text" v-model="query.filter.search">
+    <data-component
+        v-if="query"
+        :source="getMembers"
+        :query="query"
+        :query-string="true"
+        :query-string-defaults="{ sort: 'firstName' }"
+    >
+        <div slot-scope="{ data: members }">
+            <input type="text" v-model="query.filter.search">
 
-                <data-filter-facet v-model="query.filter.instruments" :multiple="true">
-                    <ul slot-scope="{ toggle, active }">
-                        <li v-for="instrument in instruments" :key="instrument">
-                            <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
-                                {{ instrument }}
-                            </button>
-                        </li>
-                    </ul>
-                </data-filter-facet>
+            <data-filter-facet v-model="query.filter.instruments" :multiple="true">
+                <ul slot-scope="{ toggle, active }">
+                    <li v-for="instrument in instruments" :key="instrument">
+                        <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
+                            {{ instrument }}
+                        </button>
+                    </li>
+                </ul>
+            </data-filter-facet>
 
-                <data-filter-facet v-model="query.filter.moreThanTenSongs">
-                    <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
-                        More than 10 songs
-                    </button>
-                </data-filter-facet>
+            <data-filter-facet v-model="query.filter.moreThanTenSongs">
+                <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
+                    More than 10 songs
+                </button>
+            </data-filter-facet>
 
-                <data-filter-facet v-model="query.filter.lover" facet-value="Yoko">
-                    <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
-                        Yoko
-                    </button>
-                </data-filter-facet>
+            <data-filter-facet v-model="query.filter.lover" facet-value="Yoko">
+                <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
+                    Yoko
+                </button>
+            </data-filter-facet>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th v-for="(label, property) in columns" :key="property">
-                                <data-sort-toggle :for="property" v-model="query.sort">
-                                    <button slot-scope="{ toggle, sortedAsc, sortedDesc }" @click.prevent="toggle">
-                                        {{ label }}
-                                        <span v-if="sortedAsc">⬆️</span>
-                                        <span v-if="sortedDesc">⬇️️</span>
-                                    </button>
-                                </data-sort-toggle>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="member in members" :key="member.firstName">
-                            <td>{{ member.firstName }}</td>
-                            <td>{{ member.lastName }}</td>
-                            <td>{{ member.instrument }}</td>
-                            <td>{{ member.songs }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <pre>{{ debug }}</pre>
-            </div>
-        </data-component>
-    </no-ssr>
+            <table>
+                <thead>
+                    <tr>
+                        <th v-for="(label, property) in columns" :key="property">
+                            <data-sort-toggle :for="property" v-model="query.sort">
+                                <button slot-scope="{ toggle, sortedAsc, sortedDesc }" @click.prevent="toggle">
+                                    {{ label }}
+                                    <span v-if="sortedAsc">⬆️</span>
+                                    <span v-if="sortedDesc">⬇️️</span>
+                                </button>
+                            </data-sort-toggle>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="member in members" :key="member.firstName">
+                        <td>{{ member.firstName }}</td>
+                        <td>{{ member.lastName }}</td>
+                        <td>{{ member.instrument }}</td>
+                        <td>{{ member.songs }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pre>{{ debug }}</pre>
+        </div>
+    </data-component>
 </template>
 
 <script>
@@ -72,15 +71,7 @@ export default {
 
     data() {
         return {
-            query: fromQueryString({
-                filter: {
-                    search: '',
-                    instruments: [],
-                    moreThanTenSongs: null,
-                    lover: null,
-                },
-                sort: 'firstName',
-            }),
+            query: null,
 
             columns: {
                 firstName: 'First name',
@@ -120,6 +111,18 @@ export default {
                 },
             ],
         };
+    },
+
+    mounted() {
+        this.query = fromQueryString({
+            filter: {
+                search: '',
+                instruments: [],
+                moreThanTenSongs: null,
+                lover: null,
+            },
+            sort: 'firstName',
+        });
     },
 
     computed: {

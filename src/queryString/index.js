@@ -3,8 +3,6 @@ import { cloneDeep, diff, isObject, mapValues, mergeDeep } from '../util';
 
 const qsOptions = {
     arrayFormat: 'brackets',
-    encodeValuesOnly: true,
-    skipNulls: true,
     sort: (a, b) => a.localeCompare(b),
 };
 
@@ -15,6 +13,8 @@ export function fromQueryString(defaultQuery, queryString = null) {
     if (queryString === null && typeof window !== 'undefined') {
         queryString = window.location.search;
     }
+
+    queryString = queryString.replace(/^\?/, '');
 
     const query = filterEmptyValues(parse(queryString));
 
