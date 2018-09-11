@@ -6,7 +6,6 @@
     "axios": "^0.18.0",
     "nuxt": "^1.4.0",
     "tailwindcss": "^0.6.1",
-    "vue": "^2.5.16",
-    "vue-data-component-source": "^0.1.0"
+    "vue": "^2.5.16"
   }
 }
