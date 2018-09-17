@@ -8,8 +8,8 @@ export default {
     props: {
         source: { required: true, type: Function },
         query: { default: () => ({}), type: Object },
+        page: { default: null },
         pageSize: { default: null },
-        pageNumber: { default: null },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
@@ -45,8 +45,8 @@ export default {
             immediate: !this.loaded,
         });
 
+        this.$watch('page', getVisibleData);
         this.$watch('pageSize', getVisibleData);
-        this.$watch('pageNumber', getVisibleData);
 
         if (!this.initialLoadDelayMs) {
             this.loadIfNotLoaded();
@@ -66,8 +66,8 @@ export default {
     computed: {
         paginator() {
             return createPaginator({
+                page: this.page,
                 pageSize: this.pageSize,
-                pageNumber: this.pageNumber,
                 totalCount: this.totalCount || 0,
             });
         },
