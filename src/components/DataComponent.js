@@ -120,7 +120,7 @@ export default {
             this.previousQuery = cloneDeep(query);
 
             if (this.queryString) {
-                this.updateQueryString();
+                this.updateQueryString(query);
             }
 
             const result = this.fetcher({
@@ -206,11 +206,8 @@ export default {
             return query;
         },
 
-        updateQueryString() {
-            const queryString = toQueryString(
-                this.query,
-                this.queryStringDefaults || this.initialQuery
-            );
+        updateQueryString(query) {
+            const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery);
 
             const url = queryString
                 ? `${window.location.pathname}?${queryString}`
