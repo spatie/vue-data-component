@@ -1,66 +1,68 @@
 <template>
-    <data-component
-        v-if="query"
-        :source="getMembers"
-        :query="query"
-        :query-string="true"
-        :query-string-defaults="{ sort: 'firstName' }"
-    >
-        <div slot-scope="{ data: members }">
-            <input type="text" v-model="query.filter.search">
+    <no-ssr>
+        <data-component
+            v-if="query"
+            :fetcher="getMembers"
+            :query.sync="query"
+            :query-string="true"
+        >
+            <div slot-scope="{ data: members }">
+                <input type="text" v-model="query.filter.search">
 
-            <data-filter-facet v-model="query.filter.instruments" :multiple="true">
-                <ul slot-scope="{ toggle, active }">
-                    <li v-for="instrument in instruments" :key="instrument">
-                        <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
-                            {{ instrument }}
-                        </button>
-                    </li>
-                </ul>
-            </data-filter-facet>
+                <data-filter-facet v-model="query.filter.instruments" :multiple="true">
+                    <ul slot-scope="{ toggle, active }">
+                        <li v-for="instrument in instruments" :key="instrument">
+                            <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
+                                {{ instrument }}
+                            </button>
+                        </li>
+                    </ul>
+                </data-filter-facet>
 
-            <data-filter-facet v-model="query.filter.moreThanTenSongs">
-                <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
-                    More than 10 songs
-                </button>
-            </data-filter-facet>
+                <data-filter-facet v-model="query.filter.moreThanTenSongs">
+                    <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
+                        More than 10 songs
+                    </button>
+                </data-filter-facet>
 
-            <data-filter-facet v-model="query.filter.lover" facet-value="Yoko">
-                <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
-                    Yoko
-                </button>
-            </data-filter-facet>
+                <data-filter-facet v-model="query.filter.lover" facet-value="Yoko">
+                    <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
+                        Yoko
+                    </button>
+                </data-filter-facet>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th v-for="(label, property) in columns" :key="property">
-                            <data-sort-toggle :for="property" v-model="query.sort">
-                                <button slot-scope="{ toggle, sortedAsc, sortedDesc }" @click.prevent="toggle">
-                                    {{ label }}
-                                    <span v-if="sortedAsc">⬆️</span>
-                                    <span v-if="sortedDesc">⬇️️</span>
-                                </button>
-                            </data-sort-toggle>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="member in members" :key="member.firstName">
-                        <td>{{ member.firstName }}</td>
-                        <td>{{ member.lastName }}</td>
-                        <td>{{ member.instrument }}</td>
-                        <td>{{ member.songs }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <pre>{{ debug }}</pre>
-        </div>
-    </data-component>
+                <table>
+                    <thead>
+                        <tr>
+                            <th v-for="(label, property) in columns" :key="property">
+                                <data-sort-toggle :for="property" v-model="query.sort">
+                                    <button slot-scope="{ toggle, sortedAsc, sortedDesc }" @click.prevent="toggle">
+                                        {{ label }}
+                                        <span v-if="sortedAsc">⬆️</span>
+                                        <span v-if="sortedDesc">⬇️️</span>
+                                    </button>
+                                </data-sort-toggle>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="member in members" :key="member.firstName">
+                            <td>{{ member.firstName }}</td>
+                            <td>{{ member.lastName }}</td>
+                            <td>{{ member.instrument }}</td>
+                            <td>{{ member.songs }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre>{{ debug }}</pre>
+            </div>
+        </data-component>
+    </no-ssr>
 </template>
 
 <script>
-import DataComponent, { DataFilterFacet, DataSortToggle, createSource, fromQueryString } from '../../src';
+import createSource from '../../src/createSource';
+import DataComponent, { DataFilterFacet, DataSortToggle } from '../../src';
 
 export default {
     components: {
@@ -71,7 +73,15 @@ export default {
 
     data() {
         return {
-            query: null,
+            query: {
+                filter: {
+                    search: '',
+                    instruments: [],
+                    moreThanTenSongs: null,
+                    lover: null,
+                },
+                sort: 'firstName',
+            },
 
             columns: {
                 firstName: 'First name',
@@ -111,18 +121,6 @@ export default {
                 },
             ],
         };
-    },
-
-    mounted() {
-        this.query = fromQueryString({
-            filter: {
-                search: '',
-                instruments: [],
-                moreThanTenSongs: null,
-                lover: null,
-            },
-            sort: 'firstName',
-        });
     },
 
     computed: {

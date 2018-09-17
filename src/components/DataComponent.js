@@ -1,4 +1,4 @@
-import { toQueryString } from '../queryString';
+import { toQueryString, fromQueryString } from '../queryString';
 import { createPaginator } from '../pagination';
 import { cloneDeep, debounce, diff, get, set } from '../util';
 
@@ -46,8 +46,11 @@ export default {
 
         this.$watch('query', getVisibleData, {
             deep: true,
-            immediate: !this.loaded,
         });
+
+        if (!this.loaded) {
+            getVisibleData({ isFirstRender: true });
+        }
 
         if (!this.initialLoadDelayMs) {
             this.loadIfNotLoaded();
@@ -82,6 +85,10 @@ export default {
         },
 
         needsPageReset() {
+            if (!this.pageNumber) {
+                return false;
+            }
+
             if (this.pageNumber == 1) {
                 return false;
             }
@@ -95,10 +102,16 @@ export default {
     },
 
     methods: {
-        getVisibleData({ forceUpdate = false } = {}) {
+        getVisibleData({ isFirstRender = false, isForcedUpdate = false } = {}) {
             let query = cloneDeep(this.query);
 
-            if (!forceUpdate && this.needsPageReset) {
+            if (isFirstRender && this.queryString) {
+                query = fromQueryString(query, window.location.search);
+
+                this.$emit('update:query', query);
+            }
+
+            if (!isFirstRender && !isForcedUpdate && this.needsPageReset) {
                 set(query, this.pageNumberKey, 1);
 
                 this.$emit('update:query', query);
@@ -112,7 +125,8 @@ export default {
 
             const result = this.fetcher({
                 query,
-                forceUpdate,
+                isFirstRender,
+                isForcedUpdate,
                 queryString: toQueryString(this.query),
             });
 
@@ -191,7 +205,7 @@ export default {
         },
 
         forceUpdate() {
-            this.getVisibleData({ forceUpdate: true });
+            this.getVisibleData({ isForcedUpdate: true });
         },
     },
 
