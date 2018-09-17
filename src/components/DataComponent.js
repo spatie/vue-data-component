@@ -40,16 +40,16 @@ export default {
             this.loadIfNotLoaded();
         }
 
-        const getVisibleData = this.debounceMs
-            ? debounce(this.getVisibleData, this.debounceMs)
-            : this.getVisibleData;
+        const fetchVisibleData = this.debounceMs
+            ? debounce(this.fetchVisibleData, this.debounceMs)
+            : this.fetchVisibleData;
 
-        this.$watch('query', getVisibleData, {
+        this.$watch('query', fetchVisibleData, {
             deep: true,
         });
 
         if (!this.loaded) {
-            getVisibleData({ isFirstRender: true });
+            fetchVisibleData({ isFirstRender: true });
         }
 
         if (!this.initialLoadDelayMs) {
@@ -102,7 +102,7 @@ export default {
     },
 
     methods: {
-        getVisibleData({ isFirstRender = false, isForcedUpdate = false } = {}) {
+        fetchVisibleData({ isFirstRender = false, isForcedUpdate = false } = {}) {
             let query = cloneDeep(this.query);
 
             if (isFirstRender && this.queryString) {
@@ -205,7 +205,7 @@ export default {
         },
 
         forceUpdate() {
-            this.getVisibleData({ isForcedUpdate: true });
+            this.fetchVisibleData({ isForcedUpdate: true });
         },
     },
 
