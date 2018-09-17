@@ -8,8 +8,8 @@ export default {
     props: {
         source: { required: true, type: Function },
         query: { default: () => ({}), type: Object },
-        page: { default: null },
         pageSize: { default: null },
+        pageNumber: { default: null },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
@@ -45,8 +45,8 @@ export default {
             immediate: !this.loaded,
         });
 
-        this.$watch('page', getVisibleData);
         this.$watch('pageSize', getVisibleData);
+        this.$watch('pageNumber', getVisibleData);
 
         if (!this.initialLoadDelayMs) {
             this.loadIfNotLoaded();
@@ -66,8 +66,8 @@ export default {
     computed: {
         paginator() {
             return createPaginator({
-                page: this.page,
                 pageSize: this.pageSize,
+                pageNumber: this.pageNumber,
                 totalCount: this.totalCount || 0,
             });
         },
@@ -93,7 +93,7 @@ export default {
                         this.visibleData = response.data;
                         this.visibleCount = response.data.length;
                         this.totalCount =
-                            response.totalCount || response.data.length;
+                            response.total || response.data.length;
 
                         this.loadIfNotLoaded();
 
@@ -106,7 +106,7 @@ export default {
             } else if (result.hasOwnProperty('data')) {
                 this.visibleData = result.data;
                 this.visibleCount = result.data.length;
-                this.totalCount = result.totalCount || result.data.length;
+                this.totalCount = result.total || result.data.length;
 
                 this.loadIfNotLoaded();
             } else {
@@ -120,7 +120,7 @@ export default {
             this.visibleData = this.initialData.data;
             this.visibleCount = this.initialData.data.length;
             this.totalCount =
-                this.initialData.totalCount || this.initialData.data.length;
+                this.initialData.total || this.initialData.data.length;
         },
 
         handleActiveRequestCountChange(activeRequestCount) {
