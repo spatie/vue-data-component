@@ -85,6 +85,10 @@ export function isObject(object) {
     return typeof object === 'object';
 }
 
+export function isPromise(object) {
+    return object && typeof object.then == 'function';
+}
+
 export function mapValues(object, callback) {
     return Object.keys(object).reduce((newObject, key) => {
         newObject[key] = callback(object[key]);

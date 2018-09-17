@@ -1,6 +1,6 @@
-import { toQueryString, fromQueryString } from '../queryString';
 import { createPaginator } from '../pagination';
-import { cloneDeep, debounce, diff, get, set } from '../util';
+import { toQueryString, fromQueryString } from '../queryString';
+import { cloneDeep, debounce, diff, get, isPromise, set } from '../util';
 
 export default {
     name: 'DataComponent',
@@ -34,25 +34,29 @@ export default {
     },
 
     created() {
+        this.debouncedFetchVisibleData = this.debounceMs
+            ? debounce(this.fetchVisibleData, this.debounceMs)
+            : this.fetchVisibleData;
+
+        let query = this.query;
+
+        if (this.queryString) {
+            query = this.updateQueryFromQueryString();
+        }
+
         if (this.initialData) {
             this.hydrateWithInitialData();
 
             this.loadIfNotLoaded();
+
+            return;
         }
 
-        const fetchVisibleData = this.debounceMs
-            ? debounce(this.fetchVisibleData, this.debounceMs)
-            : this.fetchVisibleData;
+        const fetchResult = this.debouncedFetchVisibleData(this.query);
 
-        this.$watch('query', fetchVisibleData, {
-            deep: true,
-        });
-
-        if (!this.loaded) {
-            fetchVisibleData({ isFirstRender: true });
-        }
-
-        if (!this.initialLoadDelayMs) {
+        if (isPromise(fetchResult)) {
+            fetchResult.then(this.loadIfNotLoaded);
+        } else {
             this.loadIfNotLoaded();
         }
     },
@@ -64,6 +68,7 @@ export default {
             }, this.initialLoadDelayMs);
         }
 
+        this.$watch('query', this.handleQueryChange, { deep: true });
         this.$watch('activeRequestCount', this.handleActiveRequestCountChange);
     },
 
@@ -84,6 +89,22 @@ export default {
             return get(this.query, this.pageSizeKey);
         },
 
+        previousQueryDiff() {
+            if (!this.previousQuery) {
+                return {};
+            }
+
+            return diff(this.query, this.previousQuery);
+        },
+
+        queryChangedSincePreviousFetch() {
+            if (!this.previousQuery) {
+                return true;
+            }
+
+            return Object.keys(this.previousQueryDiff).length > 0;
+        },
+
         needsPageReset() {
             if (!this.pageNumber) {
                 return false;
@@ -97,49 +118,36 @@ export default {
                 return false;
             }
 
-            return get(diff(this.query, this.previousQuery), this.pageNumberKey) === undefined;
+            return get(this.previousQueryDiff, this.pageNumberKey) === undefined;
         },
     },
 
     methods: {
-        fetchVisibleData({ isFirstRender = false, isForcedUpdate = false } = {}) {
-            let query = cloneDeep(this.query);
-
-            if (isFirstRender && this.queryString) {
-                query = fromQueryString(query, window.location.search);
-
-                this.$emit('update:query', query);
-            }
-
-            if (!isFirstRender && !isForcedUpdate && this.needsPageReset) {
-                set(query, this.pageNumberKey, 1);
-
-                this.$emit('update:query', query);
+        fetchVisibleData(query, { force = false } = {}) {
+            if (!force && !this.queryChangedSincePreviousFetch) {
+                return;
             }
 
             this.previousQuery = query;
 
-            if (this.queryString && this.loaded) {
+            if (this.queryString) {
                 this.updateQueryString();
             }
 
             const result = this.fetcher({
                 query,
-                isFirstRender,
-                isForcedUpdate,
+                force,
                 queryString: toQueryString(this.query),
             });
 
-            if (typeof result.then == 'function') {
+            if (isPromise(result)) {
                 this.activeRequestCount++;
 
-                result.then(
+                return result.then(
                     response => {
                         this.visibleData = response.data;
                         this.visibleCount = response.data.length;
                         this.totalCount = get(response, this.totalCountKey) || response.data.length;
-
-                        this.loadIfNotLoaded();
 
                         this.activeRequestCount--;
                     },
@@ -147,21 +155,31 @@ export default {
                         this.activeRequestCount--;
                     }
                 );
-            } else if (result.hasOwnProperty('data')) {
-                this.visibleData = result.data;
-                this.visibleCount = result.data.length;
-                this.totalCount = result.total || result.data.length;
+            }
 
-                this.loadIfNotLoaded();
-            } else {
+            if (!result.hasOwnProperty('data')) {
                 throw new Error('Fetcher must return a promise or an object with a `data` key');
             }
+
+            this.visibleData = result.data;
+            this.visibleCount = result.data.length;
+            this.totalCount = result.total || result.data.length;
         },
 
         hydrateWithInitialData() {
             this.visibleData = this.initialData.data;
             this.visibleCount = this.initialData.data.length;
             this.totalCount = this.initialData.total || this.initialData.data.length;
+        },
+
+        handleQueryChange() {
+            const query = cloneDeep(this.query);
+
+            if (this.needsPageReset) {
+                set(query, this.pageNumberKey, 1);
+            }
+
+            this.debouncedFetchVisibleData(query);
         },
 
         handleActiveRequestCountChange(activeRequestCount) {
@@ -182,6 +200,14 @@ export default {
                     }
                 }, this.slowRequestThresholdMs);
             }
+        },
+
+        updateQueryFromQueryString() {
+            const query = fromQueryString(this.query, window.location.search);
+
+            this.$emit('update:query', query);
+
+            return query;
         },
 
         updateQueryString() {
@@ -205,7 +231,7 @@ export default {
         },
 
         forceUpdate() {
-            this.fetchVisibleData({ isForcedUpdate: true });
+            this.fetchVisibleData({ force: true });
         },
     },
 
