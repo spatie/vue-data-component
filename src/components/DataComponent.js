@@ -16,6 +16,7 @@ export default {
         queryStringDefaults: { default: null, type: Object },
         pageNumberKey: { default: 'page' },
         pageSizeKey: { default: 'pageSize' },
+        pageCountKey: { default: null },
         totalCountKey: { default: 'total' },
     },
 
@@ -28,6 +29,7 @@ export default {
             visibleData: [],
             visibleCount: 0,
             totalCount: 0,
+            pageCount: 0,
             previousQuery: null,
             initialQuery: cloneDeep(this.query),
         };
@@ -77,6 +79,7 @@ export default {
             return createPaginator({
                 page: this.pageNumber,
                 pageSize: this.pageSize,
+                pageCount: this.pageCount,
                 totalCount: this.totalCount || 0,
             });
         },
@@ -87,22 +90,6 @@ export default {
 
         pageSize() {
             return get(this.query, this.pageSizeKey);
-        },
-
-        previousQueryDiff() {
-            if (!this.previousQuery) {
-                return {};
-            }
-
-            return diff(this.query, this.previousQuery);
-        },
-
-        queryChangedSincePreviousFetch() {
-            if (!this.previousQuery) {
-                return true;
-            }
-
-            return Object.keys(this.previousQueryDiff).length > 0;
         },
 
         needsPageReset() {
@@ -118,17 +105,19 @@ export default {
                 return false;
             }
 
-            return get(this.previousQueryDiff, this.pageNumberKey) === undefined;
+            const queryDiff = diff(this.query, this.previousQuery);
+
+            return get(queryDiff, this.pageNumberKey) === undefined;
         },
     },
 
     methods: {
         fetchVisibleData(query, { force = false } = {}) {
-            if (!force && !this.queryChangedSincePreviousFetch) {
+            if (!force && !this.queryChangedSincePreviousFetch(query)) {
                 return;
             }
 
-            this.previousQuery = query;
+            this.previousQuery = cloneDeep(query);
 
             if (this.queryString) {
                 this.updateQueryString();
@@ -137,7 +126,7 @@ export default {
             const result = this.fetcher({
                 query,
                 force,
-                queryString: toQueryString(this.query),
+                queryString: toQueryString(query),
             });
 
             if (isPromise(result)) {
@@ -148,6 +137,7 @@ export default {
                         this.visibleData = response.data;
                         this.visibleCount = response.data.length;
                         this.totalCount = get(response, this.totalCountKey) || response.data.length;
+                        this.pageCount = this.calculatePageCount(response);
 
                         this.activeRequestCount--;
                     },
@@ -164,6 +154,7 @@ export default {
             this.visibleData = result.data;
             this.visibleCount = result.data.length;
             this.totalCount = get(result, this.totalCountKey) || result.data.length;
+            this.pageCount = this.calculatePageCount(result);
         },
 
         hydrateWithInitialData() {
@@ -171,13 +162,17 @@ export default {
             this.visibleCount = this.initialData.data.length;
             this.totalCount =
                 get(this.initialData, this.totalCountKey) || this.initialData.data.length;
+            this.pageCount = this.calculatePageCount(this.initialData);
         },
 
         handleQueryChange() {
-            const query = cloneDeep(this.query);
+            let query = this.query;
 
             if (this.needsPageReset) {
+                query = cloneDeep(query);
                 set(query, this.pageNumberKey, 1);
+
+                this.$emit('update:query', query);
             }
 
             this.debouncedFetchVisibleData(query);
@@ -224,11 +219,29 @@ export default {
             window.history.replaceState(null, null, url);
         },
 
+        queryChangedSincePreviousFetch(query) {
+            if (!this.previousQuery) {
+                return true;
+            }
+
+            const queryDiff = diff(query, this.previousQuery);
+
+            return Object.keys(queryDiff).length > 0;
+        },
+
         loadIfNotLoaded() {
             if (!this.loaded) {
                 this.loaded = true;
                 this.initialLoadDelayMsFinished = true;
             }
+        },
+
+        calculatePageCount(fetchResult) {
+            if (this.pageCountKey) {
+                return get(fetchResult, this.pageCountKey);
+            }
+
+            return this.pageSize ? Math.ceil(this.totalCount / this.pageSize) : 1;
         },
 
         forceUpdate() {
