@@ -1,33 +1,37 @@
-import { debounce } from '../util';
 import { toQueryString } from '../queryString';
 import { createPaginator } from '../pagination';
+import { cloneDeep, debounce, diff, get, set } from '../util';
 
 export default {
     name: 'DataComponent',
 
     props: {
-        source: { required: true, type: Function },
+        fetcher: { required: true, type: Function },
         query: { default: () => ({}), type: Object },
-        page: { default: null },
-        pageSize: { default: null },
         initialData: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
         queryString: { default: false, type: Boolean },
-        queryStringDefaults: { default: () => ({}), type: Object },
+        queryStringDefaults: { default: null, type: Object },
+        pageNumberKey: { default: 'page' },
+        pageSizeKey: { default: 'pageSize' },
+        totalCountKey: { default: 'total' },
     },
 
-    data: () => ({
-        loaded: false,
-        initialLoadDelayMsFinished: false,
-        activeRequestCount: 0,
-        slowRequest: false,
-
-        visibleData: [],
-        visibleCount: 0,
-        totalCount: 0,
-    }),
+    data() {
+        return {
+            loaded: false,
+            initialLoadDelayMsFinished: false,
+            activeRequestCount: 0,
+            slowRequest: false,
+            visibleData: [],
+            visibleCount: 0,
+            totalCount: 0,
+            previousQuery: null,
+            initialQuery: cloneDeep(this.query),
+        };
+    },
 
     created() {
         if (this.initialData) {
@@ -44,9 +48,6 @@ export default {
             deep: true,
             immediate: !this.loaded,
         });
-
-        this.$watch('page', getVisibleData);
-        this.$watch('pageSize', getVisibleData);
 
         if (!this.initialLoadDelayMs) {
             this.loadIfNotLoaded();
@@ -66,23 +67,53 @@ export default {
     computed: {
         paginator() {
             return createPaginator({
-                page: this.page,
+                page: this.pageNumber,
                 pageSize: this.pageSize,
                 totalCount: this.totalCount || 0,
             });
+        },
+
+        pageNumber() {
+            return get(this.query, this.pageNumberKey);
+        },
+
+        pageSize() {
+            return get(this.query, this.pageSizeKey);
+        },
+
+        needsPageReset() {
+            if (this.pageNumber == 1) {
+                return false;
+            }
+
+            if (!this.previousQuery) {
+                return false;
+            }
+
+            return get(diff(this.query, this.previousQuery), this.pageNumberKey) === undefined;
         },
     },
 
     methods: {
         getVisibleData({ forceUpdate = false } = {}) {
+            let query = cloneDeep(this.query);
+
+            if (!forceUpdate && this.needsPageReset) {
+                set(query, this.pageNumberKey, 1);
+
+                this.$emit('update:query', query);
+            }
+
+            this.previousQuery = query;
+
             if (this.queryString && this.loaded) {
                 this.updateQueryString();
             }
 
-            const result = this.source({
-                query: this.query,
+            const result = this.fetcher({
+                query,
+                forceUpdate,
                 queryString: toQueryString(this.query),
-                forcedUpdate: forceUpdate,
             });
 
             if (typeof result.then == 'function') {
@@ -92,8 +123,7 @@ export default {
                     response => {
                         this.visibleData = response.data;
                         this.visibleCount = response.data.length;
-                        this.totalCount =
-                            response.total || response.data.length;
+                        this.totalCount = get(response, this.totalCountKey) || response.data.length;
 
                         this.loadIfNotLoaded();
 
@@ -110,17 +140,14 @@ export default {
 
                 this.loadIfNotLoaded();
             } else {
-                throw new Error(
-                    'Fetcher must return a promise or an object with a `data` key'
-                );
+                throw new Error('Fetcher must return a promise or an object with a `data` key');
             }
         },
 
         hydrateWithInitialData() {
             this.visibleData = this.initialData.data;
             this.visibleCount = this.initialData.data.length;
-            this.totalCount =
-                this.initialData.total || this.initialData.data.length;
+            this.totalCount = this.initialData.total || this.initialData.data.length;
         },
 
         handleActiveRequestCountChange(activeRequestCount) {
@@ -146,16 +173,14 @@ export default {
         updateQueryString() {
             const queryString = toQueryString(
                 this.query,
-                this.queryStringDefaults
+                this.queryStringDefaults || this.initialQuery
             );
 
-            window.history.replaceState(
-                null,
-                null,
-                queryString
-                    ? `${window.location.pathname}?${queryString}`
-                    : window.location.pathname
-            );
+            const url = queryString
+                ? `${window.location.pathname}?${queryString}`
+                : window.location.pathname;
+
+            window.history.replaceState(null, null, url);
         },
 
         loadIfNotLoaded() {

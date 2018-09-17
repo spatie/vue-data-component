@@ -5,10 +5,8 @@
             The free public API is a perfect case for a paginated, filterable, ajax-driven data component.</p>
         </intro>
         <data-component
-            :source="getRicks"
-            :query="query"
-            :page="query.page"
-            :page-size="20"
+            :fetcher="getRicks"
+            :query.sync="query"
             :initial-load-delay-ms="400"
         >
             <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, loaded, slowLoad, slowRequest }">
@@ -92,6 +90,7 @@ export default {
         query: {
             status: null,
             page: 1,
+            pageSize: 20,
         },
 
         statusses: {
@@ -121,7 +120,7 @@ export default {
 
             return axios.get(`${baseUrl}?name=Rick&${queryString}`).then(response => ({
                 data: response.data.results,
-                totalCount: response.data.info.count,
+                total: response.data.info.count,
             }));
         },
 
@@ -130,7 +129,6 @@ export default {
                 return;
             }
 
-            this.query.page = 1;
             this.query.status = status;
         },
     },

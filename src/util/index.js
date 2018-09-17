@@ -1,3 +1,7 @@
+export { default as get } from 'lodash.get';
+export { default as set } from 'lodash.set';
+export { default as mergeDeep } from 'deepmerge';
+
 export function cloneDeep(object) {
     if (!object) {
         return object;
@@ -74,8 +78,6 @@ export function mapValues(object, callback) {
         return newObject;
     }, {});
 }
-
-export { default as mergeDeep } from 'deepmerge';
 
 export function range(length) {
     return Array.from({ length }).map((v, k) => k + 1);

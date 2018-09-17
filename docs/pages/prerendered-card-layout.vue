@@ -5,10 +5,8 @@
             <p>Since the component already knows which data to display in the first render, there's no flash when the page loads.</p>
         </intro>
         <data-component
-            :source="getRicks"
-            :filter="filter"
-            :page="page"
-            :per-page="perPage"
+            :fetcher="getRicks"
+            :query="query"
             :initial-data="initialData"
         >
             <div slot-scope="{ data, visibleCount, totalCount, paginator, slowRequest }">
@@ -80,12 +78,11 @@ export default {
     title: 'Prerendered card layout',
 
     data: () => ({
-        filter: {
+        query: {
             status: 'all',
+            page: 1,
+            perPage: 20,
         },
-
-        page: 1,
-        perPage: 20,
 
         statusses: {
             all: 'All',

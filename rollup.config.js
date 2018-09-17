@@ -1,5 +1,6 @@
 import pkg from './package.json';
 import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
 import { uglify } from 'rollup-plugin-uglify';
 import resolve from 'rollup-plugin-node-resolve';
 
@@ -9,6 +10,7 @@ export default [
         external: ['vue', 'qs'],
         plugins: [
             resolve(),
+            commonjs(),
             babel({
                 exclude: 'node_modules/**',
                 plugins: ['external-helpers'],
@@ -41,6 +43,7 @@ export default [
         external: ['vue', 'qs'],
         plugins: [
             resolve(),
+            commonjs(),
             babel({
                 exclude: 'node_modules/**',
                 plugins: ['external-helpers'],
