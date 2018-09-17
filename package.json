@@ -1,6 +1,6 @@
 {
   "name": "vue-data-component",
-  "version": "1.0.0-alpha.23",
+  "version": "1.0.0-alpha.24",
   "description": "A straightforward Vue component to filter, sort and paginate data",
   "browser": "dist/vue-data-component.js",
   "main": "dist/vue-data-component.common.js",
@@ -67,7 +67,6 @@
   ],
   "dependencies": {
     "deepmerge": "^2.1.1",
-    "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2"
   }
 }
