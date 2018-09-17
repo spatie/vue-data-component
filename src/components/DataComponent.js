@@ -163,13 +163,14 @@ export default {
 
             this.visibleData = result.data;
             this.visibleCount = result.data.length;
-            this.totalCount = result.total || result.data.length;
+            this.totalCount = get(result, this.totalCountKey) || result.data.length;
         },
 
         hydrateWithInitialData() {
             this.visibleData = this.initialData.data;
             this.visibleCount = this.initialData.data.length;
-            this.totalCount = this.initialData.total || this.initialData.data.length;
+            this.totalCount =
+                get(this.initialData, this.totalCountKey) || this.initialData.data.length;
         },
 
         handleQueryChange() {
