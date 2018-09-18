@@ -12,7 +12,7 @@ export default {
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
-        showQueryString: { default: false, type: Boolean },
+        useQueryString: { default: false, type: Boolean },
         queryStringDefaults: { default: null, type: Object },
         pageNumberKey: { default: 'page' },
         pageSizeKey: { default: 'pageSize' },
@@ -42,7 +42,7 @@ export default {
 
         let query = this.query;
 
-        if (this.showQueryString) {
+        if (this.useQueryString) {
             query = this.updateQueryFromQueryString();
         }
 
@@ -119,7 +119,7 @@ export default {
 
             this.previousQuery = cloneDeep(query);
 
-            if (this.showQueryString) {
+            if (this.useQueryString) {
                 this.updateQueryString(query);
             }
 
