@@ -36,11 +36,11 @@
                         <tr>
                             <th v-for="(label, property) in columns" :key="property">
                                 <data-sort-toggle :for="property" v-model="query.sort">
-                                    <button slot-scope="{ toggle, sortedAsc, sortedDesc }" @click.prevent="toggle">
+                                    <template slot-scope="{ isSortedAsc, isSortedDesc }">
                                         {{ label }}
-                                        <span v-if="sortedAsc">⬆️</span>
-                                        <span v-if="sortedDesc">⬇️️</span>
-                                    </button>
+                                        <span v-if="isSortedAsc">⬆️</span>
+                                        <span v-if="isSortedDesc">⬇️️</span>
+                                    </template>
                                 </data-sort-toggle>
                             </th>
                         </tr>
