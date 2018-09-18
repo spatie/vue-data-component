@@ -33,7 +33,7 @@ export default {
     },
 
     methods: {
-        getData({ queryString }) {
+        fetch({ queryString }) {
             const headers = new Headers({
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json',
@@ -49,6 +49,7 @@ export default {
     render(h) {
         return h(DataComponent, {
             props: {
+                fetcher: this.fetch,
                 query: this.query,
             },
             on: {
