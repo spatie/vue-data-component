@@ -9,16 +9,16 @@
             :query.sync="query"
             :initial-load-delay-ms="400"
         >
-            <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, loaded, slowLoad, slowRequest }">
-                <div v-if="loaded || slowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
-                    <p v-if="loaded" class="text-grey-dark italic">
+            <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, isLoaded, isSlowLoad, isSlowRequest }">
+                <div v-if="isLoaded || isSlowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
+                    <p v-if="isLoaded" class="text-grey-dark italic">
                         Displaying {{ visibleCount }} of {{ totalCount }} Ricks.
-                        <span v-if="slowRequest">Loading...</span>
+                        <span v-if="isSlowRequest">Loading...</span>
                     </p>
                     <p v-else class="text-grey-dark italic">
                         Still loading...
                     </p>
-                    <p v-if="loaded">
+                    <p v-if="isLoaded">
                         <button
                             class="uppercase tracking-wide ml-4"
                             :class="!query.status ? 'border-b border-black' : 'text-grey-dark'"
@@ -40,7 +40,7 @@
 
                 <div
                     class="flex flex-wrap justify-between transition"
-                    :class="slowRequest ? 'opacity-50' : null"
+                    :class="isSlowRequest ? 'opacity-50' : null"
                 >
                     <article
                         v-for="rick in ricks"

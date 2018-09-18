@@ -12,7 +12,7 @@ export default {
         debounceMs: { default: 0, type: Number },
         initialLoadDelayMs: { default: 0, type: Number },
         slowRequestThresholdMs: { default: 400, type: Number },
-        queryString: { default: false, type: Boolean },
+        useQueryString: { default: false, type: Boolean },
         queryStringDefaults: { default: null, type: Object },
         pageNumberKey: { default: 'page' },
         pageSizeKey: { default: 'pageSize' },
@@ -22,10 +22,10 @@ export default {
 
     data() {
         return {
-            loaded: false,
-            initialLoadDelayMsFinished: false,
+            isLoaded: false,
+            isInitialLoadDelayFinished: false,
             activeRequestCount: 0,
-            slowRequest: false,
+            isSlowRequest: false,
             visibleData: [],
             visibleCount: 0,
             totalCount: 0,
@@ -42,7 +42,7 @@ export default {
 
         let query = this.query;
 
-        if (this.queryString) {
+        if (this.useQueryString) {
             query = this.updateQueryFromQueryString();
         }
 
@@ -64,9 +64,9 @@ export default {
     },
 
     mounted() {
-        if (!this.loaded) {
+        if (!this.isLoaded) {
             window.setTimeout(() => {
-                this.initialLoadDelayMsFinished = true;
+                this.isInitialLoadDelayFinished = true;
             }, this.initialLoadDelayMs);
         }
 
@@ -119,7 +119,7 @@ export default {
 
             this.previousQuery = cloneDeep(query);
 
-            if (this.queryString) {
+            if (this.useQueryString) {
                 this.updateQueryString(query);
             }
 
@@ -182,15 +182,15 @@ export default {
             if (activeRequestCount === 0 && this.slowRequestTimeout) {
                 window.clearTimeout(this.slowRequestTimeout);
 
-                this.slowRequest = false;
+                this.isSlowRequest = false;
 
                 this.$emit('slowrequestend');
             }
 
             if (activeRequestCount === 1) {
                 this.slowRequestTimeout = window.setTimeout(() => {
-                    if (!this.slowRequest) {
-                        this.slowRequest = true;
+                    if (!this.isSlowRequest) {
+                        this.isSlowRequest = true;
 
                         this.$emit('slowrequeststart');
                     }
@@ -227,9 +227,9 @@ export default {
         },
 
         loadIfNotLoaded() {
-            if (!this.loaded) {
-                this.loaded = true;
-                this.initialLoadDelayMsFinished = true;
+            if (!this.isLoaded) {
+                this.isLoaded = true;
+                this.isInitialLoadDelayFinished = true;
             }
         },
 
@@ -251,10 +251,9 @@ export default {
             data: this.visibleData,
             visibleCount: this.visibleCount,
             totalCount: this.totalCount,
-            loaded: this.loaded,
-            loading: !this.loaded,
-            slowLoad: this.initialLoadDelayMsFinished && !this.loaded,
-            slowRequest: this.slowRequest,
+            isLoaded: this.isLoaded,
+            isSlowLoad: this.isInitialLoadDelayFinished && !this.isLoaded,
+            isSlowRequest: this.isSlowRequest,
             reset: this.reset,
             pages: this.paginator.length,
             paginator: this.paginator,

@@ -4,7 +4,7 @@
             v-if="query"
             :fetcher="getMembers"
             :query.sync="query"
-            :query-string="true"
+            :use-query-string="true"
         >
             <div slot-scope="{ data: members }">
                 <input type="text" v-model="query.filter.search">

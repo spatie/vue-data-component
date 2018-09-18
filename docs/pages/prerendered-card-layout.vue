@@ -9,11 +9,11 @@
             :query="query"
             :initial-data="initialData"
         >
-            <div slot-scope="{ data, visibleCount, totalCount, paginator, slowRequest }">
+            <div slot-scope="{ data, visibleCount, totalCount, paginator, isSlowRequest }">
                 <div class="flex justify-between mb-12 py-4 border-t border-b border-grey">
                     <p class="text-grey-dark italic">
                         Displaying {{ visibleCount }} of {{ totalCount }} Ricks.
-                        <span v-if="slowRequest">Loading...</span>
+                        <span v-if="isSlowRequest">Loading...</span>
                     </p>
                     <p>
                         <button
@@ -30,7 +30,7 @@
 
                 <div
                     class="flex flex-wrap justify-between transition"
-                    :class="slowRequest ? 'opacity-50' : null"
+                    :class="isSlowRequest ? 'opacity-50' : null"
                 >
                     <article
                         v-for="rick in data"
