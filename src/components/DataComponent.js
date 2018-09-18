@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             isLoaded: false,
-            isInitialLoadDelayMsFinished: false,
+            isInitialLoadDelayFinished: false,
             activeRequestCount: 0,
             isSlowRequest: false,
             visibleData: [],
@@ -66,7 +66,7 @@ export default {
     mounted() {
         if (!this.isLoaded) {
             window.setTimeout(() => {
-                this.isInitialLoadDelayMsFinished = true;
+                this.isInitialLoadDelayFinished = true;
             }, this.initialLoadDelayMs);
         }
 
@@ -229,7 +229,7 @@ export default {
         loadIfNotLoaded() {
             if (!this.isLoaded) {
                 this.isLoaded = true;
-                this.isInitialLoadDelayMsFinished = true;
+                this.isInitialLoadDelayFinished = true;
             }
         },
 
@@ -252,7 +252,7 @@ export default {
             visibleCount: this.visibleCount,
             totalCount: this.totalCount,
             isLoaded: this.isLoaded,
-            isSlowLoad: this.isInitialLoadDelayMsFinished && !this.isLoaded,
+            isSlowLoad: this.isInitialLoadDelayFinished && !this.isLoaded,
             isSlowRequest: this.isSlowRequest,
             reset: this.reset,
             pages: this.paginator.length,
