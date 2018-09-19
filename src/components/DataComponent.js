@@ -253,6 +253,7 @@ export default {
             totalCount: this.totalCount,
             isLoaded: this.isLoaded,
             isSlowLoad: this.isInitialLoadDelayFinished && !this.isLoaded,
+            isInitialLoadDelayFinished: this.isInitialLoadDelayFinished,
             isSlowRequest: this.isSlowRequest,
             reset: this.reset,
             pages: this.paginator.length,
