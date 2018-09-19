@@ -1,6 +1,6 @@
 import search from '../filters/search';
 import people from './helpers/people';
-import { createQuery } from './util';
+import { createQuery } from './helpers/util';
 
 it('does nothing when empty', () => {
     const results = search()(people, createQuery());

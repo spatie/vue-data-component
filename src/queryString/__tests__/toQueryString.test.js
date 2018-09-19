@@ -182,6 +182,23 @@ it('ignores default values', () => {
     );
 
     expect(queryString).toBe(
-        'filter[ids][]=1&filter[ids][]=3&filter[ids][]=4&filter[search][author]=Sebastian'
+        encodeURI('filter[ids][]=1&filter[ids][]=3&filter[ids][]=4&filter[search][author]=Sebastian')
     );
+});
+
+it('ignores default values when they have the same value but a different type', () => {
+    const queryString = toQueryString(
+        {
+            page: {
+                number: '1',
+            },
+        },
+        {
+            page: {
+                number: 1,
+            },
+        }
+    );
+
+    expect(queryString).toBe('');
 });

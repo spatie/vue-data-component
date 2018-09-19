@@ -1,5 +1,5 @@
 import { parse as qsParse, stringify as qsStringify } from 'qs';
-import { cloneDeep, diff, isObject, mapValues, mergeDeep } from '../util';
+import { cloneDeep, diff, isObject, mapValues, mergeDeep, objectPropertiesToString } from '../util';
 
 const qsOptions = {
     arrayFormat: 'brackets',
@@ -26,7 +26,7 @@ export function toQueryString(query, defaults = {}) {
 }
 
 function sanitizeQuery(query) {
-    return sortArrayValues(filterEmptyValues(cloneDeep(query)));
+    return objectPropertiesToString(sortArrayValues(filterEmptyValues(cloneDeep(query))));
 }
 
 function filterEmptyValues(object) {
