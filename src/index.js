@@ -13,3 +13,7 @@ export default {
 };
 
 export { DataComponent, QueryComponent, DataSortToggle, DataFilterFacet };
+
+if (typeof window !== 'undefined' && window.Vue) {
+    window.Vue.use(DataComponent);
+}
