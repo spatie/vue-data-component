@@ -109,6 +109,7 @@ export default {
             if (status === 'unknown') {
                 return '️❓';
             }
+
             return '🆗';
         },
     },

@@ -109,7 +109,6 @@ export default {
 
             return get(queryDiff, this.pageNumberKey) === undefined;
         },
-
     },
 
     methods: {
