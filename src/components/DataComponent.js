@@ -109,6 +109,12 @@ export default {
 
             return get(queryDiff, this.pageNumberKey) === undefined;
         },
+
+        useInitialLoadDelay() {
+            if (this.initialLoadDelayMs) {
+                return true;
+            }
+        },
     },
 
     methods: {
