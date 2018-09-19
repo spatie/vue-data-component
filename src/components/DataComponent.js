@@ -110,11 +110,6 @@ export default {
             return get(queryDiff, this.pageNumberKey) === undefined;
         },
 
-        useInitialLoadDelay() {
-            if (this.initialLoadDelayMs) {
-                return true;
-            }
-        },
     },
 
     methods: {
@@ -259,6 +254,7 @@ export default {
             totalCount: this.totalCount,
             isLoaded: this.isLoaded,
             isSlowLoad: this.isInitialLoadDelayFinished && !this.isLoaded,
+            isInitialLoadDelayFinished: this.isInitialLoadDelayFinished,
             isSlowRequest: this.isSlowRequest,
             reset: this.reset,
             pages: this.paginator.length,
