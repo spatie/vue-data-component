@@ -1,5 +1,14 @@
-export { default as set } from 'lodash.set';
 export { default as mergeDeep } from 'deepmerge';
+
+// https://stackoverflow.com/a/10253971/6374824
+export function set(obj, path, value) {
+    const tags = path.split(".")
+    const len = tags.length - 1;
+    for (let i = 0; i < len; i++) {
+        obj = obj[tags[i]];
+    }
+    obj[tags[len]] = value;
+}
 
 export function cloneDeep(object) {
     if (!object) {
