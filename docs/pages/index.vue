@@ -62,15 +62,8 @@
 
 <script>
 import createSource from '../../src/createSource';
-import DataComponent, { DataFilterFacet, DataSortToggle } from '../../src';
 
 export default {
-    components: {
-        DataComponent,
-        DataFilterFacet,
-        DataSortToggle,
-    },
-
     data() {
         return {
             query: {
