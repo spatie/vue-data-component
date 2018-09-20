@@ -1,4 +1,3 @@
-import { createPaginator } from '../pagination';
 import { toQueryString, fromQueryString } from '../queryString';
 import { cloneDeep, debounce, diff, get, isPromise, set } from '../util';
 
@@ -75,15 +74,6 @@ export default {
     },
 
     computed: {
-        paginator() {
-            return createPaginator({
-                page: this.pageNumber,
-                pageSize: this.pageSize,
-                pageCount: this.pageCount,
-                totalCount: this.totalCount || 0,
-            });
-        },
-
         pageNumber() {
             return get(this.query, this.pageNumberKey);
         },
@@ -255,9 +245,7 @@ export default {
             isSlowLoad: this.isInitialLoadDelayFinished && !this.isLoaded,
             isInitialLoadDelayFinished: this.isInitialLoadDelayFinished,
             isSlowRequest: this.isSlowRequest,
-            reset: this.reset,
-            pages: this.paginator.length,
-            paginator: this.paginator,
+            pageCount: this.pageCount,
         });
     },
 };

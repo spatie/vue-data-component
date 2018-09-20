@@ -9,7 +9,7 @@
             :query.sync="query"
             :initial-load-delay-ms="400"
         >
-            <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, isLoaded, isSlowLoad, isSlowRequest, isInitialLoadDelayFinished }">
+            <div slot-scope="{ data: ricks, visibleCount, totalCount, isLoaded, isSlowLoad, isSlowRequest, isInitialLoadDelayFinished, pageCount }">
                 <div v-if="isLoaded || isSlowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
                     <p v-if="isLoaded" class="text-grey-dark italic">
                         Displaying {{ visibleCount }} of {{ totalCount }} Ricks.
