@@ -55,13 +55,14 @@
                     </tbody>
                 </table>
 
-                <data-paginator :page="query.page" :page-count="pageCount" :links-on-each-side="3">
+                <data-paginator :page="query.page" :page-count="pageCount">
                     <ul slot-scope="{ pages }" class="mt-4 flex justify-center">
                         <li v-for="page in pages" :key="page.number">
                             <button
                                 class="mx-4"
                                 :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
                                 @click="query.page = page.number"
+                                :disabled="page.disabled"
                             >
                                 {{ page.number }}
                             </button>
@@ -83,7 +84,7 @@ export default {
         return {
             query: {
                 page: 1,
-                pageSize: 5,
+                pageSize: 10,
                 filter: {
                     search: '',
                     instruments: [],

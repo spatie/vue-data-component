@@ -65,19 +65,8 @@
                     </article>
                 </div>
 
-                <data-paginator :page="query.page" :page-count="pageCount" :links-on-each-side="3">
-                    <ul slot-scope="{ pages }" class="mt-4 flex justify-center">
-                        <li v-for="page in pages" :key="page.number">
-                            <button
-                                class="mx-4"
-                                :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
-                                @click="query.page = page.number"
-                            >
-                                {{ page.number }}
-                            </button>
-                        </li>
-                    </ul>
-                </data-paginator>
+                <data-paginator :page="query.page" :page-count="pageCount" @change-page="query.page = $event"></data-paginator>
+
             </div>
         </data-component>
     </div>
@@ -122,7 +111,7 @@ export default {
 
             return axios.get(`${baseUrl}?${queryString}`).then(response => ({
                 data: response.data.results,
-                total: response.data.info.count,
+                totalCount: response.data.info.count,
                 pageCount: response.data.info.pages,
             }));
         },

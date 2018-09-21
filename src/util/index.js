@@ -105,10 +105,6 @@ export function mapValues(object, callback) {
     }, {});
 }
 
-export function range(length) {
-    return Array.from({ length }).map((v, k) => k + 1);
-}
-
 // https://stackoverflow.com/a/46982882/6374824
 export function objectPropertiesToString(object) {
     Object.keys(object).forEach(key => {
