@@ -64,17 +64,19 @@
                     </article>
                 </div>
 
-                <ul class="mt-4 flex justify-center">
-                    <li v-for="page in paginator" :key="page.number">
-                        <button
-                            class="mx-4"
-                            :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="query.page = page.number"
-                        >
-                            {{ page.number }}
-                        </button>
-                    </li>
-                </ul>
+                <data-paginator :page="query.page" :page-count="pageCount" :links-on-each-side="1">
+                    <ul slot-scope="{ pages }" class="mt-4 flex justify-center">
+                        <li v-for="page in pages" :key="page.number">
+                            <button
+                                class="mx-4"
+                                :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
+                                @click="query.page = page.number"
+                            >
+                                {{ page.number }}
+                            </button>
+                        </li>
+                    </ul>
+                </data-paginator>
             </div>
         </data-component>
     </div>
