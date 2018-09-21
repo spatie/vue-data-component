@@ -8,6 +8,7 @@
             :fetcher="getRicks"
             :query.sync="query"
             :initial-load-delay-ms="400"
+            pageCountKey="pageCount"
         >
             <div slot-scope="{ data: ricks, visibleCount, totalCount, isLoaded, isSlowLoad, isSlowRequest, isInitialLoadDelayFinished, pageCount }">
                 <div v-if="isLoaded || isSlowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
@@ -64,7 +65,7 @@
                     </article>
                 </div>
 
-                <data-paginator :page="query.page" :page-count="pageCount" :links-on-each-side="1">
+                <data-paginator :page="query.page" :page-count="pageCount" :links-on-each-side="3">
                     <ul slot-scope="{ pages }" class="mt-4 flex justify-center">
                         <li v-for="page in pages" :key="page.number">
                             <button
@@ -92,7 +93,6 @@ export default {
         query: {
             status: null,
             page: 1,
-            pageSize: 20,
         },
 
         statusses: {
@@ -120,9 +120,10 @@ export default {
         getRicks({ query, queryString }) {
             const baseUrl = 'https://rickandmortyapi.com/api/character';
 
-            return axios.get(`${baseUrl}?name=Rick&${queryString}`).then(response => ({
+            return axios.get(`${baseUrl}?${queryString}`).then(response => ({
                 data: response.data.results,
                 total: response.data.info.count,
+                pageCount: response.data.info.pages,
             }));
         },
 

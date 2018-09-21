@@ -1,48 +1,44 @@
-import { createPaginator } from '../pagination';
+import { range } from '../util';
 
 export default {
     name: 'DataPaginator',
 
     props: {
-        page: { required: true, type: Number },
+        page: { required: true },
         pageCount: { required: true, type: Number },
         linksOnEachSide: { default: 3, type: Number },
-        pageSize: {default: 20, type: Number },
     },
 
     computed: {
         paginator() {
-            return createPaginator({
-                page: this.page,
-                pageSize: this.pageSize,
-                pageCount: this.pageCount,
-                totalCount: this.totalCount || 0,
+            console.log(this.pagination(this.page, this.pageCount));
+
+
+
+
+            return range(this.pageCount).map(number => {
+                return { number, active: number === this.page };
             });
         },
     },
 
-    mounted() {
-        /* console.log(this.pagination(this.page, this.)) */
-    },
-
     methods: {
-        pagination (currentPage, pageCount) {
-            const delta = 2
+        pagination () {
 
             let range = []
-            for (let i = Math.max(2, currentPage - delta); i <= Math.min(pageCount - 1, currentPage + delta); i++) {
+            for (let i = Math.max(2, this.page - this.linksOnEachSide); i <= Math.min(this.pageCount - 1, this.page + this.linksOnEachSide); i++) {
                 range.push(i)
             }
 
-            if (currentPage - delta > 2) {
+            if (this.page - this.linksOnEachSide > 2) {
                 range.unshift("...")
             }
-            if (currentPage + delta < pageCount - 1) {
+            if (this.page + this.linksOnEachSide < this.pageCount - 1) {
                 range.push("...")
             }
 
             range.unshift(1)
-            range.push(pageCount)
+            range.push(this.pageCount)
 
             return range
         },

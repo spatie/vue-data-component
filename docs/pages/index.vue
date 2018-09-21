@@ -6,7 +6,7 @@
             :query.sync="query"
             :use-query-string="true"
         >
-            <div slot-scope="{ data: members }">
+            <div slot-scope="{ data, pageCount }">
                 <input type="text" v-model="query.filter.search">
 
                 <data-filter-facet v-model="query.filter.instruments" :multiple="true">
@@ -46,7 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="member in members" :key="member.firstName">
+                        <tr v-for="member in data" :key="member.firstName">
                             <td>{{ member.firstName }}</td>
                             <td>{{ member.lastName }}</td>
                             <td>{{ member.instrument }}</td>
@@ -54,6 +54,21 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <data-paginator :page="query.page" :page-count="pageCount" :links-on-each-side="3">
+                    <ul slot-scope="{ pages }" class="mt-4 flex justify-center">
+                        <li v-for="page in pages" :key="page.number">
+                            <button
+                                class="mx-4"
+                                :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
+                                @click="query.page = page.number"
+                            >
+                                {{ page.number }}
+                            </button>
+                        </li>
+                    </ul>
+                </data-paginator>
+
                 <pre>{{ debug }}</pre>
             </div>
         </data-component>
@@ -67,6 +82,8 @@ export default {
     data() {
         return {
             query: {
+                page: 1,
+                pageSize: 5,
                 filter: {
                     search: '',
                     instruments: [],
@@ -107,6 +124,34 @@ export default {
                 },
                 {
                     firstName: 'Ringo',
+                    lastName: 'Starr',
+                    instrument: 'Drums',
+                    birthday: '07/07/1940',
+                    songs: 2,
+                },
+                {
+                    firstName: 'keke',
+                    lastName: 'Lennon',
+                    instrument: 'Guitar',
+                    birthday: '04/10/1940',
+                    songs: 72,
+                },
+                {
+                    firstName: 'lol',
+                    lastName: 'McCartney',
+                    instrument: 'Bass',
+                    birthday: '18/06/1942',
+                    songs: 70,
+                },
+                {
+                    firstName: 'zi',
+                    lastName: 'Harrison',
+                    instrument: 'Guitar',
+                    birthday: '25/02/1943',
+                    songs: 22,
+                },
+                {
+                    firstName: 'bar',
                     lastName: 'Starr',
                     instrument: 'Drums',
                     birthday: '07/07/1940',

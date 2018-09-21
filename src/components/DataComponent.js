@@ -16,7 +16,7 @@ export default {
         pageNumberKey: { default: 'page' },
         pageSizeKey: { default: 'pageSize' },
         pageCountKey: { default: null },
-        totalCountKey: { default: 'total' },
+        totalCountKey: { default: 'totalCount' },
     },
 
     data() {
@@ -236,7 +236,7 @@ export default {
         },
     },
 
-    render(createElement) {
+    render() {
         return this.$scopedSlots.default({
             data: this.visibleData,
             visibleCount: this.visibleCount,
