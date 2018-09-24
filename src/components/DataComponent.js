@@ -15,7 +15,7 @@ export default {
         queryStringDefaults: { default: null, type: Object },
         pageNumberKey: { default: 'page' },
         pageSizeKey: { default: 'pageSize' },
-        pageCountKey: { default: null },
+        pageCountKey: { default: 'pageCount' },
         totalCountKey: { default: 'totalCount' },
     },
 
@@ -224,11 +224,13 @@ export default {
         },
 
         calculatePageCount(fetchResult) {
-            if (this.pageCountKey) {
-                return get(fetchResult, this.pageCountKey);
+            let pageCount = get(fetchResult, this.pageCountKey);
+
+            if (pageCount === undefined) {
+                pageCount = this.pageSize ? Math.ceil(this.totalCount / this.pageSize) : 1;
             }
 
-            return this.pageSize ? Math.ceil(this.totalCount / this.pageSize) : 1;
+            return pageCount;
         },
 
         forceUpdate() {

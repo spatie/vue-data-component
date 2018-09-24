@@ -61,13 +61,12 @@ export default {
         return (
             <ul class="mt-4 flex justify-center">
                 <li>
-                    { this.page === 1 ? '<' : (
-                        <button
-                            onClick={() => this.pageChange((this.page === 1) ? this.page : this.page - 1)}
-                        >
-                            &lt;
-                        </button>
-                    )}
+                    <button
+                        onClick={() => this.pageChange((this.page === 1) ? this.page : this.page - 1)}
+                        disabled={ this.page === 1 ? true : false }
+                    >
+                        &lt;
+                    </button>
                 </li>
                 { this.pages.map(page =>
                     <li key={ page.number } class={page.active ? 'active' : ''}>
@@ -85,13 +84,12 @@ export default {
                     </li>
                 ) }
                 <li>
-                    { this.page === this.pageCount ? '>' : (
-                        <button
-                            onClick={() => this.pageChange((this.page === this.pageCount) ? this.page : this.page + 1)}
-                        >
-                            &gt;
-                        </button>
-                    )}
+                    <button
+                        onClick={() => this.pageChange((this.page === this.pageCount) ? this.page : this.page + 1)}
+                        disabled={ this.page === this.pageCount ? true : false }
+                    >
+                        &gt;
+                    </button>
                 </li>
             </ul>
         );
