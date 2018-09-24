@@ -59,39 +59,44 @@ export default {
         }
 
         return (
-            <ul class="mt-4 flex justify-center">
-                <li>
-                    <button
-                        onClick={() => this.pageChange((this.page === 1) ? this.page : this.page - 1)}
-                        disabled={ this.page === 1 ? true : false }
-                    >
-                        &lt;
-                    </button>
-                </li>
-                { this.pages.map(page =>
-                    <li key={ page.number } class={page.active ? 'active' : ''}>
-                        { page.disabled ? (
-                             page.number
-                        ) : (
-                            <button
-                                onClick={() => this.pageChange(page.number)}
-                                disabled={ page.disabled }
-                            >
-                                { page.number }
-                            </button>
-                        )
-                        }
+            <nav aria-label="Pagination Navigation">
+                <ul class="mt-4 flex justify-center">
+                    <li>
+                        <button
+                            onClick={ () => this.pageChange((this.page === 1) ? this.page : this.page - 1) }
+                            aria-label='Goto previous page'
+                            disabled={ this.page === 1 ? true : false }
+                        >
+                            &lt;
+                        </button>
                     </li>
-                ) }
-                <li>
-                    <button
-                        onClick={() => this.pageChange((this.page === this.pageCount) ? this.page : this.page + 1)}
-                        disabled={ this.page === this.pageCount ? true : false }
-                    >
-                        &gt;
-                    </button>
-                </li>
-            </ul>
+                    { this.pages.map(page =>
+                        <li key={ page.number } class={ page.active ? 'active' : '' }>
+                            { page.disabled ? (
+                                page.number
+                            ) : (
+                                <button
+                                    onClick={ () => this.pageChange(page.number) }
+                                    aria-label={ (this.page === page.number) ? `Current page, Page ${page.number}` : `Goto page ${page.number}` }
+                                    aria-current={ this.page === page.number }
+                                    disabled={ page.disabled }
+                                >
+                                    { page.number }
+                                </button>
+                            ) }
+                        </li>
+                    ) }
+                    <li>
+                        <button
+                            onClick={ () => this.pageChange((this.page === this.pageCount) ? this.page : this.page + 1) }
+                            aria-label='Goto next page'
+                            disabled={ this.page === this.pageCount ? true : false }
+                        >
+                            &gt;
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         );
     },
 };
