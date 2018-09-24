@@ -9,7 +9,7 @@ export default {
     },
 
     computed: {
-        paginator() {
+        pages() {
             if (this.pageCount <= 1) {
                 return [];
             }
@@ -22,11 +22,11 @@ export default {
             }
 
             if (this.page - this.linksOnEachSide > 2) {
-                range.unshift("...");
+                range.unshift("…");
             }
 
             if (this.page + this.linksOnEachSide < this.pageCount - 1) {
-                range.push("...");
+                range.push("…");
             }
 
             range.unshift(1);
@@ -41,10 +41,16 @@ export default {
         },
     },
 
+    methods: {
+        pageChange(page) {
+            this.$emit('page-change', page)
+        },
+    },
+
     render() {
         if (this.$scopedSlots.default) {
             return this.$scopedSlots.default({
-                pages: this.paginator,
+                pages: this.pages,
             });
         }
 
@@ -53,34 +59,40 @@ export default {
         }
 
         return (
-            <ul slot-scope="{ pages }" class="mt-4 flex justify-center">
+            <ul class="mt-4 flex justify-center">
                 <li>
-                    <button
-                        onClick={() => this.$emit('change-page', (this.page === 1) ? this.page : this.page - 1)}
-                    >
-                        &lt;
-                    </button>
+                    { this.page === 1 ? '<' : (
+                        <button
+                            onClick={() => this.pageChange((this.page === 1) ? this.page : this.page - 1)}
+                        >
+                            &lt;
+                        </button>
+                    )}
                 </li>
-                { this.paginator.map(page =>
+                { this.pages.map(page =>
                     <li key={ page.number } class={page.active ? 'active' : ''}>
-                        { page.disabled &&
+                        { page.disabled ? (
                              page.number
-                        }
-                        { !page.disabled &&
+                        ) : (
                             <button
-                                onClick={() => this.$emit('change-page', page.number)}
+                                onClick={() => this.pageChange(page.number)}
                                 disabled={ page.disabled }
                             >
                                 { page.number }
                             </button>
+                        )
                         }
                     </li>
                 ) }
-                <button
-                    onClick={() => this.$emit('change-page', (this.page === this.pageCount) ? this.page : this.page + 1)}
-                >
-                    &gt;
-                </button>
+                <li>
+                    { this.page === this.pageCount ? '>' : (
+                        <button
+                            onClick={() => this.pageChange((this.page === this.pageCount) ? this.page : this.page + 1)}
+                        >
+                            &gt;
+                        </button>
+                    )}
+                </li>
             </ul>
         );
     },

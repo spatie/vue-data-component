@@ -8,7 +8,7 @@
             :fetcher="getRicks"
             :query.sync="query"
             :initial-load-delay-ms="400"
-            pageCountKey="pageCount"
+            page-count-key="pageCount"
         >
             <div slot-scope="{ data: ricks, visibleCount, totalCount, isLoaded, isSlowLoad, isSlowRequest, isInitialLoadDelayFinished, pageCount }">
                 <div v-if="isLoaded || isSlowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
@@ -65,7 +65,7 @@
                     </article>
                 </div>
 
-                <data-paginator :page="query.page" :page-count="pageCount" @change-page="query.page = $event"></data-paginator>
+                <data-paginator :page="query.page" :page-count="pageCount" @page-change="query.page = $event"></data-paginator>
 
             </div>
         </data-component>
