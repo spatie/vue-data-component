@@ -8,8 +8,9 @@
             :fetcher="getRicks"
             :query.sync="query"
             :initial-load-delay-ms="400"
+            page-count-key="pageCount"
         >
-            <div slot-scope="{ data: ricks, visibleCount, totalCount, paginator, isLoaded, isSlowLoad, isSlowRequest, isInitialLoadDelayFinished }">
+            <div slot-scope="{ data: ricks, visibleCount, totalCount, isLoaded, isSlowLoad, isSlowRequest, isInitialLoadDelayFinished, pageCount }">
                 <div v-if="isLoaded || isSlowLoad" class="flex justify-between mb-12 py-4 border-t border-b border-grey">
                     <p v-if="isLoaded" class="text-grey-dark italic">
                         Displaying {{ visibleCount }} of {{ totalCount }} Ricks.
@@ -64,17 +65,8 @@
                     </article>
                 </div>
 
-                <ul class="mt-4 flex justify-center">
-                    <li v-for="page in paginator" :key="page.number">
-                        <button
-                            class="mx-4"
-                            :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
-                            @click="query.page = page.number"
-                        >
-                            {{ page.number }}
-                        </button>
-                    </li>
-                </ul>
+                <data-paginator :page="query.page" :page-count="pageCount" @page-change="query.page = $event"></data-paginator>
+
             </div>
         </data-component>
     </div>
@@ -90,7 +82,6 @@ export default {
         query: {
             status: null,
             page: 1,
-            pageSize: 20,
         },
 
         statusses: {
@@ -118,9 +109,10 @@ export default {
         getRicks({ query, queryString }) {
             const baseUrl = 'https://rickandmortyapi.com/api/character';
 
-            return axios.get(`${baseUrl}?name=Rick&${queryString}`).then(response => ({
+            return axios.get(`${baseUrl}?${queryString}`).then(response => ({
                 data: response.data.results,
-                total: response.data.info.count,
+                totalCount: response.data.info.count,
+                pageCount: response.data.info.pages,
             }));
         },
 

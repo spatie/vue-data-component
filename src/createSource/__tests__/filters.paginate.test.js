@@ -36,10 +36,7 @@ it("returns the first page when page isn't, provided", () => {
 });
 
 it("returns an empty array when a page doesn't exist", () => {
-    const results = paginate()(
-        people,
-        createQuery({ page: 1000, perPage: 10 })
-    );
+    const results = paginate()(people, createQuery({ page: 1000, perPage: 10 }));
 
     expect(results).toHaveLength(0);
 });
