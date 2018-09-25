@@ -1,13 +1,14 @@
 import DataComponent from './DataComponent';
 
 export default {
+    name: 'QueryComponent',
+
     props: {
         url: { default: '' },
         filter: { default: () => ({}) },
         sort: { default: null },
         page: { default: 1 },
         pageSize: { default: null },
-        pageCountKey: { default: 'last_page' },
     },
 
     data() {
@@ -19,17 +20,6 @@ export default {
                 pageSize: this.pageSize,
             },
         };
-    },
-
-    computed: {
-        dataComponentProps() {
-            return {
-                ...this.$attrs,
-                fetcher: this.getData,
-                queryString: true,
-                pageCountKey: this.pageCountKey,
-            };
-        },
     },
 
     methods: {
@@ -51,6 +41,8 @@ export default {
             props: {
                 fetcher: this.fetch,
                 query: this.query,
+                useQueryString: true,
+                ...this.$attrs,
             },
             on: {
                 'update:query': query => {
