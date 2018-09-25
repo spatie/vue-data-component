@@ -4,17 +4,19 @@ import commonjs from 'rollup-plugin-commonjs';
 import { uglify } from 'rollup-plugin-uglify';
 import resolve from 'rollup-plugin-node-resolve';
 
+const plugins = [
+    babel({
+        exclude: 'node_modules/**',
+    }),
+    resolve(),
+    commonjs(),
+];
+
 export default [
     {
         input: 'src/index.js',
         external: ['vue', 'qs'],
-        plugins: [
-            resolve(),
-            commonjs(),
-            babel({
-                exclude: 'node_modules/**',
-            }),
-        ],
+        plugins: plugins,
         output: [
             {
                 file: pkg.module,
@@ -40,14 +42,7 @@ export default [
     {
         input: 'src/index.js',
         external: ['vue', 'qs'],
-        plugins: [
-            resolve(),
-            commonjs(),
-            babel({
-                exclude: 'node_modules/**',
-            }),
-            uglify(),
-        ],
+        plugins: [...plugins, uglify()],
         output: [
             {
                 file: pkg.browser.replace('.js', '.min.js'),
