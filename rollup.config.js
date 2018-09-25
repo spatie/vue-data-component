@@ -13,7 +13,6 @@ export default [
             commonjs(),
             babel({
                 exclude: 'node_modules/**',
-                plugins: ['external-helpers'],
             }),
         ],
         output: [
@@ -46,7 +45,6 @@ export default [
             commonjs(),
             babel({
                 exclude: 'node_modules/**',
-                plugins: ['external-helpers'],
             }),
             uglify(),
         ],
