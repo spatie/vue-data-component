@@ -1,28 +1,26 @@
 {
     "presets": [
-        ["babel-preset-env", {
-            "targets": {
-                "browsers": [
-                    ">0.25%",
-                    "not ie 11",
-                    "not op_mini all"
-                ]
-            },
-            "modules": false
-        }]
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "browsers": [">0.25%", "not ie 11", "not op_mini all"]
+                }
+            }
+        ]
     ],
-    "plugins": [
-        "babel-plugin-transform-object-rest-spread",
-        "transform-vue-jsx"
-    ],
+    "plugins": ["@babel/plugin-syntax-object-rest-spread", "babel-plugin-transform-vue-jsx"],
     "env": {
         "test": {
             "presets": [
-                ["env", {
-                    "targets": {
-                        "node": "current"
+                [
+                    "@babel/preset-env",
+                    {
+                        "targets": {
+                            "node": "current"
+                        }
                     }
-                }]
+                ]
             ]
         }
     }
