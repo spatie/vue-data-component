@@ -46,10 +46,7 @@ export default {
                 return;
             }
 
-            this.$emit(
-                'input',
-                this.value == this.facetValue ? null : this.facetValue
-            );
+            this.$emit('input', this.value == this.facetValue ? null : this.facetValue);
         },
     },
 

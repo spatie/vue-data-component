@@ -11,24 +11,16 @@ export default function search(searchOptions) {
     };
 
     return function(data, query) {
-        const searchQuery = normalizeQuery(
-            query.filter ? query.filter[key] : ''
-        );
+        const searchQuery = normalizeQuery(query.filter ? query.filter[key] : '');
 
-        if (
-            !searchQuery ||
-            searchQuery.length < minQueryLength ||
-            data.length === 0
-        ) {
+        if (!searchQuery || searchQuery.length < minQueryLength || data.length === 0) {
             return data;
         }
 
         const searchAllFields = fields.indexOf('*') !== -1;
 
         return data.filter(item => {
-            const filterableFields = searchAllFields
-                ? Object.keys(item)
-                : fields;
+            const filterableFields = searchAllFields ? Object.keys(item) : fields;
 
             return (
                 filterableFields

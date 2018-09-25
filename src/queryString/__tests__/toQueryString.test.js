@@ -127,9 +127,7 @@ it('accepts a nested object value', () => {
         },
     });
 
-    expect(queryString).toBe(
-        'filter[search][author]=Sebastian&filter[search][company]=Spatie'
-    );
+    expect(queryString).toBe('filter[search][author]=Sebastian&filter[search][company]=Spatie');
 });
 
 it('sorts nested object value keys', () => {
@@ -142,9 +140,7 @@ it('sorts nested object value keys', () => {
         },
     });
 
-    expect(queryString).toBe(
-        'filter[search][author]=Sebastian&filter[search][company]=Spatie'
-    );
+    expect(queryString).toBe('filter[search][author]=Sebastian&filter[search][company]=Spatie');
 });
 
 it('accepts a value with dotted keys', () => {
@@ -155,9 +151,7 @@ it('accepts a value with dotted keys', () => {
         },
     });
 
-    expect(queryString).toBe(
-        'filter[search.author]=Sebastian&filter[search.company]=Spatie'
-    );
+    expect(queryString).toBe('filter[search.author]=Sebastian&filter[search.company]=Spatie');
 });
 
 it('ignores default values', () => {
@@ -182,7 +176,9 @@ it('ignores default values', () => {
     );
 
     expect(queryString).toBe(
-        encodeURI('filter[ids][]=1&filter[ids][]=3&filter[ids][]=4&filter[search][author]=Sebastian')
+        encodeURI(
+            'filter[ids][]=1&filter[ids][]=3&filter[ids][]=4&filter[search][author]=Sebastian'
+        )
     );
 });
 

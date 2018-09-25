@@ -6,10 +6,7 @@ export default function createSource(data, options = {}) {
     const filters = options.filters || [search(), sort(), paginate()];
 
     return function({ query = {} } = {}) {
-        const queriedData = filters.reduce(
-            (data, filter) => filter(data, query),
-            [].concat(data)
-        );
+        const queriedData = filters.reduce((data, filter) => filter(data, query), [].concat(data));
 
         return {
             data: queriedData,

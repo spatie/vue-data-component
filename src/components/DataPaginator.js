@@ -5,7 +5,7 @@ export default {
         page: { required: true },
         pageCount: { required: true, type: Number },
         linksOnEachSide: { default: 2, type: Number },
-        navigateButtons: { default: true, type: Boolean},
+        navigateButtons: { default: true, type: Boolean },
     },
 
     computed: {
@@ -15,18 +15,22 @@ export default {
             }
 
             // https://gist.github.com/kottenator/9d936eb3e4e3c3e02598#gistcomment-1748957
-            let range = []
+            let range = [];
 
-            for (let i = Math.max(2, this.page - this.linksOnEachSide); i <= Math.min(this.pageCount - 1, this.page + this.linksOnEachSide); i++) {
+            for (
+                let i = Math.max(2, this.page - this.linksOnEachSide);
+                i <= Math.min(this.pageCount - 1, this.page + this.linksOnEachSide);
+                i++
+            ) {
                 range.push(i);
             }
 
             if (this.page - this.linksOnEachSide > 2) {
-                range.unshift("…");
+                range.unshift('…');
             }
 
             if (this.page + this.linksOnEachSide < this.pageCount - 1) {
-                range.push("…");
+                range.push('…');
             }
 
             range.unshift(1);
@@ -43,7 +47,7 @@ export default {
 
     methods: {
         pageChange(page) {
-            this.$emit('page-change', page)
+            this.$emit('page-change', page);
         },
     },
 
@@ -63,34 +67,44 @@ export default {
                 <ul class="mt-4 flex justify-center">
                     <li>
                         <button
-                            onClick={ () => this.pageChange((this.page === 1) ? this.page : this.page - 1) }
-                            aria-label='Goto previous page'
-                            disabled={ this.page === 1 ? true : false }
+                            onClick={() =>
+                                this.pageChange(this.page === 1 ? this.page : this.page - 1)
+                            }
+                            aria-label="Goto previous page"
+                            disabled={this.page === 1 ? true : false}
                         >
                             &lt;
                         </button>
                     </li>
-                    { this.pages.map(page =>
-                        <li key={ page.number } class={ page.active ? 'active' : '' }>
-                            { page.disabled ? (
+                    {this.pages.map(page => (
+                        <li key={page.number} class={page.active ? 'active' : ''}>
+                            {page.disabled ? (
                                 page.number
                             ) : (
                                 <button
-                                    onClick={ () => this.pageChange(page.number) }
-                                    aria-label={ (this.page === page.number) ? `Current page, Page ${page.number}` : `Goto page ${page.number}` }
-                                    aria-current={ this.page === page.number }
-                                    disabled={ page.disabled }
+                                    onClick={() => this.pageChange(page.number)}
+                                    aria-label={
+                                        this.page === page.number
+                                            ? `Current page, Page ${page.number}`
+                                            : `Goto page ${page.number}`
+                                    }
+                                    aria-current={this.page === page.number}
+                                    disabled={page.disabled}
                                 >
-                                    { page.number }
+                                    {page.number}
                                 </button>
-                            ) }
+                            )}
                         </li>
-                    ) }
+                    ))}
                     <li>
                         <button
-                            onClick={ () => this.pageChange((this.page === this.pageCount) ? this.page : this.page + 1) }
-                            aria-label='Goto next page'
-                            disabled={ this.page === this.pageCount ? true : false }
+                            onClick={() =>
+                                this.pageChange(
+                                    this.page === this.pageCount ? this.page : this.page + 1
+                                )
+                            }
+                            aria-label="Goto next page"
+                            disabled={this.page === this.pageCount ? true : false}
                         >
                             &gt;
                         </button>

@@ -43,10 +43,7 @@ it('reads an array value', () => {
 });
 
 it('reads an object value', () => {
-    const queryString = fromQueryString(
-        {},
-        'filter[company]=Spatie&filter[name]=Sebastian'
-    );
+    const queryString = fromQueryString({}, 'filter[company]=Spatie&filter[name]=Sebastian');
 
     expect(queryString).toEqual({
         filter: {

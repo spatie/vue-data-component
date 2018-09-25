@@ -11,8 +11,7 @@ export default function sort() {
         const compareFunction = (a, b) => {
             const sortOrderIndex = sortOrder === 'desc' ? -1 : 1;
 
-            const result =
-                a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
+            const result = a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
 
             return result * sortOrderIndex;
         };

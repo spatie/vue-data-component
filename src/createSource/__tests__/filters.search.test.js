@@ -9,10 +9,7 @@ it('does nothing when empty', () => {
 });
 
 it("searches all fields by specifying `['*']`", () => {
-    const results = search()(
-        people,
-        createQuery({ filter: { search: 'Seb' } })
-    );
+    const results = search()(people, createQuery({ filter: { search: 'Seb' } }));
 
     expect(results).toHaveLength(1);
     expect(results[0].name).toBe('Sebastian');
@@ -23,10 +20,7 @@ it('searches specific fields when specified', () => {
         fields: ['name'],
     });
 
-    let results = searchName(
-        people,
-        createQuery({ filter: { search: 'Developer' } })
-    );
+    let results = searchName(people, createQuery({ filter: { search: 'Developer' } }));
 
     expect(results).toHaveLength(0);
 
@@ -39,10 +33,7 @@ it('searches specific fields when specified', () => {
 it('searches case insensitively', () => {
     const searchAll = search();
 
-    const results = searchAll(
-        people,
-        createQuery({ filter: { search: 'seb' } })
-    );
+    const results = searchAll(people, createQuery({ filter: { search: 'seb' } }));
 
     expect(results).toHaveLength(1);
     expect(results[0].name).toBe('Sebastian');
@@ -68,10 +59,7 @@ it('searches with a custom key', () => {
         key: 'query',
     });
 
-    const results = searchAll(
-        people,
-        createQuery({ filter: { query: 'Seb' } })
-    );
+    const results = searchAll(people, createQuery({ filter: { query: 'Seb' } }));
 
     expect(results).toHaveLength(1);
     expect(results[0].name).toBe('Sebastian');
