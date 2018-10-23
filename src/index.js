@@ -14,7 +14,7 @@ export default {
     },
 };
 
-export { DataComponent, QueryComponent, DataSortToggle, DataFilterFacet };
+export { DataComponent, QueryComponent, DataSortToggle, DataFilterFacet, DataPaginator };
 
 if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(DataComponent);
