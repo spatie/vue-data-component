@@ -232,10 +232,6 @@ export default {
 
             return pageCount;
         },
-
-        forceUpdate() {
-            this.fetchVisibleData({ force: true });
-        },
     },
 
     render() {
