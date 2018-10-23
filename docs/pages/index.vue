@@ -61,8 +61,8 @@
                             <button
                                 class="mx-4"
                                 :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
-                                @click="query.page = page.number"
                                 :disabled="page.disabled"
+                                @click="query.page = page.number"
                             >
                                 {{ page.number }}
                             </button>
