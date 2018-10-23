@@ -60,8 +60,8 @@
                         <li v-for="page in pages" :key="page.number">
                             <button
                                 class="mx-4"
-                                :class="page.active ? 'border-b border-black' : 'text-grey-dark'"
-                                :disabled="page.disabled"
+                                :class="page.isActive ? 'border-b border-black' : 'text-grey-dark'"
+                                :disabled="page.isDisabled"
                                 @click="query.page = page.number"
                             >
                                 {{ page.number }}

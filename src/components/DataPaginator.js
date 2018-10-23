@@ -38,16 +38,16 @@ export default {
 
             return range.map(number => {
                 if (typeof number === 'string') {
-                    return { number, disabled: true };
+                    return { number, isDisabled: true };
                 }
-                return { number, active: number === this.page };
+                return { number, isActive: number === this.page };
             });
         },
     },
 
     methods: {
         pageChange(page) {
-            this.$emit('page-change', page);
+            this.$emit('input', page);
         },
     },
 
@@ -77,8 +77,8 @@ export default {
                         </button>
                     </li>
                     {this.pages.map(page => (
-                        <li key={page.number} class={page.active ? 'active' : ''}>
-                            {page.disabled ? (
+                        <li key={page.number} class={page.isActive ? 'active' : ''}>
+                            {page.isDisabled ? (
                                 page.number
                             ) : (
                                 <button
@@ -89,7 +89,7 @@ export default {
                                             : `Goto page ${page.number}`
                                     }
                                     aria-current={this.page === page.number}
-                                    disabled={page.disabled}
+                                    disabled={page.isDisabled}
                                 >
                                     {page.number}
                                 </button>

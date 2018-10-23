@@ -65,7 +65,11 @@
                     </article>
                 </div>
 
-                <data-paginator :page="query.page" :page-count="pageCount" @page-change="query.page = $event"></data-paginator>
+                <data-paginator
+                    :page="query.page"
+                    :page-count="pageCount"
+                    @input="query.page = $event"
+                ></data-paginator>
 
             </div>
         </data-component>
