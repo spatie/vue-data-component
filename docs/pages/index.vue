@@ -6,7 +6,7 @@
             :query.sync="query"
             :use-query-string="true"
         >
-            <div slot-scope="{ data, pageCount }">
+            <div slot-scope="{ data, pageCount, queryString }">
                 <input type="text" v-model="query.filter.search">
 
                 <data-filter-facet v-model="query.filter.instruments" :multiple="true">

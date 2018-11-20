@@ -31,6 +31,7 @@ export default {
             pageCount: 0,
             previousQuery: null,
             initialQuery: cloneDeep(this.query),
+            lastFetchedQueryString: '',
         };
     },
 
@@ -109,14 +110,16 @@ export default {
 
             this.previousQuery = cloneDeep(query);
 
+            const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery)
+
             if (this.useQueryString) {
-                this.updateQueryString(query);
+                this.updateQueryString(queryString);
             }
 
             const result = this.fetcher({
                 query,
                 force,
-                queryString: toQueryString(query),
+                queryString,
             });
 
             if (isPromise(result)) {
@@ -128,6 +131,7 @@ export default {
                         this.visibleCount = response.data.length;
                         this.totalCount = get(response, this.totalCountKey) || response.data.length;
                         this.pageCount = this.calculatePageCount(response);
+                        this.lastFetchedQueryString = queryString;
 
                         this.activeRequestCount--;
                     },
@@ -145,6 +149,7 @@ export default {
             this.visibleCount = result.data.length;
             this.totalCount = get(result, this.totalCountKey) || result.data.length;
             this.pageCount = this.calculatePageCount(result);
+            this.lastFetchedQueryString = queryString;
         },
 
         hydrateWithInitialData() {
@@ -196,9 +201,7 @@ export default {
             return query;
         },
 
-        updateQueryString(query) {
-            const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery);
-
+        updateQueryString(queryString) {
             const url = queryString
                 ? `${window.location.pathname}?${queryString}`
                 : window.location.pathname;
@@ -244,6 +247,7 @@ export default {
             isInitialLoadDelayFinished: this.isInitialLoadDelayFinished,
             isSlowRequest: this.isSlowRequest,
             pageCount: this.pageCount,
+            queryString: this.lastFetchedQueryString,
         });
     },
 };
