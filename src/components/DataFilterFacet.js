@@ -1,5 +1,5 @@
 export default {
-    facetValue: 'DataFilterFacet',
+    name: 'DataFilterFacet',
 
     props: {
         value: { required: true },
