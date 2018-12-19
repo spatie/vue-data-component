@@ -127,6 +127,10 @@ export default {
 
                 return result.then(
                     response => {
+                        if (!response.hasOwnProperty('data')) {
+                            throw response;
+                        }
+
                         this.visibleData = response.data;
                         this.visibleCount = response.data.length;
                         this.totalCount = get(response, this.totalCountKey) || response.data.length;
@@ -134,11 +138,14 @@ export default {
                         this.lastFetchedQueryString = queryString;
 
                         this.activeRequestCount--;
-                    },
-                    () => {
-                        this.activeRequestCount--;
                     }
-                );
+                ).catch((response) => {
+                    this.activeRequestCount--;
+
+                    if (response) {
+                        this.$emit('error', response);
+                    }
+                });
             }
 
             if (!result.hasOwnProperty('data')) {

@@ -48,6 +48,9 @@ export default {
                 'update:query': query => {
                     this.query = query;
                 },
+                'error': response => {
+                    this.$emit('error', response);
+                },
             },
             scopedSlots: {
                 default: props => this.$scopedSlots.default({ query: this.query, ...props }),
