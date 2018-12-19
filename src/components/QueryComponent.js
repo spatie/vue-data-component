@@ -48,7 +48,7 @@ export default {
                 'update:query': query => {
                     this.query = query;
                 },
-                'error': response => {
+                error: response => {
                     this.$emit('error', response);
                 },
             },

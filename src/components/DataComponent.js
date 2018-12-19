@@ -110,7 +110,7 @@ export default {
 
             this.previousQuery = cloneDeep(query);
 
-            const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery)
+            const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery);
 
             if (this.useQueryString) {
                 this.updateQueryString(queryString);
@@ -125,8 +125,8 @@ export default {
             if (isPromise(result)) {
                 this.activeRequestCount++;
 
-                return result.then(
-                    response => {
+                return result
+                    .then(response => {
                         if (!response.hasOwnProperty('data')) {
                             throw response;
                         }
@@ -138,14 +138,14 @@ export default {
                         this.lastFetchedQueryString = queryString;
 
                         this.activeRequestCount--;
-                    }
-                ).catch((response) => {
-                    this.activeRequestCount--;
+                    })
+                    .catch(response => {
+                        this.activeRequestCount--;
 
-                    if (response) {
-                        this.$emit('error', response);
-                    }
-                });
+                        if (response) {
+                            this.$emit('error', response);
+                        }
+                    });
             }
 
             if (!result.hasOwnProperty('data')) {
