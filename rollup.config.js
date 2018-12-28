@@ -15,7 +15,7 @@ const plugins = [
 export default [
     {
         input: 'src/index.js',
-        external: ['vue', 'qs'],
+        external: ['vue', 'deepmerge', 'qs'],
         plugins: plugins,
         output: [
             {
@@ -41,7 +41,7 @@ export default [
     },
     {
         input: 'src/index.js',
-        external: ['vue', 'qs'],
+        external: ['vue', 'deepmerge', 'qs'],
         plugins: [...plugins, uglify()],
         output: [
             {
