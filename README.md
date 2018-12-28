@@ -28,8 +28,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Installation
 
-### Polyfills
-
 With npm:
 
 ```
@@ -41,6 +39,8 @@ With yarn:
 ```
 yarn add vue-data-component
 ```
+
+### Polyfills
 
 `vue-data-component` expects the following browser API's to be available. If you expect wider browser support, you'll need to add a polyfill.
 
