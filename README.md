@@ -1,7 +1,7 @@
 # A straightforward Vue component to filter, sort and paginate data.
 
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-data-component.svg?style=flat-square)](https://npmjs.com/package/vue-data-component)
-![Less than 4kb](https://img.shields.io/badge/size-%3C4kb-brightgreen.svg?style=flat-square)
+![Less than 5kb](https://img.shields.io/badge/size-%3C5kb-brightgreen.svg?style=flat-square)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/spatie/vue-data-component/master.svg?style=flat-square)](https://travis-ci.org/spatie/vue-data-component)
 [![npm](https://img.shields.io/npm/dt/vue-data-component.svg?style=flat-square)](https://www.npmjs.com/package/vue-data-component)
@@ -17,7 +17,6 @@ A brief overview of what `vue-data-component` has to offer:
 - Debounce asynchronous requests
 - Handle loading indicators. No unnecessary flashes, only display them if the request is taking too long
 - Pass initial data for the component's first render when fetching data asynchronously, avoids layout jumps on first render when the data isn't loaded yet
-- Lightweight, the base package is less than 4KB small
 - Renderless: build your own interface, we don't make any assumptions
 - Additional helper components for sorting, pagination, and facet filters
 

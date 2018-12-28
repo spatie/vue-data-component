@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/spatie/vue-data-component",
   "peerDependencies": {
+    "qs": "^6.5.2",
     "vue": "^2.5.0"
   },
   "devDependencies": {
@@ -45,14 +46,15 @@
     "eslint-config-prettier": "^2.9.0",
     "jest": "^23.6.0",
     "prettier": "^1.13.0",
+    "qs": "^6.5.2",
     "rollup": "^0.60.1",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^4.0.0",
     "size-limit": "^0.18.2",
-    "vue": "^2.5.17",
-    "vue-template-compiler": "^2.5.17"
+    "vue": "^2.5.0",
+    "vue-template-compiler": "^2.5.0"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge"
@@ -64,12 +66,11 @@
   },
   "size-limit": [
     {
-      "limit": "10 KB",
+      "limit": "5 KB",
       "path": "dist/vue-data-component.min.js"
     }
   ],
   "dependencies": {
-    "deepmerge": "^2.1.1",
-    "qs": "^6.5.2"
+    "deepmerge": "^2.1.1"
   }
 }
