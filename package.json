@@ -68,8 +68,8 @@
   },
   "size-limit": [
     {
-      "limit": "8 KB",
-      "path": "dist/vue-data-component.min.js"
+      "limit": "6.5 KB",
+      "path": "dist/vue-data-component.common.js"
     }
   ]
 }

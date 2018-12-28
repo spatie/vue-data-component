@@ -26,7 +26,14 @@ export default [
                 file: pkg.main,
                 format: 'cjs',
                 exports: 'named',
-            },
+            }
+        ],
+    },
+    {
+        input: 'src/index.js',
+        external: ['vue'],
+        plugins: [...plugins],
+        output: [
             {
                 file: pkg.browser,
                 format: 'umd',
@@ -34,14 +41,13 @@ export default [
                 exports: 'named',
                 globals: {
                     vue: 'vue',
-                    'query-string': 'queryString',
                 },
             },
         ],
     },
     {
         input: 'src/index.js',
-        external: ['vue', 'deepmerge', 'qs'],
+        external: ['vue'],
         plugins: [...plugins, uglify()],
         output: [
             {
@@ -51,7 +57,6 @@ export default [
                 exports: 'named',
                 globals: {
                     vue: 'vue',
-                    qs: 'queryString',
                 },
             },
         ],

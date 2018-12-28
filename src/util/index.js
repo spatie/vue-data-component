@@ -77,7 +77,9 @@ export function get(object, path) {
         return object;
     }
 
-    const [pathHead, pathTail] = path.split(/\.(.+)/);
+    const pathParts = path.split(/\.(.+)/);
+    const pathHead = pathParts[0];
+    const pathTail = pathParts[1];
 
     return get(object[pathHead], pathTail);
 }
