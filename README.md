@@ -72,14 +72,12 @@ import {
 
 The main component exposed by this package is the
 
- > Props indicated with * are required
-
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `source`* | `Function` | | This function will be called to fetch data. It receives an object parameter: `{ query, queryString }`. The function should return a [response object](#response-objects). The response object mayb be wrapped in a promise. |
+| `source`* | `Function` | (required) | This function will be called to fetch data. It receives an object parameter: `{ query, queryString }`. The function should return a [response object](#response-objects). The response object mayb be wrapped in a promise. |
 | `query` | `Object` | `{}` | A [query object](#query-objects). A deep watcher will be registered on the query object to determine when new data should be fetched. |
 | `initial` | `Object` or `null` | `null` | An initial [response object](#response-objects) so the component can render as soon as possible. |
-| `debounceMs` | `Number` | `0` | Data wont be refetched until the debounce time has passed. |
+| `debounceMs` | `Number` | `0` | Data wont be subsequently fetched until the debounce time has passed. |
 | `slowRequestMs` | `Number` | `0` | Requests that take longer than `slowRequestMs` will be considered slow. See [Handling slow requests](#handling-slow-requests). |
 | `useQueryString` | `Boolean` | `false` | When `true`, the browser's query string will be updated based on the current query. See [Query strings](#query-strings).  This prop is currently not supported with SSR. |
 | `queryStringDefaults` | `Object` or `null` | `null` | The default values for the query string. When these values match the current `query` values, they will be omitted from the query string. For example, you generally don't want `page=1` in your URL's, since it has the same effect as no `page` parameter. |
