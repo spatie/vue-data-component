@@ -40,6 +40,27 @@ With yarn:
 yarn add vue-data-component
 ```
 
+This package contains a few components. You can register them all globally by installing this package as a plugin.
+
+```js
+import Vue from 'vue';
+import VueDataComponent from 'vue-data-component';
+
+Vue.use(VueDataComponent);
+```
+
+Alternatively, you can import the ones you need separately.
+
+```js
+import {
+    DataComponent,
+    QueryComponent,
+    DataSortToggle,
+    DataFilter,
+    DataPaginator,
+} from 'vue-data-component';
+```
+
 ### Polyfills
 
 `vue-data-component` expects the following browser API's to be available. If you expect wider browser support, you'll need to add a polyfill.
@@ -49,7 +70,7 @@ yarn add vue-data-component
 
 ## Usage
 
-### Props
+The main component exposed by this package is the
 
  > Props indicated with * are required
 
@@ -60,7 +81,8 @@ yarn add vue-data-component
 | `initial` | `Object|null` | `null` | An initial [response object](#response-objects) so the component can render as soon as possible. |
 | `debounceMs` | `Number` | `0` | Data wont be refetched until the debounce time has passed. |
 | `slowRequestMs` | `Number` | `0` | Requests that take longer than `slowRequestMs` will be considered slow. See [Handling slow requests](#handling-slow-requests). |
-| `useQueryString` | `Boolean` | `false` | When `true`, the browser's query string will be updated based on the current query. See [Query strings](#query-string).  This prop is currently not supported with SSR. |
+| `useQueryString` | `Boolean` | `false` | When `true`, the browser's query string will be updated based on the current query. See [Query strings](#query-strings).  This prop is currently not supported with SSR. |
+| `queryStringDefaults` | `Object|null` | `null` | The default values for the query string. When these values match the current `query` values, they will be omitted from the query string. For example, you generally don't want `page=1` in your URL's, since it has the same effect as no `page` parameter. |
 
 ### Query objects
 
