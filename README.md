@@ -8,21 +8,20 @@
 
 **Work in progress!**
 
-`vue-data-component` is a renderless component to build data-driven interfaces. Interfaces that contain filterable, sortable, or paginated data. We wanted to build something that takes care of pesky little problems like loading indicators, debouncing, or mapping your interface's filters to an AJAX request.
+`vue-data-component` is a renderless component to build data-driven interfaces. Especially interfaces that contain filterable, sortable, or paginated data. We wanted to build something that takes care of pesky little problems like loading indicators, debouncing, or mapping your interface's filters to an AJAX request.
 
 A brief overview of what `vue-data-component` has to offer:
 
-- Filter, sort, and paginate data via AJAX or from a local array
+- Filter, sort, and paginate data via AJAX or from any other data source
 - Sync the component state with the current URL's query string
-- Debounce AJAX requests
-- No unnecessary loading indicators, only if the request is taking too long
-- Pass initial data for the component's first render when fetching data asynchronously
-- Avoids layout jumps on first render when the data isn't loaded yet, inspired by React Suspense
+- Debounce asynchronous requests
+- Handle loading indicators. No unnecessary flashes, only display them if the request is taking too long
+- Pass initial data for the component's first render when fetching data asynchronously, avoids layout jumps on first render when the data isn't loaded yet
 - Lightweight, the base package is less than 4KB small
 - Renderless: build your own interface, we don't make any assumptions
-- Additional helper components for sort toggling, pagination, and facet filters
+- Additional helper components for sorting, pagination, and facet filters
 
-On their own, these features aren't super impressive, but together they enable you to build better interfaces in a uniform approach.
+On their own, none of these features are super impressive, but together they enable you to build better interfaces in a uniform approach.
 
 ## Changelog
 
@@ -30,15 +29,24 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Installation
 
-### Optional dependencies
-
-- `query-string`
-- `data-resource`
-
 ### Polyfills
 
-- `Promise`
-- `Array.from`
+With npm:
+
+```
+npm install vue-data-component
+```
+
+With yarn:
+
+```
+yarn add vue-data-component
+```
+
+`vue-data-component` expects the following browser API's to be available. If you expect wider browser support, you'll need to add a polyfill.
+
+- `Promise` ([Can I use](https://caniuse.com/#feat=promises))
+- `Array.from` ([ES compat](http://kangax.github.io/compat-table/es6/#test-Array.from))
 
 ## Testing
 
@@ -64,7 +72,8 @@ If you discover any security related issues, please contact freek@spatie.be inst
 
 ## Credits
 
-- [Sebastian De Deyne](https://github.com/sebdedeyne)
+- [Sebastian De Deyne](https://github.com/sebastiandedeyne)
+- [Adriaan Marain](https://github.com/AdrianMrn)
 - [All Contributors](../../contributors)
 
 ## Support us
