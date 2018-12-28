@@ -41,7 +41,7 @@
                 Helper components
             </h2>
             <ul class="mb-8">
-                <li><nuxt-link to="#">DataFilterFacet</nuxt-link></li>
+                <li><nuxt-link to="#">DataFilter</nuxt-link></li>
                 <li><nuxt-link to="#">DataSortToggle</nuxt-link></li>
             </ul>
             <h2 class="text-grey-dark">

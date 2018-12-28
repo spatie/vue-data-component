@@ -1,5 +1,5 @@
 export default {
-    name: 'DataFilterFacet',
+    name: 'DataFilter',
 
     props: {
         value: { required: true },

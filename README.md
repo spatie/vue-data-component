@@ -47,6 +47,41 @@ yarn add vue-data-component
 - `Promise` ([Can I use](https://caniuse.com/#feat=promises))
 - `Array.from` ([ES compat](http://kangax.github.io/compat-table/es6/#test-Array.from))
 
+## Usage
+
+### Props
+
+ > Props indicated with * are required
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `source`* | `Function` | | This function will be called to fetch data. It receives an object parameter: `{ query, queryString }`. The function should return a [response object](#response-objects). The response object mayb be wrapped in a promise. |
+| `query` | `Object` | `{}` | A [query object](#query-objects). A deep watcher will be registered on the query object to determine when new data should be fetched. |
+| `initial` | `Object|null` | `null` | An initial [response object](#response-objects) so the component can render as soon as possible. |
+| `debounceMs` | `Number` | `0` | Data wont be refetched until the debounce time has passed. |
+| `slowRequestMs` | `Number` | `0` | Requests that take longer than `slowRequestMs` will be considered slow. See [Handling slow requests](#handling-slow-requests). |
+| `useQueryString` | `Boolean` | `false` | When `true`, the browser's query string will be updated based on the current query. See [Query strings](#query-string).  This prop is currently not supported with SSR. |
+
+### Query objects
+
+Todo
+
+#### Query strings
+
+### Response objects
+
+Todo
+
+### Handling slow requests
+
+#### Slow initial loads
+
+Todo
+
+#### Slow subsequent requests
+
+Todo
+
 ## Testing
 
 ```bash

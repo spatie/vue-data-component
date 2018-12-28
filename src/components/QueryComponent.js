@@ -53,7 +53,11 @@ export default {
                 },
             },
             scopedSlots: {
-                default: props => this.$scopedSlots.default({ query: this.query, ...props }),
+                default: props =>
+                    this.$scopedSlots.default({
+                        query: this.query,
+                        ...props,
+                    }),
             },
         });
     },

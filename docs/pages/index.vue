@@ -9,7 +9,7 @@
             <div slot-scope="{ data, pageCount, queryString }">
                 <input type="text" v-model="query.filter.search">
 
-                <data-filter-facet v-model="query.filter.instruments" :multiple="true">
+                <data-filter v-model="query.filter.instruments" :multiple="true">
                     <ul slot-scope="{ toggle, active }">
                         <li v-for="instrument in instruments" :key="instrument">
                             <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
@@ -17,19 +17,19 @@
                             </button>
                         </li>
                     </ul>
-                </data-filter-facet>
+                </data-filter>
 
-                <data-filter-facet v-model="query.filter.moreThanTenSongs">
+                <data-filter v-model="query.filter.moreThanTenSongs">
                     <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
                         More than 10 songs
                     </button>
-                </data-filter-facet>
+                </data-filter>
 
-                <data-filter-facet v-model="query.filter.lover" facet-value="Yoko">
+                <data-filter v-model="query.filter.lover" facet-value="Yoko">
                     <button slot-scope="{ toggle, active }" @click.prevent="toggle" :class="{ 'font-bold': active }">
                         Yoko
                     </button>
-                </data-filter-facet>
+                </data-filter>
 
                 <table>
                     <thead>

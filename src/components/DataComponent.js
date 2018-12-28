@@ -1,22 +1,21 @@
 import { toQueryString, fromQueryString } from '../queryString';
-import { cloneDeep, debounce, diff, get, isPromise, set } from '../util';
+import { cloneDeep, debounce, get, isPromise, set } from '../util';
 
 export default {
     name: 'DataComponent',
 
     props: {
-        fetcher: { required: true, type: Function },
+        source: { required: true, type: Function },
         query: { default: () => ({}), type: Object },
-        initialData: { default: null, type: Object },
+        initial: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
-        initialLoadDelayMs: { default: 0, type: Number },
-        slowRequestThresholdMs: { default: 400, type: Number },
+        slowRequestMs: { default: 0, type: Number },
         useQueryString: { default: false, type: Boolean },
         queryStringDefaults: { default: null, type: Object },
-        pageNumberKey: { default: 'page' },
-        pageSizeKey: { default: 'pageSize' },
-        pageCountKey: { default: 'pageCount' },
-        totalCountKey: { default: 'totalCount' },
+        pageNumberKey: { default: 'page', type: String },
+        pageSizeKey: { default: 'pageSize', type: String },
+        pageCountKey: { default: 'pageCount', type: String },
+        totalCountKey: { default: 'totalCount', type: String },
     },
 
     data() {
@@ -36,26 +35,34 @@ export default {
     },
 
     created() {
+        // Register a debounced version of `fetchVisibleData` on the component
+        // instance. This function doesn't need to be reactive, so it's not
+        // registered via `data`.
         this.debouncedFetchVisibleData = this.debounceMs
             ? debounce(this.fetchVisibleData, this.debounceMs)
             : this.fetchVisibleData;
 
-        let query = this.query;
-
         if (this.useQueryString) {
-            query = this.updateQueryFromQueryString();
+            this.updateQueryFromQueryString();
         }
 
-        if (this.initialData) {
+        if (this.initial) {
             this.hydrateWithInitialData();
 
             this.loadIfNotLoaded();
 
+            // The next step in `created` is to fetch data from the source. If
+            // `initial` is provided, we want to entirely skip the first
+            // fetch.
             return;
         }
 
         const fetchResult = this.debouncedFetchVisibleData(this.query);
 
+        // It's important that we handle promises and non-promises differently.
+        // Non-promises can be resolved immediately, so they don't trigger a re-
+        // render after the component is marked as loaded. Fetching data with a
+        // promise will never display data in the first render.
         if (isPromise(fetchResult)) {
             fetchResult.then(this.loadIfNotLoaded);
         } else {
@@ -64,14 +71,53 @@ export default {
     },
 
     mounted() {
-        if (!this.isLoaded) {
+        // Registering the `slowRequestMs` timeout for the initial load must
+        // happen in the `mounted` hook to support SSR.
+        if (this.slowRequestMs && !this.isLoaded) {
             window.setTimeout(() => {
                 this.isInitialLoadDelayFinished = true;
-            }, this.initialLoadDelayMs);
+            }, this.slowRequestMs);
         }
+    },
 
-        this.$watch('query', this.handleQueryChange, { deep: true });
-        this.$watch('activeRequestCount', this.handleActiveRequestCountChange);
+    watch: {
+        query: {
+            deep: true,
+            handler(query) {
+                let query = this.query;
+
+                if (this.needsPageReset) {
+                    query = cloneDeep(query);
+                    set(query, this.pageNumberKey, 1);
+
+                    this.$emit('update:query', query);
+                }
+
+                this.debouncedFetchVisibleData(query);
+            },
+        },
+
+        activeRequestCount: {
+            handler(activeRequestCount) {
+                if (activeRequestCount === 0 && this.slowRequestTimeout) {
+                    window.clearTimeout(this.slowRequestTimeout);
+
+                    this.isSlowRequest = false;
+
+                    this.$emit('slowrequestend');
+                }
+
+                if (activeRequestCount === 1) {
+                    this.slowRequestTimeout = window.setTimeout(() => {
+                        if (!this.isSlowRequest) {
+                            this.isSlowRequest = true;
+
+                            this.$emit('slowrequeststart');
+                        }
+                    }, this.slowRequestMs);
+                }
+            },
+        },
     },
 
     computed: {
@@ -100,6 +146,10 @@ export default {
 
             return get(queryDiff, this.pageNumberKey) === undefined;
         },
+
+        previousQueryString() {
+            return toQueryString(this.previousQuery, this.queryStringDefaults || this.initialQuery);
+        },
     },
 
     methods: {
@@ -116,7 +166,7 @@ export default {
                 this.updateQueryString(queryString);
             }
 
-            const result = this.fetcher({
+            const result = this.source({
                 query,
                 force,
                 queryString,
@@ -135,7 +185,6 @@ export default {
                         this.visibleCount = response.data.length;
                         this.totalCount = get(response, this.totalCountKey) || response.data.length;
                         this.pageCount = this.calculatePageCount(response);
-                        this.lastFetchedQueryString = queryString;
 
                         this.activeRequestCount--;
                     })
@@ -160,52 +209,17 @@ export default {
         },
 
         hydrateWithInitialData() {
-            this.visibleData = this.initialData.data;
-            this.visibleCount = this.initialData.data.length;
+            this.visibleData = this.initial.data;
+            this.visibleCount = this.initial.data.length;
             this.totalCount =
-                get(this.initialData, this.totalCountKey) || this.initialData.data.length;
-            this.pageCount = this.calculatePageCount(this.initialData);
-        },
-
-        handleQueryChange() {
-            let query = this.query;
-
-            if (this.needsPageReset) {
-                query = cloneDeep(query);
-                set(query, this.pageNumberKey, 1);
-
-                this.$emit('update:query', query);
-            }
-
-            this.debouncedFetchVisibleData(query);
-        },
-
-        handleActiveRequestCountChange(activeRequestCount) {
-            if (activeRequestCount === 0 && this.slowRequestTimeout) {
-                window.clearTimeout(this.slowRequestTimeout);
-
-                this.isSlowRequest = false;
-
-                this.$emit('slowrequestend');
-            }
-
-            if (activeRequestCount === 1) {
-                this.slowRequestTimeout = window.setTimeout(() => {
-                    if (!this.isSlowRequest) {
-                        this.isSlowRequest = true;
-
-                        this.$emit('slowrequeststart');
-                    }
-                }, this.slowRequestThresholdMs);
-            }
+                get(this.initial, this.totalCountKey) || this.initial.data.length;
+            this.pageCount = this.calculatePageCount(this.initial);
         },
 
         updateQueryFromQueryString() {
             const query = fromQueryString(this.query, window.location.search);
 
             this.$emit('update:query', query);
-
-            return query;
         },
 
         updateQueryString(queryString) {
