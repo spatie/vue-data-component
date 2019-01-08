@@ -105,14 +105,6 @@ export default {
     },
 
     computed: {
-        pageNumber() {
-            return get(this.query, this.pageNumberKey);
-        },
-
-        pageSize() {
-            return get(this.query, this.pageSizeKey);
-        },
-
         previousQueryString() {
             return toQueryString(this.previousQuery, this.queryStringDefaults || this.initialQuery);
         },
@@ -142,22 +134,18 @@ export default {
                 this.activeRequestCount++;
 
                 return result
-                    .then(response => {
-                        this.visibleData = response;
+                    .then(data => {
+                        this.visibleData = data;
 
                         this.activeRequestCount--;
                     })
-                    .catch(response => {
+                    .catch(data => {
                         this.activeRequestCount--;
 
-                        if (response) {
-                            this.$emit('error', response);
+                        if (data) {
+                            this.$emit('error', data);
                         }
                     });
-            }
-
-            if (!result.hasOwnProperty('data')) {
-                throw new Error('Fetcher must return a promise or an object with a `data` key');
             }
 
             this.visibleData = result;
