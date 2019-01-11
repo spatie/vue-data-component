@@ -70,7 +70,7 @@ export default {
                             onClick={() =>
                                 this.pageChange(this.page === 1 ? this.page : this.page - 1)
                             }
-                            aria-label="Goto previous page"
+                            aria-label="Previous page"
                             disabled={this.page === 1 ? true : false}
                         >
                             &lt;
@@ -103,7 +103,7 @@ export default {
                                     this.page === this.pageCount ? this.page : this.page + 1
                                 )
                             }
-                            aria-label="Goto next page"
+                            aria-label="Next page"
                             disabled={this.page === this.pageCount ? true : false}
                         >
                             &gt;

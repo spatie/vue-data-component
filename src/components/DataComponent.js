@@ -1,5 +1,5 @@
-import { toQueryString, fromQueryString } from '../queryString';
-import { cloneDeep, diff, debounce, get, isPromise } from '../util';
+import { toQueryString } from '../queryString';
+import { cloneDeep, diff, debounce, isPromise } from '../util';
 
 export default {
     name: 'DataComponent',
@@ -10,7 +10,7 @@ export default {
         initial: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         slowRequestMs: { default: 0, type: Number },
-        useQueryString: { default: false, type: Boolean },
+        updateQueryString: { default: false, type: Boolean },
         queryStringDefaults: { default: null, type: Object },
     },
 
@@ -34,10 +34,6 @@ export default {
         this.debouncedFetchVisibleData = this.debounceMs
             ? debounce(this.fetchVisibleData, this.debounceMs)
             : this.fetchVisibleData;
-
-        if (this.useQueryString) {
-            this.updateQueryFromQueryString();
-        }
 
         if (this.initial) {
             this.visibleData = this.initial;
@@ -120,8 +116,8 @@ export default {
 
             const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery);
 
-            if (this.useQueryString) {
-                this.updateQueryString(queryString);
+            if (this.updateQueryString) {
+                this.setWindowLocationFromQueryString(queryString);
             }
 
             const result = this.source({
@@ -152,13 +148,7 @@ export default {
             this.lastFetchedQueryString = queryString;
         },
 
-        updateQueryFromQueryString() {
-            const query = fromQueryString(this.query, window.location.search);
-
-            this.$emit('update:query', query);
-        },
-
-        updateQueryString(queryString) {
+        setWindowLocationFromQueryString(queryString) {
             const url = queryString
                 ? `${window.location.pathname}?${queryString}`
                 : window.location.pathname;

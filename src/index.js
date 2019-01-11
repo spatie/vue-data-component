@@ -4,6 +4,8 @@ import { default as DataSortToggle } from './components/DataSortToggle';
 import { default as DataFilter } from './components/DataFilter';
 import { default as DataPaginator } from './components/DataPaginator';
 
+import { fromQueryString } from './queryString';
+
 export default {
     install(Vue) {
         Vue.component('data-component', DataComponent);
@@ -14,7 +16,14 @@ export default {
     },
 };
 
-export { DataComponent, QueryComponent, DataSortToggle, DataFilter, DataPaginator };
+export {
+    DataComponent,
+    QueryComponent,
+    DataSortToggle,
+    DataFilter,
+    DataPaginator,
+    fromQueryString,
+};
 
 if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(DataComponent);

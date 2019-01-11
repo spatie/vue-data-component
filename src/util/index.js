@@ -68,22 +68,6 @@ export function diff(lhs, rhs) {
     }, deletedValues);
 }
 
-export function get(object, path) {
-    if (!path) {
-        return object;
-    }
-
-    if (object === null || typeof object !== 'object') {
-        return object;
-    }
-
-    const pathParts = path.split(/\.(.+)/);
-    const pathHead = pathParts[0];
-    const pathTail = pathParts[1];
-
-    return get(object[pathHead], pathTail);
-}
-
 export function isEmpty(object) {
     return Object.keys(object).length === 0;
 }
