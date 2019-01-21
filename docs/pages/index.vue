@@ -10,7 +10,13 @@
                 <input type="text" v-model="query.filter.search">
 
                 <data-filter-facet v-model="query.filter.instruments" :multiple="true">
-                    <ul slot-scope="{ toggle, active }">
+                    <ul slot-scope="{ toggle, active, set }">
+                        <li>
+                            <button @click.prevent="set(instruments)">
+                                Select all
+                            </button>
+                        </li>
+
                         <li v-for="instrument in instruments" :key="instrument">
                             <button @click.prevent="toggle(instrument)" :class="{ 'font-bold': active(instrument) }">
                                 {{ instrument }}
