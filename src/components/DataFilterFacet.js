@@ -48,12 +48,17 @@ export default {
 
             this.$emit('input', this.value == this.facetValue ? null : this.facetValue);
         },
+
+        set(value) {
+            this.$emit('input', value);
+        },
     },
 
     render(h) {
         return this.$scopedSlots.default({
             active: this.active,
             toggle: this.toggle,
+            set: this.set,
         });
     },
 };
