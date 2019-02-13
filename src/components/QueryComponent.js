@@ -9,6 +9,7 @@ export default {
         sort: { default: null },
         page: { default: 1 },
         pageSize: { default: null },
+        useQueryString: { default: true },
     },
 
     data() {
@@ -41,7 +42,7 @@ export default {
             props: {
                 fetcher: this.fetch,
                 query: this.query,
-                useQueryString: true,
+                useQueryString: this.useQueryString,
                 ...this.$attrs,
             },
             on: {
