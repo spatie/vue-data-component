@@ -1,6 +1,6 @@
 {
   "name": "vue-data-component",
-  "version": "1.0.0-alpha.35",
+  "version": "1.0.0-alpha.36",
   "description": "A straightforward Vue component to filter, sort and paginate data",
   "browser": "dist/vue-data-component.js",
   "main": "dist/vue-data-component.common.js",
