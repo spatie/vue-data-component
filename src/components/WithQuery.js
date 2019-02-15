@@ -1,25 +1,35 @@
-import DataComponent from './DataComponent';
+import DataComponent from './WithData';
+import { cloneDeep } from '../util';
 
 export default {
-    name: 'QueryComponent',
+    name: 'WithQuery',
+
+    inheritAttrs: false,
 
     props: {
         url: { default: '' },
         filter: { default: () => ({}) },
         sort: { default: null },
-        page: { default: 1 },
-        pageSize: { default: null },
     },
 
     data() {
-        return {
-            query: {
-                filter: this.filter,
-                sort: this.sort,
-                page: this.page,
-                pageSize: this.pageSize,
+        const query = {
+            filter: cloneDeep(this.filter),
+            sort: this.sort,
+            page: {
+                number: 1,
             },
         };
+
+        return {
+            query,
+            initialQuery: cloneDeep(query),
+        };
+    },
+
+    created() {
+        this.$watch('query.filter', this.resetPage, { deep: true });
+        this.$watch('query.sort', this.resetPage);
     },
 
     methods: {
@@ -34,28 +44,33 @@ export default {
                 response.json()
             );
         },
+
+        reset() {
+            this.query = cloneDeep(this.initialQuery);
+        },
+
+        resetPage() {
+            if (this.query.page.number !== 1) {
+                console.log('totot');
+
+                this.query.page.number = 1;
+            }
+        },
     },
 
     render(h) {
         return h(DataComponent, {
             props: {
-                fetcher: this.fetch,
+                source: this.fetch,
                 query: this.query,
-                useQueryString: true,
                 ...this.$attrs,
             },
-            on: {
-                'update:query': query => {
-                    this.query = query;
-                },
-                error: response => {
-                    this.$emit('error', response);
-                },
-            },
+            on: this.$listeners,
             scopedSlots: {
                 default: props =>
                     this.$scopedSlots.default({
                         query: this.query,
+                        reset: this.reset,
                         ...props,
                     }),
             },

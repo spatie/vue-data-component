@@ -2,15 +2,15 @@ import { toQueryString } from '../queryString';
 import { cloneDeep, diff, debounce, isPromise } from '../util';
 
 export default {
-    name: 'DataComponent',
+    name: 'WithData',
 
     props: {
-        source: { required: true, type: Function },
+        source: { default: () => ({}), type: Function },
         query: { default: () => ({}), type: Object },
         initial: { default: null, type: Object },
         debounceMs: { default: 0, type: Number },
         slowRequestMs: { default: 0, type: Number },
-        updateQueryString: { default: false, type: Boolean },
+        history: { default: false, type: Boolean },
         queryStringDefaults: { default: null, type: Object },
     },
 
@@ -20,7 +20,7 @@ export default {
             isInitialLoadDelayFinished: false,
             activeRequestCount: 0,
             isSlowRequest: false,
-            visibleData: [],
+            result: [],
             previousQuery: null,
             initialQuery: cloneDeep(this.query),
             lastFetchedQueryString: '',
@@ -36,7 +36,7 @@ export default {
             : this.fetchVisibleData;
 
         if (this.initial) {
-            this.visibleData = this.initial;
+            this.result = this.initial;
 
             this.loadIfNotLoaded();
 
@@ -100,13 +100,11 @@ export default {
         },
     },
 
-    computed: {
-        previousQueryString() {
-            return toQueryString(this.previousQuery, this.queryStringDefaults || this.initialQuery);
-        },
-    },
-
     methods: {
+        forceUpdate() {
+            this.fetchVisibleData(this.query, { force: true });
+        },
+
         fetchVisibleData(query, { force = false } = {}) {
             if (!force && !this.queryChangedSincePreviousFetch(query)) {
                 return;
@@ -116,7 +114,7 @@ export default {
 
             const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery);
 
-            if (this.updateQueryString) {
+            if (this.history) {
                 this.setWindowLocationFromQueryString(queryString);
             }
 
@@ -131,7 +129,7 @@ export default {
 
                 return result
                     .then(data => {
-                        this.visibleData = data;
+                        this.result = data;
 
                         this.activeRequestCount--;
                     })
@@ -144,7 +142,7 @@ export default {
                     });
             }
 
-            this.visibleData = result;
+            this.result = result;
             this.lastFetchedQueryString = queryString;
         },
 
@@ -176,9 +174,10 @@ export default {
 
     render() {
         return this.$scopedSlots.default({
-            data: this.visibleData,
+            result: this.result,
             isLoaded: this.isLoaded,
             isSlowLoad: this.isInitialLoadDelayFinished && !this.isLoaded,
+            isLoading: this.activeRequestCount > 0,
             isInitialLoadDelayFinished: this.isInitialLoadDelayFinished,
             isSlowRequest: this.isSlowRequest,
             queryString: this.lastFetchedQueryString,

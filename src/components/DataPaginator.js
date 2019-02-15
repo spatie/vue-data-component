@@ -1,15 +1,20 @@
 export default {
     name: 'DataPaginator',
 
+    model: {
+        prop: 'page',
+        event: 'pagechange',
+    },
+
     props: {
         page: { required: true },
-        pageCount: { required: true, type: Number },
+        pages: { required: true, type: Number },
         linksOnEachSide: { default: 2, type: Number },
         navigateButtons: { default: true, type: Boolean },
     },
 
     computed: {
-        pages() {
+        pageObjects() {
             if (this.pageCount <= 1) {
                 return [];
             }
@@ -47,14 +52,18 @@ export default {
 
     methods: {
         pageChange(page) {
-            this.$emit('input', page);
+            this.$emit('pagechange', page);
         },
     },
 
     render() {
         if (this.$scopedSlots.default) {
             return this.$scopedSlots.default({
-                pages: this.pages,
+                pages: this.pageObjects,
+                next: () => this.pageChange(this.page + 1),
+                hasNext: this.page < this.pages,
+                previous: () => this.pageChange(this.page - 1),
+                hasPrevious: this.page > 1,
             });
         }
 
@@ -76,7 +85,7 @@ export default {
                             &lt;
                         </button>
                     </li>
-                    {this.pages.map(page => (
+                    {this.pageObjects.map(page => (
                         <li key={page.number} class={page.isActive ? 'active' : ''}>
                             {page.isDisabled ? (
                                 page.number
