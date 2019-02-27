@@ -14,7 +14,7 @@ export default {
                     return () => false;
                 }
 
-                return value => this.value.indexOf(value) !== -1;
+                return value => this.value.indexOf(value.toString()) !== -1;
             }
 
             if (this.facetValue) {
@@ -28,7 +28,7 @@ export default {
     methods: {
         toggle(value) {
             if (this.multiple) {
-                const valueIndex = this.value.indexOf(value);
+                const valueIndex = this.value.indexOf(value.toString());
 
                 const newValue =
                     valueIndex === -1
@@ -48,12 +48,17 @@ export default {
 
             this.$emit('input', this.value == this.facetValue ? null : this.facetValue);
         },
+
+        set(value) {
+            this.$emit('input', value);
+        },
     },
 
     render(h) {
         return this.$scopedSlots.default({
             active: this.active,
             toggle: this.toggle,
+            set: this.set,
         });
     },
 };

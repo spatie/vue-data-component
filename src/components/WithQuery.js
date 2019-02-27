@@ -51,8 +51,6 @@ export default {
 
         resetPage() {
             if (this.query.page.number !== 1) {
-                console.log('totot');
-
                 this.query.page.number = 1;
             }
         },
