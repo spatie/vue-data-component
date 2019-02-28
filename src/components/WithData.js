@@ -45,6 +45,8 @@ export default {
 
             this.loadIfNotLoaded();
 
+            this.lastFetchedQueryString = this.queryString;
+
             // The next step in `created` is to fetch data from the source. If
             // `initial` is provided, we want to entirely skip the first
             // fetch.
@@ -133,6 +135,8 @@ export default {
                 queryString: this.queryString,
             });
 
+            this.lastFetchedQueryString = this.queryString;
+
             if (isPromise(result)) {
                 this.activeRequestCount++;
 
@@ -152,7 +156,6 @@ export default {
             }
 
             this.result = result;
-            this.lastFetchedQueryString = this.queryString;
         },
 
         setWindowLocationFromQueryString() {
