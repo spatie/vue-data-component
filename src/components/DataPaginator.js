@@ -8,7 +8,7 @@ export default {
 
     props: {
         page: { required: true },
-        pages: { required: true, type: Number },
+        pageCount: { required: true, type: Number },
         linksOnEachSide: { default: 2, type: Number },
         navigateButtons: { default: true, type: Boolean },
     },
@@ -61,7 +61,7 @@ export default {
             return this.$scopedSlots.default({
                 pages: this.pageObjects,
                 next: () => this.pageChange(this.page + 1),
-                hasNext: this.page < this.pages,
+                hasNext: this.page < this.pageCount,
                 previous: () => this.pageChange(this.page - 1),
                 hasPrevious: this.page > 1,
             });
