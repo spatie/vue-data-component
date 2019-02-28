@@ -35,6 +35,11 @@ export default {
             ? debounce(this.fetchVisibleData, this.debounceMs)
             : this.fetchVisibleData;
 
+        // Set the querystring if the history prop was set to true.
+        if (this.history) {
+            this.setWindowLocationFromQueryString();
+        }
+
         if (this.initial) {
             this.result = this.initial;
 
@@ -46,7 +51,7 @@ export default {
             return;
         }
 
-        const fetchResult = this.debouncedFetchVisibleData(this.query);
+        const fetchResult = this.debouncedFetchVisibleData();
 
         // It's important that we handle promises and non-promises differently.
         // Non-promises can be resolved immediately, so they don't trigger a re-
@@ -72,8 +77,8 @@ export default {
     watch: {
         query: {
             deep: true,
-            handler(query) {
-                this.debouncedFetchVisibleData(query);
+            handler() {
+                this.debouncedFetchVisibleData();
             },
         },
 
@@ -100,28 +105,32 @@ export default {
         },
     },
 
+    computed: {
+        queryString() {
+            return toQueryString(this.query, this.queryStringDefaults || this.initialQuery);
+        },
+    },
+
     methods: {
         forceUpdate() {
-            this.fetchVisibleData(this.query, { force: true });
+            this.fetchVisibleData({ force: true });
         },
 
-        fetchVisibleData(query, { force = false } = {}) {
-            if (!force && !this.queryChangedSincePreviousFetch(query)) {
+        fetchVisibleData({ force = false } = {}) {
+            if (!force && !this.queryChangedSincePreviousFetch()) {
                 return;
             }
 
-            this.previousQuery = cloneDeep(query);
-
-            const queryString = toQueryString(query, this.queryStringDefaults || this.initialQuery);
+            this.previousQuery = cloneDeep(this.query);
 
             if (this.history) {
-                this.setWindowLocationFromQueryString(queryString);
+                this.setWindowLocationFromQueryString();
             }
 
             const result = this.source({
-                query,
+                query: this.query,
                 force,
-                queryString,
+                queryString: this.queryString,
             });
 
             if (isPromise(result)) {
@@ -143,23 +152,23 @@ export default {
             }
 
             this.result = result;
-            this.lastFetchedQueryString = queryString;
+            this.lastFetchedQueryString = this.queryString;
         },
 
-        setWindowLocationFromQueryString(queryString) {
-            const url = queryString
-                ? `${window.location.pathname}?${queryString}`
+        setWindowLocationFromQueryString() {
+            const url = this.queryString
+                ? `${window.location.pathname}?${this.queryString}`
                 : window.location.pathname;
 
             window.history.replaceState(null, null, url);
         },
 
-        queryChangedSincePreviousFetch(query) {
+        queryChangedSincePreviousFetch() {
             if (!this.previousQuery) {
                 return true;
             }
 
-            const queryDiff = diff(query, this.previousQuery);
+            const queryDiff = diff(this.query, this.previousQuery);
 
             return Object.keys(queryDiff).length > 0;
         },

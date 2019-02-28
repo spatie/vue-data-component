@@ -14,7 +14,7 @@ export default {
                     return () => false;
                 }
 
-                return value => this.value.indexOf(value.toString()) !== -1;
+                return value => this.value.some(v => v == value);
             }
 
             if (this.facetValue) {
@@ -28,12 +28,9 @@ export default {
     methods: {
         toggle(value) {
             if (this.multiple) {
-                const valueIndex = this.value.indexOf(value.toString());
-
-                const newValue =
-                    valueIndex === -1
-                        ? this.value.concat(value)
-                        : this.value.filter(v => v != value);
+                const newValue = this.value.some(v => v == value)
+                    ? this.value.filter(v => v != value)
+                    : this.value.concat(value);
 
                 this.$emit('input', newValue);
 
