@@ -8,14 +8,14 @@ export default {
 
     props: {
         page: { required: true },
-        pageCount: { required: true, type: Number },
+        lastPage: { required: true, type: Number },
         linksOnEachSide: { default: 2, type: Number },
         navigateButtons: { default: true, type: Boolean },
     },
 
     computed: {
         pageObjects() {
-            if (this.pageCount <= 1) {
+            if (this.lastPage <= 1) {
                 return [];
             }
 
@@ -24,7 +24,7 @@ export default {
 
             for (
                 let i = Math.max(2, this.page - this.linksOnEachSide);
-                i <= Math.min(this.pageCount - 1, this.page + this.linksOnEachSide);
+                i <= Math.min(this.lastPage - 1, this.page + this.linksOnEachSide);
                 i++
             ) {
                 range.push(i);
@@ -34,12 +34,12 @@ export default {
                 range.unshift('…');
             }
 
-            if (this.page + this.linksOnEachSide < this.pageCount - 1) {
+            if (this.page + this.linksOnEachSide < this.lastPage - 1) {
                 range.push('…');
             }
 
             range.unshift(1);
-            range.push(this.pageCount);
+            range.push(this.lastPage);
 
             return range.map(number => {
                 if (typeof number === 'string') {
@@ -61,13 +61,13 @@ export default {
             return this.$scopedSlots.default({
                 pages: this.pageObjects,
                 next: () => this.pageChange(this.page + 1),
-                hasNext: this.page < this.pageCount,
+                hasNext: this.page < this.lastPage,
                 previous: () => this.pageChange(this.page - 1),
                 hasPrevious: this.page > 1,
             });
         }
 
-        if (this.pageCount === 1) {
+        if (this.lastPage === 1) {
             return null;
         }
 
@@ -109,11 +109,11 @@ export default {
                         <button
                             onClick={() =>
                                 this.pageChange(
-                                    this.page === this.pageCount ? this.page : this.page + 1
+                                    this.page === this.lastPage ? this.page : this.page + 1
                                 )
                             }
                             aria-label="Next page"
-                            disabled={this.page === this.pageCount ? true : false}
+                            disabled={this.page === this.lastPage ? true : false}
                         >
                             &gt;
                         </button>
