@@ -6,14 +6,7 @@ import { default as DataSortToggle } from './components/DataSortToggle';
 
 import { fromQueryString } from './queryString';
 
-export {
-    WithData,
-    WithQuery,
-    DataSortToggle,
-    DataFilter,
-    DataPaginator,
-    fromQueryString,
-};
+export { WithData, WithQuery, DataSortToggle, DataFilter, DataPaginator, fromQueryString };
 
 const DataComponentPlugin = {
     install(Vue) {
