@@ -63,7 +63,12 @@ export default {
                 query: this.query,
                 ...this.$attrs,
             },
-            on: this.$listeners,
+            on: {
+                'update:query': query => {
+                    this.query = query;
+                },
+                ...this.$listeners,
+            },
             scopedSlots: {
                 default: props =>
                     this.$scopedSlots.default({

@@ -1,4 +1,4 @@
-import { toQueryString } from '../queryString';
+import { toQueryString, fromQueryString } from '../queryString';
 import { cloneDeep, diff, debounce, isPromise } from '../util';
 
 export default {
@@ -35,8 +35,9 @@ export default {
             ? debounce(this.fetchVisibleData, this.debounceMs)
             : this.fetchVisibleData;
 
-        // Set the querystring if the history prop was set to true.
         if (this.history) {
+            this.setQueryFromWindowLocation();
+
             this.setWindowLocationFromQueryString();
         }
 
@@ -164,6 +165,12 @@ export default {
                 : window.location.pathname;
 
             window.history.replaceState(null, null, url);
+        },
+
+        setQueryFromWindowLocation() {
+            const query = fromQueryString(this.query, window.location.search);
+
+            this.$emit('update:query', query);
         },
 
         queryChangedSincePreviousFetch() {
