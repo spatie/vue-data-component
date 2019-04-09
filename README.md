@@ -74,7 +74,7 @@ This package exposes two main components: `with-data` and `with-query`. `with-da
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `source`* | `Function` | (required) | This function will be called to fetch data. It receives an object parameter: `{ query, queryString }`. The function should return a [response object](#response-objects). The response object mayb be wrapped in a promise. |
+| `source`* | `Function` | (required) | This function will be called to fetch data. It receives an object parameter: `{ query, queryString }`. The function should return a [response object](#response-objects). The response object may be wrapped in a promise. |
 | `query` | `Object` | `{}` | A [query object](#query-objects). A deep watcher will be registered on the query object to determine when new data should be fetched. |
 | `initial` | `Object` or `null` | `null` | An initial [response object](#response-objects) so the component can render as soon as possible. |
 | `debounceMs` | `Number` | `0` | Data wont be subsequently fetched until the debounce time has passed. |
