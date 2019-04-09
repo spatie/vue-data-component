@@ -63,14 +63,14 @@ import {
 
 ### Polyfills
 
-`vue-data-component` expects the following browser API's to be available. If you expect wider browser support, you'll need to add a polyfill.
+`vue-data-component` expects the following browser API's to be available. If you need wider browser support, you'll need to add a polyfill.
 
 - `Promise` ([Can I use](https://caniuse.com/#feat=promises))
 - `Array.from` ([ES compat](http://kangax.github.io/compat-table/es6/#test-Array.from))
 
 ## Usage
 
-The main component exposed by this package is the
+This package exposes two main components: `with-data` and `with-query`. `with-data` is a low-level component that expects a function that returns a promise as it's data source. `with-query` does more out of the box. It requires an endpoint URL prop, and will call that URL with a query string to update it's data set.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
