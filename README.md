@@ -1,3 +1,5 @@
+**THIS REPO IS ABANDONDED, DO NOT USE**
+
 # A straightforward Vue component to filter, sort and paginate data.
 
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-data-component.svg?style=flat-square)](https://npmjs.com/package/vue-data-component)
